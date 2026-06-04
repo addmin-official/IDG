@@ -376,60 +376,59 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080f18] text-slate-100 flex flex-col font-sans antialiased text-sm">
+    <div className="min-h-screen bg-[#0D1B2A] text-slate-100 flex flex-col font-sans antialiased text-sm" dir={lang !== 'en' ? 'rtl' : 'ltr'}>
       
       {/* Sovereign Federal Header bar */}
-      <header id="idg-main-header" className="bg-[#111e2e] border-b border-[#cca553]/20 shadow-lg px-4 py-3 sticky top-0 z-50">
+      <header id="idg-main-header" className="bg-[#111e2e] border-b border-[#E0A96D]/30 shadow-lg px-4 py-3.5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           {/* Logo & Seal */}
-          <div className="flex items-center gap-3">
-            <div className="bg-[#cca553]/10 p-2 rounded-lg border border-[#cca553]/40 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-[#cca553] animate-pulse" />
+          <div className="flex items-center gap-3.5">
+            <div className="bg-[#E0A96D]/10 p-2 rounded-lg border border-[#E0A96D]/45 flex items-center justify-center shadow-inner hover:scale-[1.02] transition-transform duration-200">
+              <Shield className="w-8 h-8 text-[#E0A96D]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-display font-semibold tracking-wider text-slate-50 uppercase">{d.title}</h1>
-                <span className="text-xs bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <h1 className="text-xl font-display font-bold tracking-wider text-white uppercase">{d.title}</h1>
+                <span className="text-xs bg-emerald-950/90 text-[#52B788] border border-emerald-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#52B788] animate-pulse"></span>
                   Sovereign Live
                 </span>
               </div>
-              <p className="text-xs text-[#cca553] font-mono tracking-widest">{d.subtitle}</p>
+              <p className="text-xs text-[#E0A96D] font-mono tracking-widest mt-0.5 font-medium">{d.subtitle}</p>
             </div>
           </div>
 
           {/* Quick status bar and multi-language controls */}
           <div className="flex flex-wrap items-center gap-4 text-xs">
-            <div className="hidden lg:flex flex-col text-right border-r border-[#cca553]/20 pr-4">
+            <div className="hidden lg:flex flex-col text-start md:text-right border-[#E0A96D]/20 pr-4 ltr:border-r rtl:border-l pl-4">
               <span className="text-slate-400 text-[10px] uppercase font-mono tracking-wider">{d.location}</span>
-              <span className="text-[#cca553] font-semibold">{d.securityAccess}</span>
+              <span className="text-[#E0A96D] font-semibold">{d.securityAccess}</span>
             </div>
 
-            {/* Language Controls */}
-            <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700">
+            {/* Language Controls with Premium Gold #E0A96D & Strict WCAG AAA Contrast */}
+            <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700 shadow-lg" dir="ltr">
               <button 
                 onClick={() => setLang('en')} 
-                className={`px-2.5 py-1 rounded transition-all font-medium ${lang === 'en' ? 'bg-[#cca553] text-[#111e2e]' : 'text-slate-300 hover:text-white'}`}
+                className={`cursor-pointer px-2.5 py-1 rounded transition-all font-semibold ${lang === 'en' ? 'bg-[#E0A96D] text-[#0D1B2A] shadow-md' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'}`}
               >
                 EN
               </button>
               <button 
                 onClick={() => setLang('ar')} 
-                className={`px-3 py-1 rounded transition-all font-medium ${lang === 'ar' ? 'bg-[#cca553] text-[#111e2e]' : 'text-slate-300 hover:text-white'}`}
-                dir="rtl"
+                className={`cursor-pointer px-3 py-1 rounded transition-all font-semibold ${lang === 'ar' ? 'bg-[#E0A96D] text-[#0D1B2A] shadow-md' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'}`}
               >
                 العربية
               </button>
               <button 
                 onClick={() => setLang('ku')} 
-                className={`px-3 py-1 rounded transition-all font-medium ${lang === 'ku' ? 'bg-[#cca553] text-[#111e2e]' : 'text-slate-300 hover:text-white'}`}
+                className={`cursor-pointer px-3 py-1 rounded transition-all font-semibold ${lang === 'ku' ? 'bg-[#E0A96D] text-[#0D1B2A] shadow-md' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'}`}
               >
                 کوردی
               </button>
             </div>
 
-            <div className="bg-[#1a2c42] px-3 py-1.5 rounded text-slate-300 border border-slate-700/80 font-mono hidden sm:block">
+            <div className="bg-[#1a2c42] px-3 py-1.5 rounded text-slate-300 border border-slate-700/80 font-mono hidden sm:block shadow-sm">
               2026-06-04 • 01:27Z
             </div>
           </div>
@@ -538,28 +537,50 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Live Statecraft Telemetry Ticker */}
-      <section id="idg-metrics-ticker" className="bg-[#0b1420] border-b border-slate-800/60 py-2.5 px-4 text-xs font-mono text-slate-400">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              FEDERAL SYNC: <strong className="text-emerald-400">100% SECURE</strong>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#cca553]" />
-              IMMUTABLE BLOCKS: <strong className="text-slate-200">#10,453</strong>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Activity className="w-3.5 h-3.5 text-cyan-400" />
-              FED-CORRIDOR LATENCY: <strong className="text-cyan-400">12ms (AVG)</strong>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Shield className="w-3.5 h-3.5 text-slate-400" />
-              UPTIME: <strong className="text-slate-200">{uptime}%</strong>
-            </span>
+      {/* Live Statecraft Telemetry Ticker - Preventing Bi-directional Text Inversion */}
+      <section id="idg-metrics-ticker" className="bg-[#0b1420] border-b border-slate-800/60 py-3 px-4 text-xs">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            
+            {/* Sync Status Metric */}
+            <div className="flex items-center gap-2 bg-[#102235]/40 px-3 py-1 rounded border border-slate-800">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+              <span className="text-slate-400 font-semibold">
+                {lang === 'en' ? 'FEDERAL SYNC' : lang === 'ar' ? 'المزامنة الاتحادية' : 'هاوئاهەنگی فیدراڵ'}:
+              </span>
+              <span dir="ltr" className="text-[#52B788] font-bold font-mono">100% SECURE</span>
+            </div>
+
+            {/* Immutable Blocks Metric */}
+            <div className="flex items-center gap-2 bg-[#102235]/40 px-3 py-1 rounded border border-slate-800">
+              <Database className="w-3.5 h-3.5 text-[#E0A96D] shrink-0" />
+              <span className="text-slate-400 font-semibold">
+                {lang === 'en' ? 'IMMUTABLE BLOCKS' : lang === 'ar' ? 'الكتل المحمية' : 'بلۆکە بێدەستکارییەکان'}:
+              </span>
+              <span dir="ltr" className="text-slate-200 font-bold font-mono">#10,453</span>
+            </div>
+
+            {/* Latency Metric */}
+            <div className="flex items-center gap-2 bg-[#102235]/40 px-3 py-1 rounded border border-slate-800">
+              <Activity className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="text-slate-400 font-semibold">
+                {lang === 'en' ? 'FED-CORRIDOR LATENCY' : lang === 'ar' ? 'استجابة الممر الفيدرالي' : 'مۆنیتۆری خێرایی دەروازە'}:
+              </span>
+              <span dir="ltr" className="text-cyan-400 font-bold font-mono">12ms (AVG)</span>
+            </div>
+
+            {/* Uptime Metric */}
+            <div className="flex items-center gap-2 bg-[#102235]/40 px-3 py-1 rounded border border-slate-800">
+              <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="text-slate-400 font-semibold">
+                {lang === 'en' ? 'UPTIME' : lang === 'ar' ? 'جاهزية الخدمة' : 'کارامەیی بەردەوام'}:
+              </span>
+              <span dir="ltr" className="text-[#E0A96D] font-bold font-mono">{uptime}%</span>
+            </div>
+
           </div>
-          <div className="text-[#cca553] font-semibold text-[11px] uppercase tracking-wider text-right">
+
+          <div className="text-[#E0A96D] font-bold text-xs uppercase tracking-wide leading-relaxed">
             {d.customStatus}
           </div>
         </div>

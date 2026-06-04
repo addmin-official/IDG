@@ -81,7 +81,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   const isRtl = lang !== 'en';
 
   return (
-    <div id="national-command-center-canvas" className="bg-[#111e2e]/95 rounded-xl border border-slate-800 p-5 lg:p-6 shadow-2xl flex flex-col gap-6 text-slate-100" dir={isRtl ? 'rtl' : 'ltr'}>
+    <div id="national-command-center-canvas" className="bg-[#111e2e]/95 rounded-xl border border-slate-800 p-5 lg:p-6 pb-8 lg:pb-10 overflow-visible shadow-2xl flex flex-col gap-6 text-slate-100" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* Platform Title */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-800 pb-5">
@@ -197,7 +197,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           
           {/* Active Strategy Panel for PMO */}
           {activeRole === 'pmo' && (
-            <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
+            <div className="bg-slate-950/80 p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-4">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2 flex justify-between items-center">
                 <span>
                   {lang === 'en' ? 'Supreme National Strategic Agenda' : lang === 'ar' ? 'الأجندة الاستراتيجية العليا للتجارة والمالية' : 'کارنامەی باڵای ستراتیژی نیشتمانیی'}
@@ -287,7 +287,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* Ministries interlog */}
           {activeRole === 'ministries' && (
-            <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
+            <div className="bg-slate-950/80 p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-4">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2">
                 {lang === 'en' ? 'Ministry Integration & Clearance Interlocks' : lang === 'ar' ? 'تكامل الوزارات وصمامات التخليص الموحدة' : 'هاوئاهەنگی نێوان وەزارەتەکان و ڕێگەپێدانی گشتی'}
               </h3>
@@ -390,7 +390,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* Customs Control command */}
           {activeRole === 'customs' && (
-            <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
+            <div className="bg-slate-950/80 p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-4">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2">Federal Customs Control gauges</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -459,7 +459,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* Border Control hardware stats */}
           {activeRole === 'border' && (
-            <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-5">
+            <div className="bg-slate-950/80 p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-5">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2">Border Scanner & Hardware Health Desk</h3>
               <p className="text-xs text-slate-400">Live physical status indicators of X-Ray scanners, fiber networks, and local backups at the nodes.</p>
 
@@ -506,7 +506,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* Economic Council Control room */}
           {activeRole === 'economic' && (
-            <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
+            <div className="bg-slate-950/80 p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-4">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-2">National Economic intelligence & Flow Scenarios</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -613,6 +613,69 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
         {/* Right column / 1/3 width sidebar */}
         <div className="flex flex-col gap-6">
+
+          {/* Sovereign Operations Directory - Strict RTL Ergonomic Layout */}
+          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800/80 flex flex-col gap-4 shadow-xl">
+            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
+              <span className="flex items-center gap-2">
+                <Network className="text-[#E0A96D] w-4.5 h-4.5" />
+                {lang === 'en' ? 'Sovereign Operations Directory' : lang === 'ar' ? 'دليل العمليات السيادي الاتحادي' : 'ڕێبەری کارە فەرمییەکانی نیشتمانیی'}
+              </span>
+              <span className="bg-[#E0A96D]/15 text-[#E0A96D] border border-[#E0A96D]/30 px-20 py-0.5 rounded text-[9px] font-mono uppercase hidden xs:inline-block">Status Ledger</span>
+            </h3>
+
+            <div className="flex flex-col gap-2.5">
+              
+              {/* Item 1 */}
+              <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
+                <Shield className="w-5 h-5 text-emerald-400 shrink-0 group-hover:scale-105 transition-transform" />
+                <span className="text-xs font-bold text-slate-200">
+                  {lang === 'en' ? 'Federal Customs Interop' : lang === 'ar' ? 'الربط الجمركي الفيدرالي والضريبي' : 'هاوئاهەنگی گومرگی فیدراڵ و تاریفە'}
+                </span>
+                <div className="flex-grow"></div>
+                <span className="bg-emerald-950/80 text-[#52B788] border border-emerald-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
+                  {lang === 'en' ? 'Active' : lang === 'ar' ? 'نشط' : 'چالاک'}
+                </span>
+              </div>
+
+              {/* Item 2 */}
+              <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
+                <Landmark className="w-5 h-5 text-[#E0A96D] shrink-0 group-hover:scale-105 transition-transform" />
+                <span className="text-xs font-bold text-slate-200">
+                  {lang === 'en' ? 'Central Financial Ledger' : lang === 'ar' ? 'دفتر الحسابات والتعامل المركزي' : 'دەفتەری دارایی ناوەندیی فیدراڵ'}
+                </span>
+                <div className="flex-grow"></div>
+                <span className="bg-emerald-950/80 text-[#52B788] border border-emerald-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
+                  {lang === 'en' ? 'Synced' : lang === 'ar' ? 'متزامن' : 'هاودەم'}
+                </span>
+              </div>
+
+              {/* Item 3 */}
+              <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
+                <Activity className="w-5 h-5 text-cyan-400 shrink-0 group-hover:scale-105 transition-transform" />
+                <span className="text-xs font-bold text-slate-200">
+                  {lang === 'en' ? 'Anti-Fraud Database' : lang === 'ar' ? 'مزامنة ملفات منع الاحتيال' : 'ڕێگریکردنی فێڵکاریی بەندەرەکان'}
+                </span>
+                <div className="flex-grow"></div>
+                <span className="bg-emerald-950/80 text-[#52B788] border border-emerald-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
+                  {lang === 'en' ? 'Secured' : lang === 'ar' ? 'مؤمن' : 'پارێزراو'}
+                </span>
+              </div>
+
+              {/* Item 4 */}
+              <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
+                <FileText className="w-5 h-5 text-amber-400 shrink-0 group-hover:scale-105 transition-transform" />
+                <span className="text-xs font-bold text-slate-200">
+                  {lang === 'en' ? 'KRG Boundary Node Check' : lang === 'ar' ? 'سيادة وعوائد منافذ الإقليم وبغداد' : 'پشکنینی دەروازەی سنووری نێوان هەرێم'}
+                </span>
+                <div className="flex-grow"></div>
+                <span className="bg-amber-955 text-amber-400 border border-amber-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
+                  {lang === 'en' ? 'Verify' : lang === 'ar' ? 'تدقيق' : 'پشکنین'}
+                </span>
+              </div>
+
+            </div>
+          </div>
 
           {/* Active Strategic Recommendations Panel */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
