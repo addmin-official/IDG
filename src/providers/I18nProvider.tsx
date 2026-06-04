@@ -1,0 +1,168 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Language } from '../types';
+
+// English imports
+import commonEn from '../localization/en/common.json';
+import navigationEn from '../localization/en/navigation.json';
+import dashboardEn from '../localization/en/dashboard.json';
+import customsEn from '../localization/en/customs.json';
+import logisticsEn from '../localization/en/logistics.json';
+import financeEn from '../localization/en/finance.json';
+import identityEn from '../localization/en/identity.json';
+import aiEn from '../localization/en/ai.json';
+import settingsEn from '../localization/en/settings.json';
+import errorsEn from '../localization/en/errors.json';
+import validationEn from '../localization/en/validation.json';
+import notificationsEn from '../localization/en/notifications.json';
+
+// Arabic imports
+import commonAr from '../localization/ar/common.json';
+import navigationAr from '../localization/ar/navigation.json';
+import dashboardAr from '../localization/ar/dashboard.json';
+import customsAr from '../localization/ar/customs.json';
+import logisticsAr from '../localization/ar/logistics.json';
+import financeAr from '../localization/ar/finance.json';
+import identityAr from '../localization/ar/identity.json';
+import aiAr from '../localization/ar/ai.json';
+import settingsAr from '../localization/ar/settings.json';
+import errorsAr from '../localization/ar/errors.json';
+import validationAr from '../localization/ar/validation.json';
+import notificationsAr from '../localization/ar/notifications.json';
+
+// Kurdish imports
+import commonKu from '../localization/ku/common.json';
+import navigationKu from '../localization/ku/navigation.json';
+import dashboardKu from '../localization/ku/dashboard.json';
+import customsKu from '../localization/ku/customs.json';
+import logisticsKu from '../localization/ku/logistics.json';
+import financeKu from '../localization/ku/finance.json';
+import identityKu from '../localization/ku/identity.json';
+import aiKu from '../localization/ku/ai.json';
+import settingsKu from '../localization/ku/settings.json';
+import errorsKu from '../localization/ku/errors.json';
+import validationKu from '../localization/ku/validation.json';
+import notificationsKu from '../localization/ku/notifications.json';
+
+const translations = {
+  en: {
+    common: commonEn,
+    navigation: navigationEn,
+    dashboard: dashboardEn,
+    customs: customsEn,
+    logistics: logisticsEn,
+    finance: financeEn,
+    identity: identityEn,
+    ai: aiEn,
+    settings: settingsEn,
+    errors: errorsEn,
+    validation: validationEn,
+    notifications: notificationsEn,
+  },
+  ar: {
+    common: commonAr,
+    navigation: navigationAr,
+    dashboard: dashboardAr,
+    customs: customsAr,
+    logistics: logisticsAr,
+    finance: financeAr,
+    identity: identityAr,
+    ai: aiAr,
+    settings: settingsAr,
+    errors: errorsAr,
+    validation: validationAr,
+    notifications: notificationsAr,
+  },
+  ku: {
+    common: commonKu,
+    navigation: navigationKu,
+    dashboard: dashboardKu,
+    customs: customsKu,
+    logistics: logisticsKu,
+    finance: financeKu,
+    identity: identityKu,
+    ai: aiKu,
+    settings: settingsKu,
+    errors: errorsKu,
+    validation: validationKu,
+    notifications: notificationsKu,
+  },
+};
+
+interface I18nContextType {
+  locale: Language;
+  direction: 'ltr' | 'rtl';
+  setLocale: (locale: Language) => void;
+  t: (path: string) => string;
+}
+
+const I18nContext = createContext<I18nContextType | undefined>(undefined);
+
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  // Load initial locale from localStorage or default to Kurdish/Arabic/English based on preference
+  const [locale, setLocaleState] = useState<Language>(() => {
+    const saved = localStorage.getItem('idg_locale');
+    return (saved as Language) || 'ku'; // Default to Kurdish as first, or Arabic/English
+  });
+
+  const direction = locale === 'en' ? 'ltr' : 'rtl';
+
+  useEffect(() => {
+    localStorage.setItem('idg_locale', locale);
+    // Apply layout direction and lang attributes on the HTML root element globally
+    document.documentElement.setAttribute('dir', direction);
+    document.documentElement.setAttribute('lang', locale);
+    
+    // Add RTL class for specialized theme tweaks
+    if (direction === 'rtl') {
+      document.body.classList.add('rtl');
+    } else {
+      document.body.classList.remove('rtl');
+    }
+  }, [locale, direction]);
+
+  const setLocale = (newLocale: Language) => {
+    setLocaleState(newLocale);
+  };
+
+  // Helper function to resolve dot notation paths: e.g. "navigation.dashboard"
+  const t = (path: string): string => {
+    const keys = path.split('.');
+    let current: any = translations[locale];
+
+    for (const key of keys) {
+      if (current[key] !== undefined) {
+        current = current[key];
+      } else {
+        // Fallback to English translation key if current language key not found
+        let fallback: any = translations['en'];
+        for (const fkey of keys) {
+          if (fallback !== undefined && fallback[fkey] !== undefined) {
+            fallback = fallback[fkey];
+          } else {
+            fallback = undefined;
+            break;
+          }
+        }
+        return fallback || path; // Return path if fallback is missing
+      }
+    }
+
+    return typeof current === 'string' ? current : path;
+  };
+
+  return (
+    <I18nContext.Provider value={{ locale, direction, setLocale, t }}>
+      <div dir={direction} className={direction === 'rtl' ? 'rtl' : 'ltr'}>
+        {children}
+      </div>
+    </I18nContext.Provider>
+  );
+}
+
+export function useI18n() {
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error('useI18n must be used within an I18nProvider');
+  }
+  return context;
+}

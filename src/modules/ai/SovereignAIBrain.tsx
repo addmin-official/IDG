@@ -4,7 +4,7 @@ import {
   HelpCircle, RefreshCw, Send, AlertTriangle, Layers, ShieldCheck, 
   ChevronRight, ArrowRight, BookOpen, AlertCircle, Play, Eye
 } from 'lucide-react';
-import { Language } from '../types';
+import { Language } from '../../types';
 
 interface SovereignAIBrainProps {
   lang: Language;
@@ -43,13 +43,13 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
       // Dynamic output based on inputs
       const isDrillPipe = playDesc.toLowerCase().includes('drill') || playDesc.toLowerCase().includes('pipe');
       const standardResponse = isDrillPipe ? 
-`[SOVEREIGN_INFERENCE_ENGINE: CLEARED_BY_GATAWAY_BRAIN]
+`[SOVEREIGN_INFERENCE_ENGINE: CLEARED_BY_GATEWAY_BRAIN]
 =========================================
 1. HS CLASSIFICATION MAPPING:
    • RESOLVED HS-CODE: 7304.22.00 (Seamless drill pipes of stainless steel, for oil/gas drilling)
    • RECONFIRMED CODE INDEX PATH: Products of iron/steel -> Tubes/pipes -> Seamless drill pipes.
 
-2. REGISTERED DUY RECONCILIATION:
+2. REGISTERED DUTY RECONCILIATION:
    • STANDARD TARIFF VALUE: 8% Ad-Valorem
    • STRATEGIC CLEARANCE: Verified oil exploration dual-use exemption code: MOD-PETRO-2026.
 
@@ -127,37 +127,79 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
     { id: 'economic-forecaster', name: 'Economic Intel Network', index: 'Fiscal-Atlas-MoE', accuracy: '98.7%', latency: '90ms', status: 'Live' }
   ];
 
+  const isRtl = lang !== 'en';
+
+  const translateModuleName = (id: string) => {
+    switch (id) {
+      case 'hs-classifier': return lang === 'en' ? 'HS Classification AI' : lang === 'ar' ? 'ذكاء تصنيف البضائع والتعرفة' : 'زیرەکی پۆلێنکردنی تاریفەکان';
+      case 'customs-auditor': return lang === 'en' ? 'Customs Assistant AI' : lang === 'ar' ? 'مساعد التدقيق الجمركي الآلي' : 'عەقڵی هاوکاری گشتی گومرگ';
+      case 'logistics-seq': return lang === 'en' ? 'Logistics AI Core' : lang === 'ar' ? 'محرك جدولة اللوجستية والمسارات' : 'بزوێنەری مۆنیتۆری هۆشیاری لۆجستی';
+      case 'compliance-intercept': return lang === 'en' ? 'Compliance Intercept AI' : lang === 'ar' ? 'ذكاء مراقبة الحوالات والامتثال' : 'زیرەکی پاراستنی بەڵگەنامەکانی دارایی';
+      case 'risk-assessment': return lang === 'en' ? 'Risk Assessment neural' : lang === 'ar' ? 'تحليل المخاطر العصبية للمنافذ' : 'تۆڕی هەڵسەنگاندنی مەترسییەکان';
+      case 'decision-support': return lang === 'en' ? 'Decision Support Agent' : lang === 'ar' ? 'وكيل دعم القرار الوزاري' : 'سیرڤسی هاوکاری بڕیاری وەزارەت';
+      case 'predictive-corridors': return lang === 'en' ? 'Predictive Transit AI' : lang === 'ar' ? 'ذكاء مسارات الترانزيت التنبؤي' : 'زیرەکی پێشبینیکردنی ڕێڕەوەکانی ترانزیت';
+      case 'economic-forecaster': return lang === 'en' ? 'Economic Intel Network' : lang === 'ar' ? 'الشبكة الاستخباراتية الاقتصادية' : 'تۆڕی زانیاریی ئابووری نیشتمانیی';
+      default: return id;
+    }
+  };
+
+  const translateModuleStatus = (id: string) => {
+    switch (id) {
+      case 'hs-classifier': return lang === 'en' ? 'Live & Recommending' : lang === 'ar' ? 'متصل ويقدم التوصيات' : 'چالاک و پێشنیارکەر';
+      case 'customs-auditor': return lang === 'en' ? 'Backup Active' : lang === 'ar' ? 'خادم احتياطي نشط' : 'پاڵپشتی چالاک';
+      case 'logistics-seq': return lang === 'en' ? 'Live & Active' : lang === 'ar' ? 'متصل ونشط' : 'ڕاستەوخۆ چالاک';
+      case 'compliance-intercept': return lang === 'en' ? 'Strict Zero-Trust' : lang === 'ar' ? 'عديم الثقة النشطة' : 'سیستەمی چاودێری توند';
+      case 'risk-assessment': return lang === 'en' ? 'Monitoring Stream' : lang === 'ar' ? 'يراقب تدفق البيانات' : 'مۆنیتۆرکردنی ڕاستەوخۆ';
+      case 'decision-support': return lang === 'en' ? 'On-Standby' : lang === 'ar' ? 'في وضع الاستعداد' : 'لەسەر هێڵە';
+      case 'predictive-corridors': return lang === 'en' ? 'Active' : lang === 'ar' ? 'نشط' : 'چالاکە';
+      case 'economic-forecaster': return lang === 'en' ? 'Live' : lang === 'ar' ? 'مباشر' : 'چالاکی ڕاستەوخۆ';
+      default: return '';
+    }
+  };
+
   return (
-    <div id="sovereign-ai-brain-canvas" className="bg-[#111e2e]/95 rounded-xl border border-slate-800 p-5 lg:p-6 shadow-2xl flex flex-col gap-6 text-slate-100">
+    <div id="sovereign-ai-brain-canvas" className="bg-[#111e2e]/95 rounded-xl border border-slate-800 p-5 lg:p-6 shadow-2xl flex flex-col gap-6 text-slate-100" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* Sovereign AI Central Display Header */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-800 pb-5">
         <div>
-          <span className="text-[10px] uppercase font-mono text-[#cca553] tracking-widest font-bold">REPUBLIC OF IRAQ • REVENUE SHIELD DIGITAL ASSETS</span>
+          <span className="text-[10px] uppercase font-mono text-[#cca553] tracking-widest font-bold">
+            {lang === 'en' ? 'REPUBLIC OF IRAQ • REVENUE SHIELD DIGITAL ASSETS' : lang === 'ar' ? 'جمهورية العراق - قصر حماية العائد المالي الوطني' : 'کۆماری عێراق - مۆری دیجیتاڵیی داهاتی نیشتمانیی'}
+          </span>
           <h2 className="text-xl font-display font-semibold tracking-wide text-slate-50 uppercase flex items-center gap-2.5 mt-0.5">
             <span className="p-1.5 bg-emerald-500/10 rounded-lg border border-emerald-500/30">
               <Cpu className="w-5 h-5 text-emerald-400" />
             </span>
-            Sovereign IA Brain & Model Registry (IDG Cortex)
+            {lang === 'en' ? 'Sovereign AI Brain & Model Registry (IDG Cortex)' : lang === 'ar' ? 'العقل الاصطناعي السيادي وخادم سجلات النماذج العصبية' : 'مێشکی زیرەکی گومرگی فیدراڵی عێراق'}
           </h2>
           <p className="text-xs text-slate-400 mt-1 max-w-3xl">
-            Centralized strategic artificial intelligence network executing statecraft-grade customs categorization, currency-drain audits, biological quarantine filtering, and intercorridor logistics orchestration.
+            {lang === 'en' ? 'Centralized strategic artificial intelligence network executing statecraft-grade customs categorization, currency-drain audits, biological quarantine filtering, and intercorridor logistics orchestration.' :
+              lang === 'ar' ? 'الشبكة العصبية المركزية المشفرة لحماية الإيرادات ومراقبة قيم تداول البضائع واكتشاف محاولات تبييض وتهريب العملات الصعبة.' :
+              'تۆڕی ناوەندی زیرەکی بەڕێوەبردنی گشتی دەروازە بازرگانییەکان بۆ لێکدانەوەی دەقی داتاکانی گشت خاڵە جومگەییەکان.'}
           </p>
         </div>
 
         {/* Neural general statistics tickers */}
         <div className="flex gap-4 bg-[#0b1420] border border-slate-800/80 p-3 rounded-lg text-xs font-mono">
-          <div className="text-center border-r border-slate-800/80 pr-4">
-            <span className="text-slate-500 text-[10px] block uppercase">Average Inference Latency</span>
+          <div className="text-center border-r border-slate-850 pr-4">
+            <span className="text-slate-500 text-[10px] block uppercase">
+              {lang === 'en' ? 'Average Latency' : lang === 'ar' ? 'متوسط زمن الاستجابة' : 'تێکڕای کاتی وەڵامدانەوە'}
+            </span>
             <span className="text-emerald-400 font-bold block mt-0.5">48ms</span>
           </div>
-          <div className="text-center border-r border-slate-800/80 pr-4">
-            <span className="text-slate-500 text-[10px] block uppercase">Average Precision score</span>
+          <div className="text-center border-r border-slate-850 pr-4">
+            <span className="text-slate-500 text-[10px] block uppercase">
+              {lang === 'en' ? 'Precision score' : lang === 'ar' ? 'درجة الدقة المعيارية' : 'ڕێژەی وردی گشتی'}
+            </span>
             <span className="text-[#cca553] font-bold block mt-0.5">99.14%</span>
           </div>
           <div className="text-center">
-            <span className="text-slate-500 text-[10px] block uppercase">Operational Model Nodes</span>
-            <span className="text-cyan-400 font-bold block mt-0.5">32 Host Clustered</span>
+            <span className="text-slate-500 text-[10px] block uppercase">
+              {lang === 'en' ? 'Model Nodes' : lang === 'ar' ? 'عقد النمذجة الرياضية' : 'گرێی مۆدێلەکان'}
+            </span>
+            <span className="text-cyan-400 font-bold block mt-0.5">
+              {lang === 'en' ? '32 Clustered' : lang === 'ar' ? '٣٢ عقدة متصلة' : '٣٢ گرێی پەیوەستکراو'}
+            </span>
           </div>
         </div>
       </div>
@@ -169,8 +211,12 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
           
           {/* Section 1: Dynamic neural models service map */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2">Centralized AI Neural Cluster Map</h3>
-            <p className="text-xs text-slate-400">Interactive roster map of tactical-grade neural networks, pre-trained datasets, and sovereign statecraft APIs running across Iraq custom hubs.</p>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2">
+              {lang === 'en' ? 'Centralized AI Neural Cluster Map' : lang === 'ar' ? 'خارطة العناقيد العصبية الموحدة للذكاء الاصطناعي' : 'نەخشەی سەرەکی زیرەکی دەستکردی دەروازەکان'}
+            </h3>
+            <p className="text-xs text-slate-400">
+              {lang === 'en' ? 'Interactive roster map of tactical-grade neural networks, pre-trained datasets, and sovereign statecraft APIs running across Iraq custom hubs.' : lang === 'ar' ? 'خريطة تفاعلية للشبكات العصبية، ومجموعات البيانات والاتصالات المبرمجة الجارية عبر منافذ العراق الاتحادية.' : 'نەخشەیەکی کارلێککارانەی تۆڕە دەمارییەکان، داتاکانی ڕاهێنراو، و فۆرمی بڕیاردانی نیشتمانیی بۆ دەروازەکانی عێراق.'}
+            </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
               {aiModules.map((m) => (
@@ -188,12 +234,14 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                     <span className={`h-2.5 w-2.5 rounded-full ${activeModule === m.id ? 'bg-emerald-400 animate-pulse' : 'bg-emerald-500/60'}`} />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-200 text-xs mt-1 leading-snug">{m.name}</h4>
-                    <p className="text-[10px] font-mono text-slate-400 mt-1 capitalize">Duty Grade: {m.status}</p>
+                    <h4 className="font-semibold text-slate-200 text-xs mt-1 leading-snug">{translateModuleName(m.id)}</h4>
+                    <p className="text-[10px] font-mono text-slate-400 mt-1 capitalize">
+                      {lang === 'en' ? 'Duty Grade: ' : lang === 'ar' ? 'فئة العمل: ' : 'پلەی ئەرک: '}{translateModuleStatus(m.id)}
+                    </p>
                   </div>
-                  <div className="flex justify-between items-center text-[9px] font-mono mt-1 pt-1 border-t border-slate-850/40 text-slate-500">
-                    <span>Precision: {m.accuracy}</span>
-                    <span>Lat: {m.latency}</span>
+                  <div className="flex justify-between items-center text-[9px] font-mono mt-1 pt-1 border-t border-slate-855 text-slate-500">
+                    <span>{lang === 'en' ? 'Precision: ' : lang === 'ar' ? 'الدقة: ' : 'وردی: '}{m.accuracy}</span>
+                    <span>{lang === 'en' ? 'Lat: ' : lang === 'ar' ? 'الاستجابة: ' : 'کاتی گواستنەوە: '}{m.latency}</span>
                   </div>
                 </div>
               ))}
@@ -202,10 +250,14 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
             {/* Selected Module Detail Panel */}
             <div className="bg-[#0b1420] p-4 rounded-lg border border-slate-850/80 flex flex-col gap-2 mt-2">
               <div className="flex justify-between items-center border-b border-slate-850/60 pb-2 mb-2">
-                <span className="text-[10px] font-mono text-[#cca553] uppercase font-bold">CLUSTER REPORT: {activeModule.toUpperCase()}</span>
-                <span className="text-[10px] text-slate-500 font-mono">NODE HEALTH: OPTIMAL (100% SECURE)</span>
+                <span className="text-[10px] font-mono text-[#cca553] uppercase font-bold">
+                  {lang === 'en' ? 'CLUSTER REPORT: ' : lang === 'ar' ? 'تقرير العنقود: ' : 'ڕاپۆرتی سەرەکی: '}{activeModule.toUpperCase()}
+                </span>
+                <span className="text-[10px] text-slate-500 font-mono">
+                  {lang === 'en' ? 'NODE HEALTH: OPTIMAL (100% SECURE)' : lang === 'ar' ? 'صحة العقدة: ممتازة (١٠٠٪ مؤمنة)' : 'تەندروستی گرێکان: بەرزترین ئاست (١٠٠٪ پارێزراو)'}
+                </span>
               </div>
-              <p className="text-xs text-slate-350 leading-relaxed font-mono">
+              <p className="text-xs text-slate-300 leading-relaxed font-mono">
                 {activeModule === 'hs-classifier' && 'Our HS Code Classifier parses multi-language manifests in Kurdish, Arabic, and Western scripts, matching declared item textures to global custom indices. This intercepts intentional misclassifications designed to hide toxic industrial chemicals or avoid tariffs.'}
                 {activeModule === 'customs-auditor' && 'Under-invoicing analyzer. Examines container item valuations and correlates them against global market averages. Generates instant revenue protection warnings if cargo worth deviates sharply from trade averages.'}
                 {activeModule === 'logistics-seq' && 'Autonomously sequences logistics backlogs. Correlates queue densities at Trebil, Ibrahim Khalil, and southern harbors to predict custom processing congestions and schedules automatic re-routes.'}
@@ -272,7 +324,7 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                   />
                 </div>
 
-                <div className="bg-[#0b1420] p-3 rounded-lg border border-slate-850 flex flex-col gap-2.5">
+                <div className="bg-[#0b1420] p-3 rounded-lg border border-slate-855 flex flex-col gap-2.5">
                   <span className="text-[10px] text-slate-500 uppercase font-mono tracking-wider block font-bold">Dynamic Cargo Variables:</span>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                     <div>
@@ -299,7 +351,7 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                         type="text"
                         value={playCost}
                         onChange={(e) => setPlayCost(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-850 rounded px-2 py-1 mt-0.5 text-slate-200 focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-slate-950 border border-slate-855 rounded px-2 py-1 mt-0.5 text-slate-200 focus:outline-none focus:border-emerald-500"
                       />
                     </div>
                   </div>
@@ -325,10 +377,10 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                       {inferenceResult}
                     </div>
                   ) : isInferencing ? (
-                    <div className="flex flex-col items-center justify-center h-full gap-2 py-12 text-slate-400">
+                    <div className="flex flex-col items-center justify-center h-full gap-2 py-12 text-slate-404">
                       <Cpu className="w-8 h-8 text-emerald-400 animate-spin" />
                       <p className="animate-pulse">Accessing secure AI-Cluster Model UR-Cortex-V3...</p>
-                      <p className="text-[10px] text-slate-550">Resolving custom tariff index database matrices</p>
+                      <p className="text-[10px] text-[#4a6381]">Resolving custom tariff index database matrices</p>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2 py-12">
@@ -366,12 +418,12 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
             {hitlList.length === 0 ? (
               <div className="bg-emerald-950/20 border border-emerald-500/20 p-4 rounded text-center text-xs">
                 <p className="text-emerald-400 font-bold mb-1">✓ HUMAN OVERRIDES EXPENDED</p>
-                <p className="text-[10px] text-slate-405">All low-confidence classifier assessments have been securely audited by central agencies.</p>
+                <p className="text-[10px] text-slate-400">All low-confidence classifier assessments have been securely audited by central agencies.</p>
               </div>
             ) : (
               <div className="flex flex-col gap-4">
                 {hitlList.map((h) => (
-                  <div key={h.id} className="bg-slate-900 p-3.5 rounded border border-slate-850 flex flex-col gap-2.5 text-xs">
+                  <div key={h.id} className="bg-slate-900 p-3.5 rounded border border-slate-855 flex flex-col gap-2.5 text-xs text-slate-300">
                     <div className="flex justify-between items-center text-slate-400 font-mono text-[10px] border-b border-slate-850/60 pb-1.5">
                       <span>INCIDENT: <strong className="text-slate-200">{h.id}</strong></span>
                       <span className="text-amber-400 bg-amber-955 px-1 rounded font-semibold">Score: {h.score} Confidence</span>
@@ -393,7 +445,7 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                       </button>
                       <button
                         onClick={() => handleHITLResolve(h.id, 'REJECTED')}
-                        className="py-1.5 bg-red-950 hover:bg-red-900 border border-red-500/30 text-red-300 rounded font-semibold font-mono text-[10px] uppercase transition-all"
+                        className="py-1.5 bg-red-955 hover:bg-red-900 border border-red-500/30 text-red-300 rounded font-semibold font-mono text-[10px] uppercase transition-all"
                       >
                         Reject & Hold
                       </button>
@@ -415,7 +467,7 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
                         <span className="text-slate-500 text-[8px]">Secured</span>
                       </div>
                       <p className="text-slate-300 mt-0.5 leading-normal">Resolution Action: <span className={r.action === 'APPROVED' ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'}>{r.action}</span></p>
-                      <p className="text-[9px] text-slate-550 mt-0.5">Authorizing Cert: CIPHER-JWT-SECURE3921</p>
+                      <p className="text-[9px] text-[#425870] mt-0.5">Authorizing Cert: CIPHER-JWT-SECURE3921</p>
                     </div>
                   ))}
                 </div>
@@ -425,32 +477,32 @@ export default function SovereignAIBrain({ lang }: SovereignAIBrainProps) {
 
           {/* Section 4: AI Governance Framework Section */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-3">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-350 border-b border-slate-900 pb-1.5 flex items-center gap-1.5">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-1.5 flex items-center gap-1.5">
               <Layers className="text-[#cca553] w-4.5 h-4.5" />
               Sovereign Governance Framework
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               Every artificial intelligence model deployed within the Iraq Digital Gateway ecosystem must strictly satisfy the <strong>Supreme Sovereign Auditing Accords of 2026</strong>.
             </p>
-            <div className="flex flex-col gap-2.5 text-xs mt-1">
+            <div className="flex flex-col gap-2.5 mt-1">
               <div className="bg-slate-900/60 p-2.5 rounded border border-slate-850 flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-slate-200">No External Cloud Dependencies</p>
+                  <p className="font-semibold text-slate-200 text-xs">No External Cloud Dependencies</p>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-normal">AI models execute in secure local Baghdad micro-servers with offline fallback support.</p>
                 </div>
               </div>
               <div className="bg-slate-900/60 p-2.5 rounded border border-slate-850 flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-slate-200">Zero-Bias Multi-Lingual Accord</p>
+                  <p className="font-semibold text-slate-200 text-xs">Zero-Bias Multi-Lingual Accord</p>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-normal">Kurdish, Arabic, and English trade entities are evaluated utilizing identical objective semantic parameters.</p>
                 </div>
               </div>
               <div className="bg-slate-900/60 p-2.5 rounded border border-slate-850 flex items-start gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-slate-200">Auditable Prompt Registers</p>
+                  <p className="font-semibold text-slate-200 text-xs">Auditable Prompt Registers</p>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-normal">All dynamic statecraft prompts require electronic signatures before deploying into live gateway channels.</p>
                 </div>
               </div>
