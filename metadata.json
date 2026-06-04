@@ -1,0 +1,6 @@
+{
+  "name": "Iraq Digital Gateway (IDG)",
+  "description": "Sovereign AI-native digital infrastructure for trade, customs, logistics, and compliance intelligence in Iraq and the Kurdistan Region.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
