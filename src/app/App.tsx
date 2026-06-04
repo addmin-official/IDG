@@ -5,7 +5,7 @@ import {
   RefreshCw, Layers, Landmark, Network, 
   ArrowRight, BookOpen
 } from 'lucide-react';
-import { CHECKPOINTS, DICTIONARY } from '../mockData';
+import { CHECKPOINTS, DICTIONARY, CARGO_PRESETS } from '../mockData';
 import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
 import SovereignAIBrain from '../modules/ai/SovereignAIBrain';
 import NationalCommandCenter from '../modules/command-center/NationalCommandCenter';
@@ -919,24 +919,24 @@ export default function App() {
               <div className="mb-5 bg-slate-950/60 p-4 rounded-lg border border-slate-800">
                 <label className="text-xs text-slate-400 font-mono uppercase block mb-2">{d.manifestPreset}</label>
                 <div className="flex flex-col gap-2">
-                  {CHECKPOINTS.map((preset, idx) => {
-                    const presetId = idx === 0 ? 'MNF-IRAQ-2026-9081' : idx === 1 ? 'MNF-IRAQ-2026-1049' : 'MNF-IRAQ-2026-5541';
+                  {CARGO_PRESETS.map((preset) => {
+                    const presetId = preset.manifestId;
                     return (
                       <button
                         key={presetId}
                         onClick={() => handlePresetSelect(presetId)}
-                        className={`w-full text-left p-2.5 rounded text-xs transition-all border flex flex-col ${
+                        className={`w-full text-left p-2.5 rounded text-xs transition-all border flex flex-col cursor-pointer ${
                           selectedPreset === presetId 
-                            ? 'bg-[#1a2c42] border-[#cca553] text-white shadow' 
+                            ? 'bg-[#1a2c42] border-[#E0A96D] text-white shadow-lg' 
                             : 'bg-[#101925] border-slate-800 text-slate-400 hover:text-slate-200'
                         }`}
                       >
                         <div className="flex justify-between items-center w-full">
                           <span className="font-mono font-semibold text-slate-300 text-[11px]">{presetId}</span>
-                          <span className="text-[10px] text-slate-500 italic font-mono">{idx === 0 ? 'Germany' : idx === 1 ? 'China' : 'Turkey'}</span>
+                          <span className="text-[10px] text-[#E0A96D]/90 italic font-mono">{preset.originCountry}</span>
                         </div>
                         <span className="truncate max-w-[240px] text-slate-400 font-medium text-[11px] mt-1">
-                          {idx === 0 ? 'Al-Furat Heavy Machinery Ltd' : idx === 1 ? 'Sumer General import Consortium' : 'Dijlah Agri-Chemicals Corp'}
+                          {preset.importerName}
                         </span>
                       </button>
                     );

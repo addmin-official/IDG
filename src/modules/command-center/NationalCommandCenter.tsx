@@ -86,12 +86,12 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
       {/* Platform Title */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-800 pb-5">
         <div>
-          <span className="text-[10px] uppercase font-mono text-[#cca553] tracking-widest font-bold">
+          <span className="text-[10px] uppercase font-mono text-[#E0A96D] tracking-widest font-bold">
             {lang === 'en' ? 'REPUBLIC OF IRAQ & COUNCIL OF MINISTERS' : lang === 'ar' ? 'جمهورية العراق - مجلس الوزراء الفيدرالي' : 'کۆماری عێراق - ئەنجومەنی وەزیران'}
           </span>
           <h2 className="text-xl font-display font-semibold tracking-wide text-slate-50 uppercase flex items-center gap-2.5 mt-0.5">
-            <span className="p-1.5 bg-[#cca553]/15 rounded-lg border border-[#cca553]/40">
-              <Monitor className="w-5 h-5 text-[#cca553]" />
+            <span className="p-1.5 bg-[#E0A96D]/15 rounded-lg border border-[#E0A96D]/40">
+              <Monitor className="w-5 h-5 text-[#E0A96D]" />
             </span>
             {lang === 'en' ? 'Sovereign National Command Center (IDG Command Hub)' : lang === 'ar' ? 'غرفة العمليات الوطنية السيادية الموحدة (IDG)' : 'ناوەندی فەرمانی نیشتمانیی سەروەر'}
           </h2>
@@ -113,7 +113,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             onClick={() => setActiveRole('pmo')}
             className={`px-2.5 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 ${
               activeRole === 'pmo' 
-                ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/30 font-bold' 
+                ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -126,7 +126,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             onClick={() => setActiveRole('ministries')}
             className={`px-2.5 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 ${
               activeRole === 'ministries' 
-                ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/30 font-bold' 
+                ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -139,7 +139,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             onClick={() => setActiveRole('customs')}
             className={`px-2.5 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 ${
               activeRole === 'customs' 
-                ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/30 font-bold' 
+                ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -152,7 +152,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             onClick={() => setActiveRole('border')}
             className={`px-2.5 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 ${
               activeRole === 'border' 
-                ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/30 font-bold' 
+                ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -165,7 +165,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             onClick={() => setActiveRole('economic')}
             className={`px-2.5 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 ${
               activeRole === 'economic' 
-                ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/30 font-bold' 
+                ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -176,16 +176,16 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
       </div>
 
       {/* Role Title and Description banner */}
-      <div className="bg-[#1a2c42]/30 border-[#cca553] p-4 rounded bg-gradient-to-r from-[#1a2c42]/40 to-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 rtl:border-l-0 rtl:border-r-4">
+      <div className="bg-[#1a2c42]/30 border-[#E0A96D] p-4 rounded bg-gradient-to-r from-[#1a2c42]/40 to-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 rtl:border-l-0 rtl:border-r-4">
         <div>
           <h3 className="font-semibold text-slate-100 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#cca553]" />
+            <Sparkles className="w-4 h-4 text-[#E0A96D]" />
             {labels[activeRole].title}
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">{labels[activeRole].sub}</p>
         </div>
         <div className="bg-slate-900 border border-slate-800 p-2 rounded font-mono text-[10px] text-slate-500 select-none">
-          SECURE ENCLAVE ID: <span className="text-[#cca553]">{activeRole.toUpperCase()}_ADMIN_STREAMS</span>
+          SECURE ENCLAVE ID: <span className="text-[#E0A96D]">{activeRole.toUpperCase()}_ADMIN_STREAMS</span>
         </div>
       </div>
 
@@ -202,20 +202,20 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 <span>
                   {lang === 'en' ? 'Supreme National Strategic Agenda' : lang === 'ar' ? 'الأجندة الاستراتيجية العليا للتجارة والمالية' : 'کارنامەی باڵای ستراتیژی نیشتمانیی'}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-[#cca553]/10 border border-[#cca553]/30 rounded text-[#cca553] uppercase font-mono">2026 Fiscal Cycle</span>
+                <span className="text-xs px-2 py-0.5 bg-[#E0A96D]/10 border border-[#E0A96D]/30 rounded text-[#E0A96D] uppercase font-mono">2026 Fiscal Cycle</span>
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-[#0b1420] border border-slate-850 p-4 rounded-lg flex flex-col gap-2">
                   <h4 className="text-xs text-slate-400 uppercase font-mono">
-                    {lang === 'en' ? 'Customs Direct Revenues Target' : lang === 'ar' ? 'عوائد المالية والتعرفة الاتحادیة المحققة' : 'ئاستی داهاتی گومرگی فیدراڵی'}
+                    {lang === 'en' ? 'Customs Direct Revenues Target' : lang === 'ar' ? 'عوائد المالية والتعرفة الاتحادية المحققة' : 'ئاستی داهاتی گومرگی فیدراڵی'}
                   </h4>
                   <div className="flex items-end gap-2 mt-1">
-                    <span className="text-2xl font-bold font-mono text-[#cca553]">8.42T IQD</span>
+                    <span className="text-2xl font-bold font-mono text-[#E0A96D]">8.42T IQD</span>
                     <span className="text-xs text-emerald-400 font-mono mb-1">94.3% Achieved</span>
                   </div>
                   <div className="w-full bg-slate-900 h-1.5 rounded overflow-hidden mt-2">
-                    <div className="bg-[#cca553] h-full rounded" style={{ width: '94.3%' }}></div>
+                    <div className="bg-[#E0A96D] h-full rounded" style={{ width: '94.3%' }}></div>
                   </div>
                   <p className="text-[10px] text-slate-500 leading-normal mt-1">
                     {lang === 'en' ? 'Federal central treasury direct intake calculated from real-time blockchain customs receipts. Over 800M USD leakage blocked by automated AI auditors.' :
@@ -267,7 +267,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                     </div>
                   </div>
                   <div className="flex items-start gap-2.5">
-                    <span className="p-1 bg-[#cca553]/10 text-[#cca553] border border-[#cca553]/20 rounded text-[9px] uppercase font-mono font-bold">Priority 2</span>
+                    <span className="p-1 bg-[#E0A96D]/10 text-[#E0A96D] border border-[#E0A96D]/20 rounded text-[9px] uppercase font-mono font-bold">Priority 2</span>
                     <div>
                       <p className="font-semibold text-slate-200">
                         {lang === 'en' ? 'Turkey-Kurdistan Region Railway Cargo Custom Accord' : lang === 'ar' ? 'الاتفاق الجمركي الموحد لربط سكة وبوابات إقليم كوردستان بتركيا' : 'ڕێککەوتنی گشتی ڕاگرتنی تاریفەی هاوبەش بۆ دەروازەی ئیبراهیم خەلیل'}
@@ -348,42 +348,77 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               {/* COSQC Accords panel */}
               <div className="bg-slate-900/60 p-4 rounded-lg border border-slate-850 flex flex-col gap-3">
                 <h4 className="text-xs uppercase font-mono text-slate-400">Central Organization for Standardization and Quality Control (COSQC) Accords</h4>
-                <div className="overflow-x-auto text-xs">
+                
+                {/* Desktop and Tablet table */}
+                <div className="hidden md:block overflow-x-auto text-xs">
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="border-b border-slate-800 text-slate-500 text-[10px] uppercase font-mono">
-                        <th className="pb-2">Accord Token</th>
-                        <th className="pb-2">Origin Region</th>
-                        <th className="pb-2">Audited Item Class</th>
-                        <th className="pb-2">Compliance Rating</th>
-                        <th className="pb-2 text-right">Certificate Seal</th>
+                        <th className="pb-2 text-start">Accord Token</th>
+                        <th className="pb-2 text-start">Origin Region</th>
+                        <th className="pb-2 text-start">Audited Item Class</th>
+                        <th className="pb-2 text-start">Compliance Rating</th>
+                        <th className="pb-2 text-end">Certificate Seal</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-850 text-slate-300 font-mono text-[11px]">
                       <tr>
-                        <td className="py-2.5 text-[#cca553]">COSQC-STND-2026</td>
-                        <td>European Union</td>
-                        <td>Automotive Brake Assembly</td>
-                        <td className="text-emerald-400">99.8% (Approved)</td>
-                        <td className="text-right text-slate-400">MODERN_ISO_COSQC</td>
+                        <td className="py-2.5 text-[#E0A96D] text-start">COSQC-STND-2026</td>
+                        <td className="text-start">European Union</td>
+                        <td className="text-start font-sans">Automotive Brake Assembly</td>
+                        <td className="text-emerald-400 text-start">99.8% (Approved)</td>
+                        <td className="text-end text-slate-400">MODERN_ISO_COSQC</td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 text-[#cca553]">COSQC-AGRI-9981</td>
-                        <td>Regional Wheat Imports</td>
-                        <td>Grains / Non-GMO seeds</td>
-                        <td className="text-emerald-400">100.0% (Approved)</td>
-                        <td className="text-right text-slate-400">AGRI_GOV_CERT</td>
+                        <td className="py-2.5 text-[#E0A96D] text-start">COSQC-AGRI-9981</td>
+                        <td className="text-start">Regional Wheat Imports</td>
+                        <td className="text-start font-sans">Grains / Non-GMO seeds</td>
+                        <td className="text-emerald-400 text-start">100.0% (Approved)</td>
+                        <td className="text-end text-slate-400">AGRI_GOV_CERT</td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 text-[#cca553]">COSQC-ELEC-4131</td>
-                        <td>East Asia Circuits</td>
-                        <td>High voltage grid elements</td>
-                        <td className="text-amber-400">89.2% (Pending Inspect)</td>
-                        <td className="text-right text-slate-400">LAB_MANUAL_HOLD</td>
+                        <td className="py-2.5 text-[#E0A96D] text-start">COSQC-ELEC-4131</td>
+                        <td className="text-start">East Asia Circuits</td>
+                        <td className="text-start font-sans">High voltage grid elements</td>
+                        <td className="text-amber-400 text-start">89.2% (Pending Inspect)</td>
+                        <td className="text-end text-slate-400">LAB_MANUAL_HOLD</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+
+                {/* Mobile view cards */}
+                <div className="block md:hidden space-y-4">
+                  {[
+                    { token: 'COSQC-STND-2026', origin: 'European Union', item: 'Automotive Brake Assembly', rating: '99.8% (Approved)', status: 'approved', seal: 'MODERN_ISO_COSQC' },
+                    { token: 'COSQC-AGRI-9981', origin: 'Regional Wheat Imports', item: 'Grains / Non-GMO seeds', rating: '100.0% (Approved)', status: 'approved', seal: 'AGRI_GOV_CERT' },
+                    { token: 'COSQC-ELEC-4131', origin: 'East Asia Circuits', item: 'High voltage grid elements', rating: '89.2% (Pending Inspect)', status: 'pending', seal: 'LAB_MANUAL_HOLD' }
+                  ].map((row) => (
+                    <div key={row.token} className="bg-slate-950/45 p-3.5 rounded-lg border border-slate-850 flex flex-col gap-2 text-xs">
+                      <div className="flex justify-between items-center border-b border-slate-850 pb-1.5">
+                        <span className="font-mono font-bold text-[#E0A96D] text-xs">{row.token}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold uppercase ${row.status === 'approved' ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/10' : 'bg-amber-950/80 text-amber-500 border border-amber-500/10'}`}>
+                          {row.rating}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                        <div>
+                          <span className="text-slate-500 block text-[9px] uppercase font-mono">Origin</span>
+                          <span className="text-slate-300 font-medium">{row.origin}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 block text-[9px] uppercase font-mono">Item Class</span>
+                          <span className="text-slate-300 font-medium font-sans">{row.item}</span>
+                        </div>
+                        <div className="col-span-2 mt-1">
+                          <span className="text-slate-500 block text-[9px] uppercase font-mono">Certificate Seal</span>
+                          <span className="text-slate-400 font-mono text-[10px]">{row.seal}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
               </div>
             </div>
           )}
@@ -401,7 +436,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 </div>
                 <div className="bg-[#0b1420] border border-slate-850 p-3 rounded-lg text-center">
                   <span className="text-[10px] text-slate-500 uppercase block font-mono">Tax Revenue (Daily)</span>
-                  <span className="text-xl font-bold font-mono text-[#cca553] mt-1 block">22.4B IQD</span>
+                  <span className="text-xl font-bold font-mono text-[#E0A96D] mt-1 block">22.4B IQD</span>
                   <span className="text-[9px] text-emerald-400 block font-mono mt-0.5">+4.2% Peak Yield</span>
                 </div>
                 <div className="bg-[#0b1420] border border-slate-850 p-3 rounded-lg text-center">
@@ -497,7 +532,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                   </div>
                   <div className="bg-[#050b12] p-3 rounded border border-slate-850 text-center">
                     <span className="text-[10px] text-slate-500 block mb-1">QUARANTINE OVERFLOW CAPACITY</span>
-                    <span className="text-lg font-bold text-[#cca553] font-mono">0.05% Range</span>
+                    <span className="text-lg font-bold text-[#E0A96D] font-mono">0.05% Range</span>
                   </div>
                 </div>
               </div>
@@ -524,7 +559,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 <div className="bg-[#0b1420] border border-slate-850 p-4 rounded-lg flex flex-col gap-2">
                   <h4 className="text-xs text-slate-400 uppercase font-mono font-semibold">Balance of Payments Current Account Projection</h4>
                   <div className="flex items-end gap-2 mt-1">
-                    <span className="text-2xl font-bold font-mono text-[#cca553]">+$9.18B USD</span>
+                    <span className="text-2xl font-bold font-mono text-[#E0A96D]">+$9.18B USD</span>
                     <span className="text-xs text-emerald-400 font-mono mb-1">Surplus Trend</span>
                   </div>
                   <p className="text-[10px] text-slate-500 leading-normal mt-1">
@@ -539,13 +574,13 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1 text-xs">
                   <div className="p-3 bg-slate-950 rounded border border-slate-850">
                     <p className="font-semibold text-slate-200 uppercase tracking-wide text-[11px]">Gulf-Basra Corridor (Grand Faw Link)</p>
-                    <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                    <p className="text-[10px] text-slate-404 mt-1 leading-normal">
                       Establishes a sovereign transit land-bridge dry tunnel linking Basra container port to the Turkish rail mesh. Expected to handle 40M tons of overland cargo annually.
                     </p>
                   </div>
                   <div className="p-3 bg-slate-950 rounded border border-slate-850">
                     <p className="font-semibold text-slate-200 uppercase tracking-wide text-[11px]">West Levant Corridor (Levant Transit Tunnel)</p>
-                    <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                    <p className="text-[10px] text-slate-404 mt-1 leading-normal">
                       Connects Iraqi petrochemical storage networks to Mediterranean dry-cargo systems. Under analysis by Joint Levant Trade Ministry Committees.
                     </p>
                   </div>
@@ -558,7 +593,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
             <div className="border-b border-slate-900 pb-3 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
               <div>
-                <span className="text-[10px] text-[#cca553] uppercase font-mono tracking-wider font-semibold block">
+                <span className="text-[10px] text-[#E0A96D] uppercase font-mono tracking-wider font-semibold block">
                   {selectedGate.region[lang]}
                 </span>
                 <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2 mt-0.5">
@@ -576,7 +611,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               </div>
               <div className="bg-[#0b1420] p-3 rounded border border-slate-850">
                 <span className="text-slate-500 text-[10px] uppercase font-mono block mb-1">Daily Custom Revenues</span>
-                <span className="text-xs font-bold text-[#cca553] font-mono block">{(selectedGate.revenueRaw * 1000).toLocaleString()} IQD</span>
+                <span className="text-xs font-bold text-[#E0A96D] font-mono block">{(selectedGate.revenueRaw * 1000).toLocaleString()} IQD</span>
               </div>
               <div className="bg-[#0b1420] p-3 rounded border border-slate-850">
                 <span className="text-slate-500 text-[10px] uppercase font-mono block mb-1">Trucks Processed (Today)</span>
@@ -598,7 +633,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                     onClick={() => setSelectedGate(checkpoint)}
                     className={`px-3 py-1.5 rounded text-xs font-mono font-medium transition-all ${
                       selectedGate.id === checkpoint.id
-                        ? 'bg-[#1a2c42] border border-[#cca553]/40 text-[#cca553] font-bold shadow'
+                        ? 'bg-[#1a2c42] border border-[#E0A96D]/40 text-[#E0A96D] font-bold shadow'
                         : 'bg-slate-900 border border-slate-850 text-slate-400 hover:text-slate-200'
                     }`}
                   >
@@ -621,7 +656,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 <Network className="text-[#E0A96D] w-4.5 h-4.5" />
                 {lang === 'en' ? 'Sovereign Operations Directory' : lang === 'ar' ? 'دليل العمليات السيادي الاتحادي' : 'ڕێبەری کارە فەرمییەکانی نیشتمانیی'}
               </span>
-              <span className="bg-[#E0A96D]/15 text-[#E0A96D] border border-[#E0A96D]/30 px-20 py-0.5 rounded text-[9px] font-mono uppercase hidden xs:inline-block">Status Ledger</span>
+              <span className="bg-[#E0A96D]/15 text-[#E0A96D] border border-[#E0A96D]/30 px-2 py-0.5 rounded text-[9px] font-mono uppercase hidden xs:inline-block">Status Ledger</span>
             </h3>
 
             <div className="flex flex-col gap-2.5">
@@ -654,7 +689,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
                 <Activity className="w-5 h-5 text-cyan-400 shrink-0 group-hover:scale-105 transition-transform" />
                 <span className="text-xs font-bold text-slate-200">
-                  {lang === 'en' ? 'Anti-Fraud Database' : lang === 'ar' ? 'مزامنة ملفات منع الاحتيال' : 'ڕێگریکردنی فێڵکاریی بەندەرەکان'}
+                  {lang === 'en' ? 'Anti-Fraud System' : lang === 'ar' ? 'مزامنة منع الاحتيال' : 'ڕێگریکردنی فێڵکاریی بەندەرەکان'}
                 </span>
                 <div className="flex-grow"></div>
                 <span className="bg-emerald-950/80 text-[#52B788] border border-emerald-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
@@ -664,12 +699,12 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
               {/* Item 4 */}
               <div className="flex items-center gap-4 bg-[#102235]/40 hover:bg-[#102235]/70 p-3.5 rounded-lg border border-slate-800/80 hover:border-[#E0A96D]/30 transition-all cursor-pointer shadow-md group">
-                <FileText className="w-5 h-5 text-amber-400 shrink-0 group-hover:scale-105 transition-transform" />
+                <FileText className="w-5 h-5 text-amber-550 shrink-0 group-hover:scale-105 transition-transform" />
                 <span className="text-xs font-bold text-slate-200">
                   {lang === 'en' ? 'KRG Boundary Node Check' : lang === 'ar' ? 'سيادة وعوائد منافذ الإقليم وبغداد' : 'پشکنینی دەروازەی سنووری نێوان هەرێم'}
                 </span>
                 <div className="flex-grow"></div>
-                <span className="bg-amber-955 text-amber-400 border border-amber-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
+                <span className="bg-amber-950/80 text-amber-500 border border-amber-500/25 px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider shrink-0 select-none">
                   {lang === 'en' ? 'Verify' : lang === 'ar' ? 'تدقيق' : 'پشکنین'}
                 </span>
               </div>
@@ -681,17 +716,17 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
             <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
               <span className="flex items-center gap-1.5">
-                <Cpu className="text-[#cca553] w-4 h-4" />
+                <Cpu className="text-[#E0A96D] w-4 h-4" />
                 Sovereign AI Decision Shield
               </span>
-              <span className="bg-[#cca553]/10 text-[#cca553] border border-[#cca553]/30 px-2 py-0.5 rounded text-[9px] font-mono uppercase">Recommendations</span>
+              <span className="bg-[#E0A96D]/10 text-[#E0A96D] border border-[#E0A96D]/30 px-2 py-0.5 rounded text-[9px] font-mono uppercase">Recommendations</span>
             </h3>
 
             <div className="flex flex-col gap-3.5 text-xs text-slate-300">
               <div className="bg-[#1a2c42]/20 border-l-3 border-emerald-500 p-3 rounded relative">
-                <p className="font-mono text-[9px] text-[#cca553] font-semibold mb-1 uppercase">HS CLASSIFICATION ANOMALY CAPTURE (ACTIVE)</p>
+                <p className="font-mono text-[9px] text-[#E0A96D] font-semibold mb-1 uppercase">HS CLASSIFICATION ANOMALY CAPTURE (ACTIVE)</p>
                 <p className="font-medium text-slate-200">Reclassify Wheat strain imports from Levant tunnel</p>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">
+                <p className="text-[11px] text-slate-404 mt-1 leading-normal">
                   Our neural network flagged importer tariff mismatch [HS-1001] mapped instead as [HS-1003]. Reclassifying recovers 41M IQD in unassigned duties instantly.
                 </p>
                 <div className="mt-2.5 flex justify-end">
@@ -702,9 +737,9 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               </div>
 
               <div className="bg-[#1a2c42]/20 border-l-3 border-cyan-400 p-3 rounded relative">
-                <p className="font-mono text-[9px] text-[#cca553] font-semibold mb-1 uppercase">PREDICTIVE STREAK & FLOW CLEARANCE LOG (ACTIVE)</p>
+                <p className="font-mono text-[9px] text-[#E0A96D] font-semibold mb-1 uppercase">PREDICTIVE STREAK & FLOW CLEARANCE LOG (ACTIVE)</p>
                 <p className="font-medium text-slate-200">Reroute Ibrahim Khalil bulk trucks to Duhoq dry lock</p>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">
+                <p className="text-[11px] text-slate-404 mt-1 leading-normal">
                   Live scanner queue projections hint at a 4-hour customs backlog at regional borders tonight. Pre-routing 12 cargo trucks to Dahuk bypass drops latency by 72% overall.
                 </p>
                 <div className="mt-2.5 flex justify-end">

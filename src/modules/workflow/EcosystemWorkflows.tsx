@@ -169,7 +169,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
       {/* Simulation Dashboard Header Banner */}
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 border-b border-slate-850 pb-5">
         <div>
-          <span className="text-[10px] uppercase font-mono text-[#cca553] tracking-widest font-bold">
+          <span className="text-[10px] uppercase font-mono text-[#E0A96D] tracking-widest font-bold">
             {lang === 'en' ? 'REPUBLIC OF IRAQ • INTEROPERABILITY INTERLOCK SYSTEM' : lang === 'ar' ? 'جمهورية العراق - نظام محاكاة وتسوية التكامل الفيدرالي' : 'کۆماری عێراق - ماتیڕالی هاوئاهەنگی نیشتمانیی فیدراڵ'}
           </span>
           <h2 className="text-xl font-display font-semibold tracking-wide text-slate-50 uppercase flex items-center gap-2.5 mt-0.5">
@@ -194,7 +194,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           <button
             onClick={() => setSimulationSpeed(4500)}
             className={`px-2 py-1 rounded text-[10px] font-mono transition-all ${
-              simulationSpeed === 4500 ? 'bg-slate-900 border border-slate-800 text-[#cca553] font-bold' : 'text-slate-400 hover:text-white'
+              simulationSpeed === 4500 ? 'bg-slate-900 border border-slate-800 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
             {lang === 'en' ? 'Slower (4.5s)' : lang === 'ar' ? 'أبطأ (٤.٥ ث)' : 'هێواشتر (٤.٥ چ)'}
@@ -203,7 +203,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           <button
             onClick={() => setSimulationSpeed(3000)}
             className={`px-2 py-1 rounded text-[10px] font-mono transition-all ${
-              simulationSpeed === 3000 ? 'bg-slate-900 border border-slate-850 text-[#cca553] font-bold' : 'text-slate-400 hover:text-white'
+              simulationSpeed === 3000 ? 'bg-slate-900 border border-slate-850 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
             {lang === 'en' ? 'Normal (3s)' : lang === 'ar' ? 'طبيعي (٣ ث)' : 'ئاسایی (٣ چ)'}
@@ -212,7 +212,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           <button
             onClick={() => setSimulationSpeed(1500)}
             className={`px-2 py-1 rounded text-[10px] font-mono transition-all ${
-              simulationSpeed === 1500 ? 'bg-slate-900 border border-slate-850 text-[#cca553] font-bold' : 'text-slate-400 hover:text-white'
+              simulationSpeed === 1500 ? 'bg-slate-900 border border-slate-850 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
             {lang === 'en' ? 'Accelerated (1.5s)' : lang === 'ar' ? 'مسرّع (١.٥ ث)' : 'خێراتر (١.٥ چ)'}
@@ -247,12 +247,12 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           }}
           className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 h-[115px] ${
             activeScenario === 'general-trade'
-              ? 'bg-[#1a2c42]/30 border-[#cca553] shadow-md ring-1 ring-[#cca553]/15'
+              ? 'bg-[#1a2c42]/30 border-[#E0A96D] shadow-md ring-1 ring-[#E0A96D]/15'
               : 'bg-slate-950/80 border-slate-855 hover:border-slate-750'
           }`}
         >
           <span className="p-2 bg-slate-900 rounded-lg border border-slate-800">
-            <Ship className={`w-5 h-5 ${activeScenario === 'general-trade' ? 'text-[#cca553]' : 'text-slate-500'}`} />
+            <Ship className={`w-5 h-5 ${activeScenario === 'general-trade' ? 'text-[#E0A96D]' : 'text-slate-500'}`} />
           </span>
           <div>
             <h3 className="font-semibold text-slate-100 text-xs">
@@ -272,12 +272,12 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           }}
           className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 h-[115px] ${
             activeScenario === 'krg-trade'
-              ? 'bg-[#1a2c42]/30 border-[#cca553] shadow-md ring-1 ring-[#cca553]/15'
+              ? 'bg-[#1a2c42]/30 border-[#E0A96D] shadow-md ring-1 ring-[#E0A96D]/15'
               : 'bg-slate-950/80 border-slate-855 hover:border-slate-750'
           }`}
         >
           <span className="p-2 bg-slate-900 rounded-lg border border-slate-800">
-            <Truck className={`w-5 h-5 ${activeScenario === 'krg-trade' ? 'text-[#cca553]' : 'text-slate-500'}`} />
+            <Truck className={`w-5 h-5 ${activeScenario === 'krg-trade' ? 'text-[#E0A96D]' : 'text-slate-500'}`} />
           </span>
           <div>
             <h3 className="font-semibold text-slate-100 text-xs">
@@ -297,18 +297,18 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           }}
           className={`p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 h-[115px] ${
             activeScenario === 'air-cargo'
-              ? 'bg-[#1a2c42]/30 border-[#cca553] shadow-md ring-1 ring-[#cca553]/15'
+              ? 'bg-[#1a2c42]/30 border-[#E0A96D] shadow-md ring-1 ring-[#E0A96D]/15'
               : 'bg-slate-950/80 border-slate-855 hover:border-slate-750'
           }`}
         >
           <span className="p-2 bg-slate-900 rounded-lg border border-slate-800">
-            <Plane className={`w-5 h-5 ${activeScenario === 'air-cargo' ? 'text-[#cca553]' : 'text-slate-500'}`} />
+            <Plane className={`w-5 h-5 ${activeScenario === 'air-cargo' ? 'text-[#E0A96D]' : 'text-slate-500'}`} />
           </span>
           <div>
             <h3 className="font-semibold text-slate-100 text-xs">
               {lang === 'en' ? 'Air Cargo Expedited Ingress Terminal' : lang === 'ar' ? 'ممر الشحن الجوي السريع بمطارات العراق' : 'ڕێڕەوی خێرای باری ئاسمانی فڕۆکەخانەکان'}
             </h3>
-            <p className="text-[10px] text-slate-404 mt-1 leading-normal">
+            <p className="text-[10px] text-slate-400 mt-1 leading-normal">
               {lang === 'en' ? 'Simulates high-value strategic computing elements or raw therapeutics arriving at Baghdad and Erbil airports.' : lang === 'ar' ? 'محاكاة الشحنات عالية القيمة والمواد الحساسة والأجهزة ووصولها إلى مطارات بغداد وأربيل.' : 'هاوشێوەکەری باری پزیشکی و ئامێرە تەکنەلۆژییە گرنگەکان بۆ فڕۆکەخانەی بەغداد یان هەولێر.'}
             </p>
           </div>
@@ -358,11 +358,11 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
         {/* Selected Stage Detail Monitor */}
         <div className="bg-[#0b1420] p-5 rounded-lg border border-slate-850/80 grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="md:col-span-2 border-r border-slate-850/60 pr-5 rtl:border-r-0 rtl:border-l rtl:pr-0 rtl:pl-5 flex flex-col gap-2">
-            <span className="text-[10px] font-mono text-[#cca553] uppercase font-bold tracking-widest">
+            <span className="text-[10px] font-mono text-[#E0A96D] uppercase font-bold tracking-widest">
               {lang === 'en' ? `CURRENT PROCESS WAVE OVERWATCH: STAGE ${activeStepIndex + 1} OF 13` : lang === 'ar' ? `مراقبة موجة العمليات الجارية: المرحلة ${activeStepIndex + 1} من أصل ١٣` : `مۆنیتۆری ڕێڕەوی گشتی پرۆسەکە: قۆناغی ${activeStepIndex + 1} لە کۆی ١٣`}
             </span>
             <h4 className="text-base font-bold text-slate-100 flex items-center gap-2">
-              <span className="p-1 px-1.5 bg-[#cca553]/15 rounded border border-[#cca553]/30 font-mono text-xs text-[#cca553]">
+              <span className="p-1 px-1.5 bg-[#E0A96D]/15 rounded border border-[#E0A96D]/30 font-mono text-xs text-[#E0A96D]">
                 {activeStepIndex + 1}
               </span>
               {activeStep.title[lang]}
@@ -400,7 +400,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
                 <span className="text-[9px] text-slate-500 block">
                   {lang === 'en' ? 'TOTAL DIRECT REVENUES' : lang === 'ar' ? 'عوائد التعرفة والضرائب' : 'کۆی داهاتی باج'}
                 </span>
-                <span className="text-xs font-bold text-[#cca553] mt-1 block">{(simMetrics.totalDutyCalculated / 1000000).toFixed(0)}M IQD</span>
+                <span className="text-xs font-bold text-[#E0A96D] mt-1 block">{(simMetrics.totalDutyCalculated / 1000000).toFixed(0)}M IQD</span>
               </div>
               <div className="bg-slate-900 p-2.5 rounded border border-slate-855 text-center">
                 <span className="text-[9px] text-slate-500 block">
@@ -414,6 +414,85 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
             <div className="bg-slate-900 p-2 rounded border border-slate-850 text-center font-mono text-[10px] text-slate-500 leading-normal">
               {lang === 'en' ? 'CURRENT SCENARIO:' : lang === 'ar' ? 'السيناريو الحالي:' : 'سیناریۆی چالاک:'} <span className="text-cyan-400 font-bold">{activeScenario.toUpperCase()}</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom sections: Transaction monitor split with logs */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        
+        {/* Left 2/3: Live Transaction logs list */}
+        <div className="xl:col-span-2 bg-[#0a1523]/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
+          <h3 className="text-xs uppercase font-mono tracking-wider text-slate-350 border-b border-slate-900 pb-2 font-bold">
+            {lang === 'en' ? 'Secure Ledger transaction flow stream' : lang === 'ar' ? 'تدفق سجل الحوالات والمعاملات الآمن' : 'مۆنیتۆری ڕاستەوخۆی تۆماری جێگیری کارە فەرمییەکان'}
+          </h3>
+          
+          {/* Desktop/Tablet table view */}
+          <div className="hidden md:block overflow-x-auto text-xs font-mono">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-850 text-slate-500 text-[9px] uppercase font-mono">
+                  <th className="pb-2 text-start">
+                    {lang === 'en' ? 'Secure TX ID' : lang === 'ar' ? 'رمز المعاملة الآمن' : 'ناسنامەی کارەکە'}
+                  </th>
+                  <th className="pb-2 text-start">
+                    {lang === 'en' ? 'Pipeline Phase' : lang === 'ar' ? 'مرحلة التدفق' : 'قۆناغی کار'}
+                  </th>
+                  <th className="pb-2 text-start">
+                    {lang === 'en' ? 'Audit Status' : lang === 'ar' ? 'حالة التدقيق الجمركي' : 'بارودۆخی پێداچوونەوە'}
+                  </th>
+                  <th className="pb-2 text-start">
+                    {lang === 'en' ? 'Execution Log Detail' : lang === 'ar' ? 'تفاصيل سجل التنفيذ اللحظي' : 'زانیاری نووسراوی ڕاپۆرت'}
+                  </th>
+                  <th className="pb-2 text-end">
+                    {lang === 'en' ? 'Sequence Timestamp' : lang === 'ar' ? 'التوقيت الرقمي' : 'کاتی گواستنەوە'}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-850/60 text-slate-300 text-[10.5px]">
+                {logs.map((log, idx) => (
+                  <tr key={idx} className={idx === 0 ? 'text-[#E0A96D] font-bold animate-pulse' : ''}>
+                    <td className="py-2.5 font-bold text-[#E0A96D] text-start">{log.id}</td>
+                    <td className="text-start">{log.step}</td>
+                    <td className="text-start">
+                      <span className="px-1.5 py-0.5 bg-emerald-950/80 text-emerald-400 border border-emerald-500/20 rounded uppercase text-[9px] font-semibold">
+                        {log.status === 'Success' ? (lang === 'en' ? 'Success' : lang === 'ar' ? 'ناجح' : 'سەرکەوتوو') : (lang === 'en' ? 'Processing' : lang === 'ar' ? 'خاضع للمطابقة' : 'پڕۆسە دەکرێت')}
+                      </span>
+                    </td>
+                    <td className="text-slate-400 max-w-xs truncate text-start">{log.detail}</td>
+                    <td className="text-end text-slate-500 text-[10px]">{log.timestamp}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card view list */}
+          <div className="block md:hidden space-y-3 font-mono">
+            {logs.map((log, idx) => (
+              <div key={idx} className={`bg-slate-950/45 p-3.5 rounded-lg border flex flex-col gap-2.5 text-xs transition-all ${idx === 0 ? 'border-[#E0A96D]/40 ring-1 ring-[#E0A96D]/15' : 'border-slate-850'}`}>
+                <div className="flex justify-between items-center">
+                  <span className={`text-xs font-bold ${idx === 0 ? 'text-[#E0A96D]' : 'text-slate-300'}`}>{log.id}</span>
+                  <span className="px-1.5 py-0.5 bg-emerald-950/80 text-emerald-400 border border-emerald-500/20 rounded uppercase text-[9px] font-semibold">
+                    {log.status === 'Success' ? (lang === 'en' ? 'Success' : lang === 'ar' ? 'ناجح' : 'سەرکەوتوو') : (lang === 'en' ? 'Processing' : lang === 'ar' ? 'خاضع للمطابقة' : 'پڕۆسە دەکرێت')}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-slate-500 block text-[9px] uppercase font-mono">Phase</span>
+                    <span className="text-slate-300">{log.step}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-slate-500 block text-[9px] uppercase font-mono">Timestamp</span>
+                    <span className="text-slate-400 text-[10px]">{log.timestamp}</span>
+                  </div>
+                  <div className="col-span-2 mt-1 py-1 border-t border-slate-850/40">
+                    <span className="text-slate-500 block text-[9px] uppercase font-mono mb-0.5">Log Details</span>
+                    <p className="text-slate-400 text-[10.5px] leading-normal break-words">{log.detail}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -469,7 +548,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
         {/* Right 1/3 sidebar framework governance rules */}
         <div className="bg-[#0a1523]/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-3.5">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-300 border-b border-slate-900 pb-2 flex items-center gap-1.5">
-            <Sparkles className="text-[#cca553] w-4.5 h-4.5" />
+            <Sparkles className="text-[#E0A96D] w-4.5 h-4.5" />
             {lang === 'en' ? 'Integrative Governance Accords' : lang === 'ar' ? 'اتفاقيات الحوكمة المشتركة' : 'ڕێککەوتننامەکانی حوكمڕانی نوێ'}
           </h3>
           <p className="text-xs text-slate-400 leading-relaxed font-mono">
