@@ -101,6 +101,11 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
 
   // Localisation helper
   const isRtl = lang !== 'en';
+  const getLabel = (en: string, ar: string, ku: string) => {
+    if (lang === 'en') return en;
+    if (lang === 'ar') return ar;
+    return ku;
+  };
 
   useEffect(() => {
     refreshAllStates();
@@ -221,12 +226,15 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
       
       {/* Page Header */}
       <PageHeader
-        title={isRtl ? 'بوابة الهوية الرقمية ومنصة الثقة الفدرالية' : 'Sovereign Identity & Digital Trust Framework'}
-        subtitle={isRtl ? 'مستودع المفاتيح العامة (PKI)، والشهادات الموثوقة W3C، وتواقيع المعاملات الجمركية المتعددة الأطراف للوزارات.' : 
-                  'Multi-tenant W3C Verifiable Credentials governance, cryptographic Public Key Infrastructure (PKI), document multi-signature approvals, and decentralized citizen consent registries.'}
+        title={getLabel('Sovereign Identity & Digital Trust Framework', 'بوابة الهوية الرقمية ومنصة الثقة الفدرالية', 'بەرەی ناسنامەی نیشتمانیی و متمانەی دیجیتاڵیی')}
+        subtitle={getLabel(
+          'Multi-tenant W3C Verifiable Credentials governance, cryptographic Public Key Infrastructure (PKI), document multi-signature approvals, and decentralized citizen consent registries.',
+          'مستودع المفاتيح العامة (PKI)، والشهادات الموثوقة W3C، وتواقيع المعاملات الجمركية المتعددة الأطراف للوزارات.',
+          'سەکۆی هاوبەشی بەڵگەنامە دیجیتاڵییە فەرمییەکان (W3C)، ژێرخانی کلیلە گشتییەکان (PKI)، و مۆرکردنی فرە-دەسەڵاتیی بازرگانی بۆ وەزارەتەکان.'
+        )}
         badge={
           <Badge variant="gold">
-            {isRtl ? 'أمن الثقة الفدرالي' : 'TRUST ARCHITECTURE L5'}
+            {getLabel('TRUST ARCHITECTURE L5', 'أمن الثقة الفدرالي', 'ئاسایشی متمانەی فیدراڵیی L5')}
           </Badge>
         }
         actions={
@@ -236,7 +244,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
             className="text-white border-slate-700 hover:border-[#E0A96D]/50 text-xs flex items-center gap-1.5"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            {isRtl ? 'تحديث سلسلة ومسار الثقة' : 'Sync Cryptological Nodes'}
+            {getLabel('Sync Cryptological Nodes', 'تحديث سلسلة ومسار الثقة', 'هاوکاتکاری گرێی کریپتۆگرافی')}
           </Button>
         }
       />
@@ -245,7 +253,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         
         <StatCard
-          title={isRtl ? 'مؤشر جاهزية الثقة الأمنية الوطني' : 'National Trust Readiness Score'}
+          title={getLabel('National Trust Readiness Score', 'مؤشر جاهزية الثقة الأمنية الوطني', 'پێوانەی ئامادەیی متمانەی ئاسایشی نیشتمانیی')}
           value={`${trustScore}%`}
           subtitle="Measures PKI, Signing & Consent"
           icon={<ShieldCheck className="w-5 h-5 text-[#52B788]" />}
@@ -253,7 +261,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         />
 
         <StatCard
-          title={isRtl ? 'إجمالي الهويات الموثقة بيومترياً' : 'Biometrically Bound DID Records'}
+          title={getLabel('Biometrically Bound DID Records', 'إجمالي الهويات الموثقة بيومترياً', 'کۆی گشتی فۆرمەکانی ناسنامەی بایۆمەتری')}
           value="4"
           subtitle="Iris + Fingerprint Triple Salted keys"
           icon={<Users className="w-5 h-5 text-[#E0A96D]" />}
@@ -261,7 +269,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         />
 
         <StatCard
-          title={isRtl ? 'سلسلة الشهادات المشعلة النشطة' : 'PKI Certificates Enrolled'}
+          title={getLabel('PKI Certificates Enrolled', 'سلسلة الشهادات المشعلة النشطة', 'ژمارەی بڕوانامە تۆمارکراوەکانی PKI')}
           value={certs.length.toString()}
           subtitle="From Iraq Root CA G1 roots"
           icon={<Key className="w-5 h-5 text-cyan-400" />}
@@ -269,7 +277,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         />
 
         <StatCard
-          title={isRtl ? 'الشهادات الموثقة الموزعة (VC)' : 'Issuing W3C Credentials'}
+          title={getLabel('Issuing W3C Credentials', 'الشهادات الموثقة الموزعة (VC)', 'پێشکەشکردنی بەڵگەنامە باوەڕپێکراوەکان')}
           value={credentials.length.toString()}
           subtitle="Held securely inside digital wallets"
           icon={<FileCheck className="w-5 h-5 text-purple-400" />}
@@ -281,13 +289,13 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
       {/* Sub-panel Tabs Nav Bar */}
       <div className="border-b border-slate-800 flex flex-wrap gap-1 bg-[#111e2e]/55 p-1 rounded-lg">
         {[
-          { key: 'registry', label: isRtl ? 'مسجلات الهوية' : 'Identity Registry', icon: Users },
-          { key: 'wallet', label: isRtl ? 'المحفظة الرقمية' : 'Sovereign Wallets', icon: Wallet },
-          { key: 'credentials', label: isRtl ? 'شهادات W3C الموثقة' : 'Verifiable Credentials', icon: FileCheck },
-          { key: 'pki', label: isRtl ? 'مستودع الشهادات PKI' : 'Sovereign PKI', icon: Landmark },
-          { key: 'signatures', label: isRtl ? 'التواقيع الرقمية' : 'Digital Signatures', icon: Key },
-          { key: 'consent', label: isRtl ? 'موافقة المواطنين' : 'Citizen Consent', icon: CheckSquare },
-          { key: 'federation', label: isRtl ? 'الاتحاد الفدرالي IAM' : 'Federated IAM', icon: Globe }
+          { key: 'registry', label: getLabel('Identity Registry', 'مسجلات الهوية', 'تۆماری گشتی ناسنامەکان'), icon: Users },
+          { key: 'wallet', label: getLabel('Sovereign Wallets', 'المحفظة الرقمية', 'محفەزەی نیشتمانیی سەروەر'), icon: Wallet },
+          { key: 'credentials', label: getLabel('Verifiable Credentials', 'شهادات W3C الموثقة', 'بەڵگەنامە باوەڕپێکراوەکان'), icon: FileCheck },
+          { key: 'pki', label: getLabel('Sovereign PKI', 'مستودع الشهادات PKI', 'ڕێکخستنی کلیلەکانی PKI'), icon: Landmark },
+          { key: 'signatures', label: getLabel('Digital Signatures', 'التواقيع الرقمية', 'مۆری ئەلیکترۆنیی کۆدکراو'), icon: Key },
+          { key: 'consent', label: getLabel('Citizen Consent', 'موافقة المواطنين', 'مۆڵەتی بەکارهێنانی داتا'), icon: CheckSquare },
+          { key: 'federation', label: getLabel('Federated IAM', 'الاتحاد الفدرالي IAM', 'سازانی فیدراڵیی IAM'), icon: Globe }
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = panelTab === tab.key;
@@ -316,14 +324,18 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
           <div className="flex flex-col gap-5 animate-fade-in">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <SectionHeader
-                title={isRtl ? 'السجلات السيادية للهويات الرقمية' : 'National Sovereign Identity Registries'}
-                description={isRtl ? 'قاعدة بيانات موثقة تربط الحسابات المدنية، والشركات، وموظفي المنافذ بالمفاتيح العامة المشفرة.' : 'Unified national records for natural citizens, business corporations, federal government agents, and subsystem service accounts.'}
+                title={getLabel('National Sovereign Identity Registries', 'السجلات السيادية للهويات الرقمية', 'سجلە نیشتمانییە سەروەرەکانی ناسنامەی دیجیتاڵیی')}
+                description={getLabel(
+                  'Unified national records for natural citizens, business corporations, federal government agents, and subsystem service accounts.',
+                  'قاعدة بيانات موثقة تربط الحسابات المدنية، والشركات، وموظفي المنافذ بالمفاتيح العامة المشفرة.',
+                  'قاعیدەی زانیاریی پشتڕاستکراوە کە پێوەست دەکات هەژمارە مەدەنییەکان، کۆمپانیاکان و فەرمانبەرانی دەروازەکان بە کلیلە گشتییەکان.'
+                )}
               />
 
               {/* Citizen/Business search */}
               <div className="w-full md:w-72">
                 <Input 
-                  placeholder={isRtl ? 'بحث برقم الهوية أو الاسم...' : 'Search Name or DID...'} 
+                  placeholder={getLabel('Search Name or DID...', 'بحث برقم الهوية أو الاسم...', 'گەڕان بەپێی کلیل یان ناو یان ناسنامە...')} 
                   value={registrySearch}
                   onChange={(e) => setRegistrySearch(e.target.value)}
                   id="reg-search-field"
@@ -412,8 +424,12 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'wallet' && (
           <div className="flex flex-col gap-5 animate-fade-in">
             <SectionHeader
-              title={isRtl ? 'محافظ الهوية المتكاملة اللامركزية' : 'Sovereign Digital Identity Wallets'}
-              description={isRtl ? 'محاكاة كاملة للمستندات والشهادات الترخيصية المحفوظة في الهواتف السيادية والمخازن المشفرة للمؤسسات.' : 'Full client device emulation displaying digital certificate stacks, trade permits, and verified credentials held by entity DIDs.'}
+              title={getLabel('Sovereign Digital Identity Wallets', 'محافظ الهوية المتكاملة اللامركزية', 'محفەزەی نیشتمانیی سەروەری ناسنامە دیجیتاڵییەکان')}
+              description={getLabel(
+                'Full client device emulation displaying digital certificate stacks, trade permits, and verified credentials held by entity DIDs.',
+                'محاكاة كاملة للمستندات والشهادات الترخيصية المحفوظة في الهواتف السيادية والمخازن المشفرة للمؤسسات.',
+                'ھواشێوەکردنی تەواوی بەڵگەنامە و بڕوانامە فەرمییەکان لەناو کڵاستەری کلیلە پارێزراوەکان بۆ کۆمپانیا و دەزگاکان.'
+              )}
             />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2">
@@ -492,8 +508,16 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'credentials' && (
           <div className="flex flex-col gap-6 animate-fade-in text-start">
             <SectionHeader
-              title={isRtl ? 'إصدار وفحص الشهادات الرقمية الموثقة W3C (Verifiable Credentials)' : 'Federal W3C Credentials Issuer Center'}
-              description={isRtl ? 'منصة لإصدار وتوقيع شهادة الجمارك أوتوماتيكياً وبثها مباشرةً إلى محفظة الشركة أو المواطن.' : 'Authorize, cryptographically seal, and dispatch standardized W3C claim credentials to sovereign wallets.'}
+              title={getLabel(
+                'Federal W3C Credentials Issuer Center',
+                'إصدار وفحص الشهادات الرقمية الموثقة W3C (Verifiable Credentials)',
+                'ناوەندی فیدراڵیی دەرکردن و پشکنینی بڕوانامە دیجیتاڵییەکانی W3C'
+              )}
+              description={getLabel(
+                'Authorize, cryptographically seal, and dispatch standardized W3C claim credentials to sovereign wallets.',
+                'منصة لإصدار وتوقيع شهادة الجمارك أوتوماتيكياً وبثها مباشرةً إلى محفظة الشركة أو المواطن.',
+                'سیستەمی پێدانی بڕوانامە و مۆرکردنی گومرگی بە زیرەکی دەستکرد و ناردنی ڕاستەوخۆ بۆ ناو محفەزەی هاووڵاتیان.'
+              )}
             />
 
             {/* Display issuance notice info if generated */}
@@ -636,8 +660,16 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'pki' && (
           <div className="flex flex-col gap-6 animate-fade-in text-start">
             <SectionHeader
-              title={isRtl ? 'مستودع المفاتيح والشهادات الفيدرالي (Sovereign PKI)' : 'Cryptographic PKI Trust Hierarchies'}
-              description={isRtl ? 'هندسة تسلسل الشهادات الرقمية من سلطة المعاملات الوطنية إلى فحص سلامة نقاط التداول بجميع المنافذ.' : 'Inspect the hierarchical root public certificate authorities (CA) and dynamic path validation up to the self-signed G1 Root CA.'}
+              title={getLabel(
+                'Cryptographic PKI Trust Hierarchies',
+                'مستودع المفاتيح والشهادات الفيدرالي (Sovereign PKI)',
+                'سیستەمی زنجیرەیی کلیلە متمانەپێکراوەکان بۆ فیدراڵ (Sovereign PKI)'
+              )}
+              description={getLabel(
+                'Inspect the hierarchical root public certificate authorities (CA) and dynamic path validation up to the self-signed G1 Root CA.',
+                'هندسة تسلسل الشهادات الرقمية من سلطة المعاملات الوطنية إلى فحص سلامة نقاط التداول بجميع المنافذ.',
+                'تۆڕی پارێزراوی کلیلە گشتییەکان لە دەسەڵاتی متمانەی نیشتمانییەوە تا گەیاندنی بە گرێی پۆینتەکانی دەروازە بازرگانییەکان.'
+              )}
             />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2">
@@ -743,8 +775,16 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'signatures' && (
           <div className="flex flex-col gap-6 animate-fade-in text-start">
             <SectionHeader
-              title={isRtl ? 'التصديق السبراني والتواقيع الرقمية (Digital Signatures)' : 'Federal Multi-Signature Authorization Vault'}
-              description={isRtl ? 'نظام حوكمة لتوقيع المستندات الرسمية، وتراخيص الاستيراد، والمعاملات الجمركية التي تتطلب تصديقاً ثلاثياً.' : 'Document sealing workstation. Supports asynchronous multi-agency sign-off chains with complete non-repudiation audit locks.'}
+              title={getLabel(
+                'Federal Multi-Signature Authorization Vault',
+                'التصديق السبراني والتواقيع الرقمية (Digital Signatures)',
+                'سیستەمی مۆری فەرمی و مۆڵەتە کۆدکراوە فرە-لایەنەکان'
+              )}
+              description={getLabel(
+                'Document sealing workstation. Supports asynchronous multi-agency sign-off chains with complete non-repudiation audit locks.',
+                'نظام حوكمة لتوقيع المستندات الرسمية، وتراخيص الاستيراد، والمعاملات الجمركية التي تتطلب تصديقاً ثلاثياً.',
+                'سیستەمی حوکمڕانیی بۆ مۆرکردنی بەڵگەنامە فەرمییەکان، مۆڵەتەکانی هاوردەکردن و ڕێککەوتنی جومگەیی نێوان وەزارەتەکان.'
+              )}
             />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2">
@@ -854,8 +894,16 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'consent' && (
           <div className="flex flex-col gap-5 animate-fade-in text-start">
             <SectionHeader
-              title={isRtl ? 'سجل موافقات وتصاريح مشاركة البيانات الفيدرالية' : 'Citizen Consent & Data Sharing Registry'}
-              description={isRtl ? 'تمكين المواطنين والشركات من تتبع الجهات الرقابية المخولة بالاطلاع على هوياتهم وحق سحب الصلاحيات حياً.' : 'Citizen-controlled dashboard managing data sharing agreements. Authorized users can inspect, revoke, or issue claims permissions across departments.'}
+              title={getLabel(
+                'Citizen Consent & Data Sharing Registry',
+                'سجل موافقات وتصاريح مشاركة البيانات الفيدرالية',
+                'سجلی گشتی موافەقەت و گۆڕینەوەی ڕێپێدراوی داتاکانی سەروەریی'
+              )}
+              description={getLabel(
+                'Citizen-controlled dashboard managing data sharing agreements. Authorized users can inspect, revoke, or issue claims permissions across departments.',
+                'تمكين المواطنين والشركات من تتبع الجهات الرقابية المخولة بالاطلاع على هوياتهم وحق سحب الصلاحيات حياً.',
+                'سەکۆی کۆنترۆڵ بۆ هاووڵاتیان و کۆمپانیاکان تا چاودێری بکەن کێ دەستگەیشتنی بە بەڵگەنامەکانیان هەیە لەگەڵ مافی لێسەندنەوەی ڕێپێدانەکان.'
+              )}
             />
 
             <div className="overflow-x-auto border border-slate-850 rounded pt-2">
@@ -906,8 +954,16 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'federation' && (
           <div className="flex flex-col gap-6 animate-fade-in text-start">
             <SectionHeader
-              title={isRtl ? 'بوابات الهوية الموحدة الفيدرالية (Federated identity)' : 'Federated Sovereign Core Brokering'}
-              description={isRtl ? 'قنوات تواصل معتمدة تدعم بروتوكولات OIDC و OAuth 2.1 و SAML 2.0 الموحدة لأجهزة الدولة.' : 'Secure trust endpoints connecting external banking ledgers and company registries under state federated authentication protocols.'}
+              title={getLabel(
+                'Federated Sovereign Core Brokering',
+                'بوابات الهوية الموحدة الفيدرالية (Federated identity)',
+                'سەرچاوەی بڕوانامەی یەکگرتووی فیدراڵ بۆ سازانی نیشتمانیی'
+              )}
+              description={getLabel(
+                'Secure trust endpoints connecting external banking ledgers and company registries under state federated authentication protocols.',
+                'قنوات تواصل معتمدة تدعم بروتوكولات OIDC و OAuth 2.1 و SAML 2.0 الموحدة لأجهزة الدولة.',
+                'سیستەمگەلی کۆنترۆڵی پارێزراوی کلیلە هاوبەشەکان بەپێی ستانداردەکانی OIDC و OAuth 2.1 بۆ دەروازەکانی هەرێم و فیدراڵ.'
+              )}
             />
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 pt-2">

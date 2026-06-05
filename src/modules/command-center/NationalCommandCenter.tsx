@@ -83,6 +83,11 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   };
 
   const isRtl = lang !== 'en';
+  const getLabel = (en: string, ar: string, ku: string) => {
+    if (lang === 'en') return en;
+    if (lang === 'ar') return ar;
+    return ku;
+  };
 
   const labels: Record<string, Record<string, string>> = {
     pmo: {
@@ -117,11 +122,11 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   ];
 
   const checkpointFlowNodes = [
-    { id: '1', label: lang === 'en' ? 'Manifest Decrypt' : 'فك التشفير', status: 'passed' as const },
-    { id: '2', label: lang === 'en' ? 'CBI Asset Match' : 'طوابق البنك', status: 'passed' as const },
-    { id: '3', label: lang === 'en' ? 'Gemini Risk Audit' : 'تدقيق المخاطر', status: 'active' as const },
-    { id: '4', label: lang === 'en' ? 'Ledger Write' : 'سلسلة الكتل', status: 'pending' as const },
-    { id: '5', label: lang === 'en' ? 'State Clearance' : 'تخليص الجمرك', status: 'pending' as const }
+    { id: '1', label: getLabel('Manifest Decrypt', 'فك التشفير', 'پشکنینی مانیفێست'), status: 'passed' as const },
+    { id: '2', label: getLabel('CBI Asset Match', 'طوابق البنك', 'هاوتاکردنی داهاتی CBI'), status: 'passed' as const },
+    { id: '3', label: getLabel('Gemini Risk Audit', 'تدقيق المخاطر', 'تدقیقی مەترسییەکانی زانیاری'), status: 'active' as const },
+    { id: '4', label: getLabel('Ledger Write', 'سلسلة الكتل', 'تۆمارکردن لە دەفتەری نیشتمانیی'), status: 'pending' as const },
+    { id: '5', label: getLabel('State Clearance', 'تخليص الجمرك', 'تەواوکردنی ڕێکارەکان'), status: 'pending' as const }
   ];
 
   const hourlyTrafficData = [
@@ -134,8 +139,8 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   ];
 
   const scanningHeatmapData = [
-    { name: lang === 'en' ? 'Lane 01 Scanners' : 'مفرزة السونار ١', densities: [0.2, 0.4, 0.9, 0.8, 0.3, 0.1] },
-    { name: lang === 'en' ? 'Lane 02 Decryptors' : 'مفرزة التشفير ٢', densities: [0.1, 0.2, 0.5, 0.9, 0.6, 0.2] }
+    { name: getLabel('Lane 01 Scanners', 'مفرزة السونار ١', 'مەفرەزەی فلتەری تیشکی ١'), densities: [0.2, 0.4, 0.9, 0.8, 0.3, 0.1] },
+    { name: getLabel('Lane 02 Decryptors', 'مفرزة التشفير ٢', 'مەفرەزەی فلتەری تیشکی ٢'), densities: [0.1, 0.2, 0.5, 0.9, 0.6, 0.2] }
   ];
 
   const customsClassifications = [
@@ -541,7 +546,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
               <span className="flex items-center gap-2">
                 <Layers className="text-[#E0A96D] w-4.5 h-4.5" />
-                {lang === 'en' ? 'Sovereign Manifest Loop' : 'دورة المستندات السيادية'}
+                {getLabel('Sovereign Manifest Loop', 'دورة المستندات السيادية', 'زنجیرەی بەڵگەنامە سەروەرەکان')}
               </span>
             </h3>
 
@@ -555,16 +560,16 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
               <span className="flex items-center gap-2">
                 <Network className="text-[#E0A96D] w-4.5 h-4.5" />
-                {lang === 'en' ? 'Sovereign Operations Directory' : 'دليل العمليات الفيدرالي'}
+                {getLabel('Sovereign Operations Directory', 'دليل العمليات الفيدرالي', 'دایرێکتۆریی ئۆپەراسیۆنە سەروەرەکان')}
               </span>
             </h3>
 
             <div className="flex flex-col gap-2.5 text-xs">
               {[
-                { icon: <Shield className="w-4 h-4 text-[#52B788]" />, label: lang === 'en' ? 'Federal Customs Interop' : 'الربط الموحد', status: lang === 'en' ? 'Active' : 'نشط' },
-                { icon: <Landmark className="w-4 h-4 text-[#E0A96D]" />, label: lang === 'en' ? 'Central Financial Ledger' : 'دفتر حساب البنك', status: lang === 'en' ? 'Synced' : 'متزامن' },
-                { icon: <Activity className="w-4 h-4 text-cyan-400" />, label: lang === 'en' ? 'Anti-Fraud System' : 'مكافحة الاحتيال', status: lang === 'en' ? 'Secured' : 'مؤمن' },
-                { icon: <FileText className="w-4 h-4 text-amber-550" />, label: lang === 'en' ? 'KRG Boundary Node' : 'منافذ الإقليم', status: lang === 'en' ? 'Verify' : 'تدقيق' }
+                { icon: <Shield className="w-4 h-4 text-[#52B788]" />, label: getLabel('Federal Customs Interop', 'الربط الموحد', 'یەکگرتنی گومرگی فیدراڵ'), status: getLabel('Active', 'نشط', 'چالاک') },
+                { icon: <Landmark className="w-4 h-4 text-[#E0A96D]" />, label: getLabel('Central Financial Ledger', 'دفتر حساب البنك', 'دەفتەری سەرەکی دارایی'), status: getLabel('Synced', 'متزامن', 'هاوکاتکراو') },
+                { icon: <Activity className="w-4 h-4 text-cyan-400" />, label: getLabel('Anti-Fraud System', 'مكافحة الاحتيال', 'سیستەمی دژە ساختەکاری'), status: getLabel('Secured', 'مؤمن', 'پارێزراو') },
+                { icon: <FileText className="w-4 h-4 text-amber-550" />, label: getLabel('KRG Boundary Node', 'منافذ الإقليم', 'گرێی سنووری هەرێم'), status: getLabel('Verify', 'تدقيق', 'پشکنین') }
               ].map((item, idx) => (
                 <div 
                   key={idx} 
@@ -573,7 +578,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                   {item.icon}
                   <span className="font-bold text-slate-200">{item.label}</span>
                   <div className="flex-grow"></div>
-                  <Badge variant={item.status === 'Active' || item.status === 'Synced' || item.status === 'Secured' ? 'success' : 'slate'}>
+                  <Badge variant={item.status === 'Active' || item.status === 'Synced' || item.status === 'Secured' || item.status === 'چالاک' || item.status === 'هاوکاتکراو' || item.status === 'پارێزراو' ? 'success' : 'slate'}>
                     {item.status}
                   </Badge>
                 </div>
