@@ -52,6 +52,45 @@ interface NationalDataCommandCenterProps {
 }
 
 export default function NationalDataCommandCenter({ lang }: NationalDataCommandCenterProps) {
+  // Dynamic Localization Helpers
+  const getLabel = (en: string, ar: string, ku: string) => {
+    if (lang === 'ku') return ku;
+    if (lang === 'ar') return ar;
+    return en;
+  };
+
+  const translateClassification = (cls: string) => {
+    switch (cls) {
+      case 'TOP_SECRET': return getLabel('Sovereign / TOP SECRET', 'سيادي / سري للغاية', 'سەروەر / زۆر نهێنی');
+      case 'SECRET': return getLabel('SECRET', 'سري', 'نهێنی');
+      case 'CONFIDENTIAL': return getLabel('CONFIDENTIAL', 'جوانب خاصة', 'تایبەت');
+      case 'INTERNAL': return getLabel('INTERNAL', 'داخلي', 'ناوخۆیی');
+      default: return cls;
+    }
+  };
+
+  const translateMinistry = (min: string) => {
+    switch (min) {
+      case 'Ministry of Finance': return getLabel('Ministry of Finance', 'وزارة المالية', 'وەزارەتی دارایی');
+      case 'Prime Minister Office': return getLabel('Prime Minister Office', 'رئاسة الوزراء', 'نووسینگەی سەرۆک وەزیران');
+      case 'National Security Agency': return getLabel('National Security Agency', 'مستشارية الأمن القومي', 'دەزگای ئاسایشی نیشتمانی');
+      case 'Ministry of Defense': return getLabel('Ministry of Defense', 'وزارة الدفاع', 'وەزارەتی بەرگری');
+      case 'Ministry of Interior': return getLabel('Ministry of Interior', 'وزارة الداخلية', 'وەزارەتی ناوخۆ');
+      case 'Ministry of Trade': return getLabel('Ministry of Trade', 'وزارة التجارة', 'وەزارەتی بازرگانی');
+      default: return min;
+    }
+  };
+
+  const translateRole = (role: string) => {
+    switch (role) {
+      case 'Super Admin': return getLabel('Super Admin', 'مدير عام بالنظام', 'سەرپەرشتیاری باڵا');
+      case 'Customs Admin': return getLabel('Customs Admin', 'مدير الجمارك', 'سەرپەرشتیاری گومرگ');
+      case 'Border Officer': return getLabel('Border Officer', 'ضابط الحدود', 'ئەفسەری سنووری');
+      case 'Intelligence Analyst': return getLabel('Intelligence Analyst', 'محلل استخبارات', 'شیکەرەوەی زانیاری ئاسایشی');
+      default: return role;
+    }
+  };
+
   // Engines
   const catalog = NationalDataCatalog.getInstance();
   const mdm = MasterDataManagement.getInstance();
@@ -151,7 +190,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
     else if (label === 'SECRET') color = colors.status.danger;
     else if (label === 'CONFIDENTIAL') color = colors.status.warning;
     else if (label === 'INTERNAL') color = '#3b82f6';
-    return { label, value, color };
+    return { label: translateClassification(label), value, color };
   });
 
   // Flow Lineage nodes
@@ -162,29 +201,20 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
       
       {/* Dynamic Page Header */}
       <PageHeader
-        title={isRtl ? 'منصة ونسيج البيانات الوطني السيادي (Data Fabric)' : 'Sovereign National Data Fabric Architecture'}
-        subtitle={isRtl ? 'محور التحكم ببيانات الدولة العراقية لربط الوزارات وتدقيق جودة السجلات وحوكمة المصادر.' : 
-                  'Unified multi-tenant federal data assets discovery registry, Master Data resolution, end-to-end data lineage, and event-driven data quality orchestrations.'}
+        title={getLabel(
+          'Sovereign National Data Fabric Architecture',
+          'منصة ونسيج البيانات الوطني السيادي (Data Fabric)',
+          'تۆڕی زانیارییە نیشتمانییە سەروەرەکان (نەسیجی داتا)'
+        )}
+        subtitle={getLabel(
+          'Unified multi-tenant federal data assets discovery registry, Master Data resolution, end-to-end data lineage, and event-driven data quality orchestrations.',
+          'محور التحكم ببيانات الدولة العراقية لربط الوزارات وتدقيق جودة السجلات وحوكمة المصادر.',
+          'سەکۆی کۆنترۆڵ بۆ دابەشکردنی داتای نیشتمانی بە چاودێری وەزارەتەکان, چاکسازی جۆری زانیاری سنوورەکان و بڕیاری پێشوەختە.'
+        )}
         badge={
           <Badge variant="gold">
-            {isRtl ? 'حوكمة البيانات الفيدرالية' : 'FABRIC GOVERNANCE CLASS L5'}
+            {getLabel('FABRIC GOVERNANCE CLASS L5', 'حوكمة البيانات الفيدرالية', 'ئاستی بەڕێوەبردنی زنجیرەی زانیاری باڵا')}
           </Badge>
-        }
-        actions={
-          <div className="flex gap-2">
-            <Button 
-              onClick={() => {
-                setDatasets(catalog.getAllDatasets());
-                setQualityReports(qualityFramework.getReports());
-                setActiveEvents(eventBus.getEventHistory());
-              }}
-              variant="outline"
-              className="text-white border-slate-700 hover:border-[#E0A96D]/50 text-xs flex items-center gap-1.5"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              {isRtl ? 'تحديث الفهرس الوطني' : 'Refresh Fabric Ledger'}
-            </Button>
-          </div>
         }
       />
 
@@ -192,35 +222,35 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         
         <StatCard
-          title={isRtl ? 'مؤشر جودة البيانات الوطني الموحد' : 'National Data Quality Index'}
+          title={getLabel('National Data Quality Index', 'مؤشر جودة البيانات الوطني الموحد', 'پێوانەی پشتکردنەوەی جۆری زانیاری')}
           value={`${nationalDataQualityScore}%`}
-          subtitle="Precision Score across 6 Core Dimensions"
+          subtitle={getLabel('Precision Score across 6 Core Dimensions', 'دقة مطابقة البيانات عبر ٦ معايير أساسية', 'ئاستی جۆری داتا بەپێی ٦ پێوانەی بنەڕەتی')}
           icon={<CheckSquare className="w-5 h-5 text-[#52B788]" />}
-          trend={{ value: '0.04% Live Recalc', isPositive: true }}
+          trend={{ value: getLabel('0.04% Live Recalc', '0.04% فحص فوري', '0.04% چاکسازی خۆکار'), isPositive: true }}
         />
 
         <StatCard
-          title={isRtl ? 'مجموع السجلات المشفرة الفدرالية' : 'Sovereign Master Records'}
+          title={getLabel('Sovereign Master Records', 'مجموع السجلات المشفرة الفدرالية', 'کۆی تۆمارە فەرمییە سەروەرەکان')}
           value="48.5M+"
-          subtitle="Enveleoped under Triple Language Key"
+          subtitle={getLabel('Enveloped under Triple Language Key', 'مشفرة بالكامل تحت هويات لغوية متعددة', 'پارێزراوە لە ژێر ناسنامەی زمانە فەرمییەکان')}
           icon={<Layers3 className="w-5 h-5 text-[#E0A96D]" />}
-          trend={{ value: 'Citizens & Businesses verified', isPositive: true }}
+          trend={{ value: getLabel('Citizens & Businesses verified', 'تم التحقق من المواطنين والشركات', 'هاوڵاتیان و کۆمپانیاکان پشتڕاستکراونەتەوە'), isPositive: true }}
         />
 
         <StatCard
-          title={isRtl ? 'مجموعات البيانات الخاضعة للحوكمة' : 'Governed National Datasets'}
+          title={getLabel('Governed National Datasets', 'مجموعات البيانات الخاضعة للحوكمة', 'دامەزراوە داتاییە فەرمییەکانی وڵات')}
           value={datasets.length.toString()}
-          subtitle="Distributed across 4 Federal Ministries"
+          subtitle={getLabel('Distributed across 4 Federal Ministries', 'موزعة تنظيمياً على ٤ وزارات فدرالية', 'دابەشکراوە بەسەر ٤ وەزارەتی سەرەکیدا')}
           icon={<Database className="w-5 h-5 text-cyan-400" />}
-          trend={{ value: 'Fully Mapped', isPositive: true }}
+          trend={{ value: getLabel('Fully Mapped', 'مخططة بالكامل', 'تەواوی نەخشەکە کێشراوە'), isPositive: true }}
         />
 
         <StatCard
-          title={isRtl ? 'الأحداث اللامركزية الموزعة حياً' : 'Decoupled Domain Event Bus'}
-          value={`Broker Active`}
-          subtitle={`Buffered ${activeEvents.length} recent system streams`}
+          title={getLabel('Decoupled Domain Event Bus', 'الأحداث اللامركزية الموزعة حياً', 'خەتی گواستنەوەی چالاکی زانیارییەکان')}
+          value={getLabel('Broker Active', 'وسيط نشط', 'ناوەندەکە چالاکە')}
+          subtitle={getLabel(`Buffered ${activeEvents.length} recent system streams`, `تم تخزين ${activeEvents.length} حدثاً في الذاكرة الموقتة`, `پاراستنی ${activeEvents.length} گۆڕانکاریی لە یادگەدا`)}
           icon={<Activity className="w-5 h-5 text-purple-400" />}
-          trend={{ value: 'Zero Packet Drops', isPositive: true }}
+          trend={{ value: getLabel('Zero Packet Drops', 'لا توجد خسارة في الإرسال', 'تەواوی پاکەتەکان بە بێ کێشە گەیشتن'), isPositive: true }}
         />
 
       </div>
@@ -236,8 +266,8 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
             <div className="border-b border-slate-900 pb-3 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
               <div>
                 <SectionHeader 
-                  title={isRtl ? 'دليل ومستودع مجموعات البيانات السيادية (Data Catalog)' : 'National Governed Dataset Discovery Registry'}
-                  description={isRtl ? 'قائمة تفصيلية بمجموعات البيانات الوطنية مع تحديد الوزارة المالكة ومستشعرات جودة البيانات.' : 'Searchable and audit-proof catalog of federal master datasets, custodians, and classification tiers.'}
+                  title={getLabel('National Governed Dataset Discovery Registry', 'دليل ومستودع مجموعات البيانات السيادية (Data Catalog)', 'تۆماری گشتی بۆ داتا کۆنترۆڵکراوە نیشتمانییەکان')}
+                  description={getLabel('Searchable and audit-proof catalog of federal master datasets, custodians, and classification tiers.', 'قائمة تفصيلية بمجموعات البيانات الوطنية مع تحديد الوزارة المالكة ومستشعرات جودة البيانات.', 'لینک و زانیاری گشتگیر بەپێی وەزارەت و ئاستی پاراستنی داتاکان.')}
                 />
               </div>
 
@@ -246,7 +276,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                 <Search className="absolute ltr:left-3 rtl:right-3 top-2.5 w-4 h-4 text-slate-500" />
                 <input
                   type="text"
-                  placeholder={isRtl ? 'بحث في البيانات المترابطة...' : 'Search datasets, owners...'}
+                  placeholder={getLabel('Search datasets, owners...', 'بحث في البيانات المترابطة...', 'گەڕان لە داتاکان و خاوەنەکان...')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-[#0b1420] border border-slate-800 text-xs rounded-md w-full ltr:pl-9 rtl:pr-9 py-2 text-white focus:outline-none focus:border-[#E0A96D] focus:ring-1 focus:ring-[#E0A96D]"
@@ -256,7 +286,14 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
 
             {/* Catalog Master Table */}
             <div className="overflow-x-auto">
-              <Table headers={['Dataset Name / Identification', 'Sovereign Custodian Ministry', 'Data Steward Agent', 'Classification Tier', 'Quality Index', 'Master Record Count']}>
+              <Table headers={[
+                getLabel('Dataset Name / Identification', 'مجموعة البيانات / التعريف', 'ناوی داتا / ناسنامەی سەرەکی'),
+                getLabel('Sovereign Custodian Ministry', 'الوزارة الحاضنة المشرفة', 'وەزارەتی سەرپەرشتیار'),
+                getLabel('Data Steward Agent', 'وكيل إدارة البيانات', 'بەرپرسی بەڕێوەبردنی داتا'),
+                getLabel('Classification Tier', 'مستوى السرية والخطورة', 'پلەی پاراستنی زانیاری'),
+                getLabel('Quality Index', 'مؤشر جودة البيانات', 'نمرەی متمانەی داتا'),
+                getLabel('Master Record Count', 'عدد السجلات الموثقة', 'ژمارەی نووسراوەکان')
+              ]}>
                 {datasetList.map((ds) => {
                   const isSelected = ds.id === selectedDatasetId;
                   return (
@@ -271,7 +308,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                         <strong className="text-white block font-sans text-xs">{lang === 'en' ? ds.name.en : lang === 'ar' ? ds.name.ar : ds.name.ku}</strong>
                         <span className="text-[10px] text-slate-500 block mt-0.5">{ds.id}</span>
                       </td>
-                      <td className="px-4 py-3.5 text-slate-200 uppercase tracking-wide">{ds.ownerMinistry}</td>
+                      <td className="px-4 py-3.5 text-slate-200 uppercase tracking-wide">{translateMinistry(ds.ownerMinistry)}</td>
                       <td className="px-4 py-3.5">
                         <span className="text-slate-300 block">{ds.dataSteward}</span>
                         <span className="text-[9px] text-slate-500 block font-normal">{ds.stewardEmail}</span>
@@ -282,7 +319,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                           ds.classification === 'SECRET' ? 'danger' :
                           ds.classification === 'CONFIDENTIAL' ? 'warning' : 'slate'
                         }>
-                          {ds.classification}
+                          {translateClassification(ds.classification)}
                         </Badge>
                       </td>
                       <td className="px-4 py-3.5">
@@ -307,7 +344,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                 <div className="flex flex-col gap-3">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#E0A96D] flex items-center gap-1.5 border-b border-slate-900 pb-1.5">
                     <Shuffle className="w-3.5 h-3.5" />
-                    Cross-Ministry Relational Interlock Mapping
+                    {getLabel('Cross-Ministry Relational Interlock Mapping', 'مخطط الربط والتبادل بين الوزارات', 'نەخشەی بەستنەوەی گوازەرەوەی نێوان وەزارەتەکان')}
                   </h4>
                   <p className="text-[11px] text-slate-400 leading-normal font-sans italic">
                     "{lang === 'en' ? selectedDatasetDetails.description.en : lang === 'ar' ? selectedDatasetDetails.description.ar : selectedDatasetDetails.description.ku}"
@@ -321,11 +358,15 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                           <span className="text-[9px] bg-slate-950 px-1.5 py-0.5 rounded text-white tracking-widest">{m.syncMechanism}</span>
                         </div>
                         <p className="text-slate-400">
-                          Destination Target: <strong className="text-slate-200">{m.targetMinistry}</strong> ({m.targetDatasetId})
+                          {getLabel('Destination Target', 'الجهة المستلمة المستهدفة', 'مەبەستی جێگۆڕکێ')}: <strong className="text-slate-200">{translateMinistry(m.targetMinistry)}</strong> ({m.targetDatasetId})
                         </p>
                         {m.transformationRule && (
                           <div className="text-[9px] text-slate-500 font-bold bg-slate-950 p-1.5 border border-slate-900 rounded italic">
-                            Rule: {m.transformationRule}
+                            {getLabel('Rule', 'القاعدة الرياضية', 'یاسا')}: {getLabel(
+                              m.transformationRule,
+                              m.transformationRule.replace('Verify', 'التحقق من').replace('Format', 'صياغة').replace('Map', 'مطابقة'),
+                              m.transformationRule.replace('Verify', 'پشکنینی فەرمی بۆ').replace('Format', 'دارشتنی شێوازی').replace('Map', 'بەستنەوە بە')
+                            )}
                           </div>
                         )}
                       </div>
@@ -338,18 +379,18 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                   <div className="flex flex-col gap-3">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-[#52B788] flex items-center gap-1.5 border-b border-slate-900 pb-1.5">
                       <CheckCircle className="w-3.5 h-3.5" />
-                      Dataset 6-Dimension Quality Assurance
+                      {getLabel('Dataset 6-Dimension Quality Assurance', 'ضمان الجودة الفنية لستة أبعاد للبيانات', 'پشکنینی جۆری داتا بەپێی ٦ ئاست')}
                     </h4>
 
                     {/* Quality Rules Radar Mock Bar Grid */}
                     <div className="grid grid-cols-2 gap-3.5 font-mono text-xs pt-1">
                       {[
-                        { label: 'Completeness', val: selectedDatasetQuality.metrics.completeness },
-                        { label: 'Accuracy', val: selectedDatasetQuality.metrics.accuracy },
-                        { label: 'Consistency', val: selectedDatasetQuality.metrics.consistency },
-                        { label: 'Timeliness', val: selectedDatasetQuality.metrics.timeliness },
-                        { label: 'Uniqueness', val: selectedDatasetQuality.metrics.uniqueness },
-                        { label: 'Validity', val: selectedDatasetQuality.metrics.validity }
+                        { label: getLabel('Completeness', 'الاكتمال في السجلات', 'تەواوەتی داتا'), val: selectedDatasetQuality.metrics.completeness },
+                        { label: getLabel('Accuracy', 'الدقة الرياضية', 'ڕاستی زانیاری'), val: selectedDatasetQuality.metrics.accuracy },
+                        { label: getLabel('Consistency', 'الاتساق وعدم التناقض', 'هاوسەنگی بێکێشە'), val: selectedDatasetQuality.metrics.consistency },
+                        { label: getLabel('Timeliness', 'سرعة التزامن والحداثة', 'هاوکاتی خێرا'), val: selectedDatasetQuality.metrics.timeliness },
+                        { label: getLabel('Uniqueness', 'عدم التكرار (الفردية)', 'تەواوی ناتەبایی'), val: selectedDatasetQuality.metrics.uniqueness },
+                        { label: getLabel('Validity', 'صحة الحقول ونوع البيانات', 'یاسایی بوون'), val: selectedDatasetQuality.metrics.validity }
                       ].map((dim) => (
                         <div key={dim.label} className="bg-slate-950/60 p-2 px-3 rounded border border-slate-900 flex flex-col gap-1">
                           <div className="flex justify-between items-center text-[10px] text-slate-400">
@@ -364,18 +405,28 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                     </div>
 
                     {/* Critical Anomalies Alerts inside quality rules */}
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-mono">Platform Flagged Quality Alerts</span>
+                    <div className="flex flex-col gap-1.5 mt-3">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider font-mono">
+                        {getLabel('Platform Flagged Quality Alerts', 'تنبهمات جودة البيانات المرصودة بالنظام', 'ئاگادارکردنەوە فەرمییەکانی چاودێری جۆری داتا')}
+                      </span>
                       {selectedDatasetQuality.criticalAnomalies.length === 0 ? (
-                        <span className="text-[10px] text-emerald-400 bg-emerald-950/20 p-2 px-3 rounded border border-emerald-900/40 inline-block font-mono">
-                          ✓ Dual verification check complete. 0 structural integrity errors present on master golden fields.
+                        <span className="text-[10px] text-emerald-400 bg-emerald-950/20 p-2 px-3 rounded border border-emerald-900/40 inline-block font-mono text-start">
+                          ✓ {getLabel(
+                            'Dual verification check complete. 0 structural integrity errors present on master golden fields.',
+                            'تم التدقيق المزدوج الموحد. صفر أخطاء فنية في سلامة الحقول البنيوية الذهبية المعتمدة.',
+                            'پشکنینی دوولایەنەی داتا تەواو بوو. هێچ کەموکوڕی و کێشەیەک لە پێکهاتەی داتاکاندا بەدی نەکرا.'
+                          )}
                         </span>
                       ) : (
                         <div className="flex flex-col gap-1.5">
                           {selectedDatasetQuality.criticalAnomalies.map((a, i) => (
-                            <div key={i} className="bg-red-950/20 border border-red-500/20 text-red-100 text-[10.5px] p-2 rounded-md font-sans font-semibold flex items-start gap-2 leading-relaxed">
+                            <div key={i} className="bg-red-950/20 border border-red-500/20 text-red-100 text-[10.5px] p-2 rounded-md font-sans font-semibold flex items-start gap-2 leading-relaxed text-start">
                               <AlertTriangle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
-                              <span>{a}</span>
+                              <span>{getLabel(
+                                a,
+                                a.replace('Duplicate', 'سجل مكرر').replace('Invalid', 'غير صحيح').replace('Nulls', 'قيم فارغة'),
+                                a.replace('Duplicate', 'سجلی دووبارە').replace('Invalid', 'ناڕاست').replace('Nulls', 'زانیاری بەتاڵ')
+                              )}</span>
                             </div>
                           ))}
                         </div>
@@ -392,9 +443,8 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
           {/* Section 2: Interactive National Data Lineage, Dependency Trace Engine */}
           <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800 shadow-xl flex flex-col gap-4 text-start">
             <SectionHeader 
-              title={isRtl ? 'تتبع مسار سلاسل تداول البيانات والاعتمادية (Data Lineage Engine)' : 'End-to-End Dynamic Data Lineage Graph'}
-              description={isRtl ? 'تتبع مصادر البيانات، المسارات، والتحويلات الرياضية وصولاً إلى التقارير واللوحات الحكومية مع تحليل الأثر حياً.' : 
-                            'Comprehensive visualization of physical database systems mapped through dynamic middleware pipelines.'}
+              title={getLabel('End-to-End Dynamic Data Lineage Graph', 'تتبع مسار سلاسل تداول البيانات والاعتمادية (Data Lineage Engine)', 'هێڵکاری تێپەڕبوون و گواستنەوەی جۆراوجۆری زانیارییەکان')}
+              description={getLabel('Comprehensive visualization of physical database systems mapped through dynamic middleware pipelines.', 'تتبع مصادر البيانات، المسارات، والتحويلات الرياضية وصولاً إلى التقارير واللوحات الحكومية مع تحليل الأثر حياً.', 'بینینی گشتگیر بۆ جووڵەی پایپلاینی زانیاری لە نێوان فەرمانگەکاندا بە شێوەیەکی خێرا.')}
             />
 
             {/* Lineage Visual Simulator layout */}
@@ -402,20 +452,24 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
               
               {/* Selector area */}
               <div className="flex flex-col gap-2.5">
-                <label className="text-[11px] font-mono text-[#E0A96D] uppercase font-bold">1. Select Lineage Source Entity</label>
+                <label className="text-[11px] font-mono text-[#E0A96D] uppercase font-bold">{getLabel('1. Select Lineage Source Entity', '١. حدد الكيان المصدر للبيانات', '١. سەرچاوەی دابەشبوونی زانیاری لێرە هەڵبژێرە')}</label>
                 <select
                   value={impactSourceNode}
                   onChange={(e) => triggerImpactSimulation(e.target.value)}
                   className="bg-[#111e2e] border border-slate-800 rounded p-2 text-xs font-mono text-white focus:outline-none"
                 >
-                  <option value="src-moi-civil-db">MoI Civil Registration (Raw Citizen DB)</option>
-                  <option value="src-mot-companies-db">MoTrade Registry System (Raw Corporate DB)</option>
-                  <option value="src-[#E0A96D]">Central Bank Interbanking Ledger (Raw Forex DB)</option>
-                  <option value="pipe-idg-etl-processor">IDG Resolution Node (Transformation Pipeline)</option>
-                  <option value="core-datalake-isolated">Unified Data Ocean (Central Golden Registry)</option>
+                  <option value="src-moi-civil-db">{getLabel('MoI Civil Registration (Raw Citizen DB)', 'سجل الأحوال المدنية - الداخلية (قاعدة بيانات المواطنين الأساسية)', 'تۆماری باری شارستانی - وەزارەتی ناوخۆ (داتای هاوڵاتیان)')}</option>
+                  <option value="src-mot-companies-db">{getLabel('MoTrade Registry System (Raw Corporate DB)', 'سجل الشركات المركزي - وزارة التجارة (قاعدة بيانات الشركات العالمية)', 'تۆماری ناوەندی کۆمپانیاکان - وەزارەتی بازرگانی')}</option>
+                  <option value="src-[#E0A96D]">{getLabel('Central Bank Interbanking Ledger (Raw Forex DB)', 'سجلات تحويلات البنك المركزي (بيانات النقد الأجنبي الفورية)', 'تۆماری گشتی بانکەکان - بانکی ناوەندی عێراق')}</option>
+                  <option value="pipe-idg-etl-processor">{getLabel('IDG Resolution Node (Transformation Pipeline)', 'عقدة معالجة وتدقيق البوابة الرقمية المشتركة', 'ناوەندی پاکتاوکردن و چاکسازی پۆرتاڵی نیشتمانی')}</option>
+                  <option value="core-datalake-isolated">{getLabel('Unified Data Ocean (Central Golden Registry)', 'بحيرة البيانات الفيدرالية الموحدة المعزولة', 'دەریاچەی زانیارییە فیدراڵییە سەرەکییە پارێزراوەکان')}</option>
                 </select>
                 <p className="text-[10px] text-slate-500 font-sans leading-normal">
-                  Failsafe telemetry tracks data element transformations down to downstream executive decision platforms automatically.
+                  {getLabel(
+                    'Failsafe telemetry tracks data element transformations down to downstream executive decision platforms automatically.',
+                    'تتبع القياسات الفنية تلقائياً تحولات عناصر البيانات حتى منصات اتخاذ القرار التنفيذي لضمان عدم التناقض.',
+                    'پێوانەکەرە فەرمییەکان بە شێوەیەکی ئۆتۆماتیکی گۆڕانکاری داتاکان دەگوازنەوە بۆ سەکۆکانی تر بە بێ هیچ کێشەیەک یان لادانێک.'
+                  )}
                 </p>
               </div>
 
@@ -423,26 +477,31 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
               <div className="md:col-span-2 flex flex-col gap-2">
                 <label className="text-[11px] font-mono text-[#52B788] uppercase font-bold flex items-center gap-1.5">
                   <Play className="w-3.5 h-3.5 fill-emerald-500 text-emerald-500" />
-                  Live Downstream Dependency Impact Assessment
+                  {getLabel('Live Downstream Dependency Impact Assessment', 'تقييم الأثر المباشر للاعتمادية على الأنظمة التابعة', 'هەڵسەنگاندنی ڕاستەوخۆی کاریگەری گۆڕانکاریی لەسەر جومگەکانی تر')}
                 </label>
 
                 {impactResult.length === 0 ? (
-                  <div className="p-4 bg-slate-900 border border-slate-850 rounded-lg text-xs italic text-slate-500">
-                    No downstream components impacted by this node. Isolated perimeter.
+                  <div className="p-4 bg-slate-900 border border-slate-850 rounded-lg text-xs italic text-slate-500 text-start">
+                    {getLabel('No downstream components impacted by this node. Isolated perimeter.', 'لا توجد أنظمة تابعة تتأثر بهذا العنوان. النطاق معزول تماماً وحصين.', 'هیچ کەرتی تر نییە کە بکەوێتە ژێر کاریگەری ئەم خاڵەوە. ناوەندەکە بە تەواوی جیاکراوەتەوە.')}
                   </div>
                 ) : (
                   <div className="overflow-y-auto max-h-[160px] border border-slate-850 rounded">
-                    <Table headers={['Impacted Node / Service System', 'Classification Type', 'Criticality Rating', 'Affected Role Affiliations']}>
+                    <Table headers={[
+                      getLabel('Impacted Node / Service System', 'النظام أو الواجهة المتأثرة', 'جگە یان واژەی کەوتوو لەژێر کاریگەری'),
+                      getLabel('Classification Type', 'نوع التصنيف الأمني', 'پۆلێنکردنی ئاستی نهێنی'),
+                      getLabel('Criticality Rating', 'درجة الخطورة والحرج', 'ڕێژەی مەترسی و گرنگی'),
+                      getLabel('Affected Role Affiliations', 'الفئات الوظيفية المتأثرة بالصلاحية', 'نازناوە فەرمییە تووشبووەکان بە گۆڕانکاری')
+                    ]}>
                       {impactResult.map((node, i) => (
                         <tr key={i} className="text-[10.5px] font-mono hover:bg-slate-900/30">
                           <td className="px-3 py-2 font-semibold text-white">{node.label}</td>
-                          <td className="px-3 py-2 text-slate-400">{node.type}</td>
+                          <td className="px-3 py-2 text-slate-400">{translateClassification(node.type)}</td>
                           <td className="px-3 py-2">
                             <Badge variant={node.impactLevel === 'CRITICAL' ? 'danger' : 'warning'}>
-                              {node.impactLevel}
+                              {node.impactLevel === 'CRITICAL' ? getLabel('CRITICAL', 'حرج للغاية', 'زۆر گرنگ و پێویست') : getLabel('WARNING', 'تحذير متوسط', 'ئاگادارکردنەوە')}
                             </Badge>
                           </td>
-                          <td className="px-3 py-2 text-slate-300">{node.roleAffected}</td>
+                          <td className="px-3 py-2 text-slate-350">{translateRole(node.roleAffected)}</td>
                         </tr>
                       ))}
                     </Table>
