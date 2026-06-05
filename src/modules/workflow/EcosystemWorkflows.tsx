@@ -75,7 +75,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
     },
     {
       id: 'step-7',
-      title: { en: 'Under-Invoicing Revenue Protection Audit', ar: 'تدقيق التسعير الاستيرادي ومكافحة التهرب الفاتوري', ku: 'پشکینی فێڵی بەهەرزان نیشاندانی تێچووی هاوردە' },
+      title: { en: 'Under-Invoicing Revenue Protection Audit', ar: 'التسعير الاستيرادي ومكافحة التهرب الفاتوري', ku: 'پشکینی فێڵی بەهەرزان نیشاندانی تێچووی هاوردە' },
       actor: { en: 'Federal Customs Anti-Fraud unit', ar: 'وحدة حماية الإيرادات ومكافحة التهرب الجمركي', ku: 'بەشی دەروازە بۆ چاودێری فێڵ و داگرتنی نرخ' },
       detail: { en: 'Correlates price profiles to prevent tariff losses from undervalued and misdeclared imports.', ar: 'يقوم الذكاء الاصطناعي بكشف كذب الفواتير الاستعراضية الرخيصة لإلزام المستورد بالقيمة العادلة الموحدة.', ku: 'بەراوردکردنی نرخی ڕاگەیەندراو لەگەڵ نرخی بازاڕ بۆ ڕاگرتنی تێکدانی هاوسەنگی باج.' }
     },
@@ -203,7 +203,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           <button
             onClick={() => setSimulationSpeed(3000)}
             className={`px-2 py-1 rounded text-[10px] font-mono transition-all ${
-              simulationSpeed === 3000 ? 'bg-slate-900 border border-slate-850 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
+              simulationSpeed === 3000 ? 'bg-slate-900 border border-slate-855 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
             {lang === 'en' ? 'Normal (3s)' : lang === 'ar' ? 'طبيعي (٣ ث)' : 'ئاسایی (٣ چ)'}
@@ -212,7 +212,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
           <button
             onClick={() => setSimulationSpeed(1500)}
             className={`px-2 py-1 rounded text-[10px] font-mono transition-all ${
-              simulationSpeed === 1500 ? 'bg-slate-900 border border-slate-850 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
+              simulationSpeed === 1500 ? 'bg-slate-900 border border-slate-855 text-[#E0A96D] font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
             {lang === 'en' ? 'Accelerated (1.5s)' : lang === 'ar' ? 'مسرّع (١.٥ ث)' : 'خێراتر (١.٥ چ)'}
@@ -225,7 +225,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
             className={`px-3 py-1 rounded text-[10px] uppercase font-mono font-bold transition-all flex items-center gap-1 ${
               isSimulating 
                 ? 'bg-amber-950/40 text-amber-400 border border-amber-500/25' 
-                : 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/25'
+                : 'bg-emerald-955/40 text-emerald-400 border border-emerald-500/25'
             }`}
           >
             {isSimulating ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
@@ -418,7 +418,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
         </div>
       </div>
 
-      {/* Bottom sections: Transaction monitor split with logs */}
+      {/* Bottom sections: Transaction monitor split with logs & sidebar governance */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         
         {/* Left 2/3: Live Transaction logs list */}
@@ -495,55 +495,6 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Bottom sections: Transaction monitor split with logs */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        
-        {/* Left 2/3: Live Transaction logs list */}
-        <div className="xl:col-span-2 bg-[#0a1523]/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4">
-          <h3 className="text-xs uppercase font-mono tracking-wider text-slate-350 border-b border-slate-900 pb-2 font-bold">
-            {lang === 'en' ? 'Secure Ledger transaction flow stream' : lang === 'ar' ? 'تدفق سجل الحوالات والمعاملات الآمن' : 'مۆنیتۆری ڕاستەوخۆی تۆماری جێگیری کارە فەرمییەکان'}
-          </h3>
-          <div className="overflow-x-auto text-xs font-mono">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-850 text-slate-500 text-[9px] uppercase font-mono">
-                  <th className="pb-2">
-                    {lang === 'en' ? 'Secure TX ID' : lang === 'ar' ? 'رمز المعاملة الآمن' : 'ناسنامەی کارەکە'}
-                  </th>
-                  <th className="pb-2">
-                    {lang === 'en' ? 'Pipeline Phase' : lang === 'ar' ? 'مرحلة التدفق' : 'قۆناغی کار'}
-                  </th>
-                  <th className="pb-2">
-                    {lang === 'en' ? 'Audit Status' : lang === 'ar' ? 'حالة التدقيق الجمركي' : 'بارودۆخی پێداچوونەوە'}
-                  </th>
-                  <th className="pb-2">
-                    {lang === 'en' ? 'Execution Log Detail' : lang === 'ar' ? 'تفاصيل سجل التنفيذ اللحظي' : 'زانیاری نووسراوی ڕاپۆرت'}
-                  </th>
-                  <th className="pb-2 text-right">
-                    {lang === 'en' ? 'Sequence Timestamp' : lang === 'ar' ? 'التوقيت الرقمي' : 'کاتی گواستنەوە'}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-850/60 text-slate-300 text-[10.5px]">
-                {logs.map((log, idx) => (
-                  <tr key={idx} className={idx === 0 ? 'text-[#cca553] font-bold animate-pulse' : ''}>
-                    <td className="py-2.5 font-bold text-[#cca553]">{log.id}</td>
-                    <td>{log.step}</td>
-                    <td>
-                      <span className="px-1.5 py-0.5 bg-emerald-950/80 text-emerald-400 border border-emerald-500/20 rounded uppercase text-[9px] font-semibold">
-                        {log.status === 'Success' ? (lang === 'en' ? 'Success' : lang === 'ar' ? 'ناجح' : 'سەرکەوتوو') : (lang === 'en' ? 'Processing' : lang === 'ar' ? 'خاضع للمطابقة' : 'پڕۆسە دەکرێت')}
-                      </span>
-                    </td>
-                    <td className="text-slate-400 max-w-xs truncate">{log.detail}</td>
-                    <td className="text-right text-slate-500 text-[10px]">{log.timestamp}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
         {/* Right 1/3 sidebar framework governance rules */}
         <div className="bg-[#0a1523]/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-3.5">
@@ -567,7 +518,7 @@ export default function EcosystemWorkflows({ lang }: EcosystemWorkflowsProps) {
               <strong className="text-slate-200 block text-[11px] mb-1">
                 {lang === 'en' ? 'Standardized COSQC Harmonization' : lang === 'ar' ? 'مطابقة التقييس والسيطرة النوعية' : 'ڕێککەوتني گشتني هاوسەنگي COSQC'}
               </strong>
-              <p className="text-[10px] text-slate-500 leading-normal font-mono">
+              <p className="text-[10px] text-slate-500 leading-normal font-mono font-semibold">
                 {lang === 'en' ? 'Ensures that bulk imports meet quality specifications prior to dispatch in land hubs.' : lang === 'ar' ? 'يضمن مطابقة البضائع للمواصفات الصحية السليمة قبل السماح بدخولها وخروجها.' : 'دڵنیادەبێتەوە کە خواروباری هاوردەکراو پشکنینی تەواوی بۆ کراوە پێش گەیشتنی بە بەکاربەر.'}
               </p>
             </div>

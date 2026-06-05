@@ -3,12 +3,15 @@ import {
   Shield, Check, AlertTriangle, Activity, Database, Cpu, 
   TrendingUp, FileText, Send, Server, 
   RefreshCw, Layers, Landmark, Network, 
-  ArrowRight, BookOpen
+  ArrowRight, BookOpen, Lock
 } from 'lucide-react';
 import { CHECKPOINTS, DICTIONARY, CARGO_PRESETS } from '../mockData';
 import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
 import SovereignAIBrain from '../modules/ai/SovereignAIBrain';
 import NationalCommandCenter from '../modules/command-center/NationalCommandCenter';
+import SecurityCommandCenter from '../modules/security/SecurityCommandCenter';
+import NationalDataCommandCenter from '../modules/data-fabric/NationalDataCommandCenter';
+import NationalIdentityCommandCenter from '../modules/digital-identity/NationalIdentityCommandCenter';
 import { useI18n } from '../providers/I18nProvider';
 import { Brain } from 'lucide-react';
 
@@ -531,6 +534,57 @@ export default function App() {
             <span className="absolute -top-1 -right-1 flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('security')}
+            className={`px-4 py-2 rounded-md transition-all flex items-center gap-2 font-medium capitalize text-xs relative ${
+              activeTab === 'security' 
+                ? 'bg-[#1a2c42] text-white border-l-2 border-[#cca553] shadow-md' 
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            id="nav-btn-security"
+          >
+            <Lock className="w-4 h-4 text-[#cca553]" />
+            {lang === 'en' ? 'Sovereign Security' : lang === 'ar' ? 'الأمن السبراني السيادي' : 'ئاسایشی ئەلیکترۆنی'}
+            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('data-fabric')}
+            className={`px-4 py-2 rounded-md transition-all flex items-center gap-2 font-medium capitalize text-xs relative ${
+              activeTab === 'data-fabric' 
+                ? 'bg-[#1a2c42] text-white border-l-2 border-[#cca553] shadow-md' 
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            id="nav-btn-data-fabric"
+          >
+            <Database className="w-4 h-4 text-[#cca553]" />
+            {lang === 'en' ? 'Sovereign Data Fabric' : lang === 'ar' ? 'نسيج البيانات الوطني السيادي' : 'نسیجی داتای نیشتمانیی'}
+            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('sovereign-trust')}
+            className={`px-4 py-2 rounded-md transition-all flex items-center gap-2 font-medium capitalize text-xs relative ${
+              activeTab === 'sovereign-trust' 
+                ? 'bg-[#1a2c42] text-white border-l-2 border-[#cca553] shadow-md' 
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            id="nav-btn-sovereign-trust"
+          >
+            <Shield className="w-4 h-4 text-[#cca553]" />
+            {lang === 'en' ? 'Sovereign Trust Portal' : lang === 'ar' ? 'بوابة الثقة الفيدرالية والمفاتيح ' : 'مەکینەی ناسنامەی نیشتمانیی'}
+            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
             </span>
           </button>
 
@@ -1616,6 +1670,27 @@ export default function App() {
         {activeTab === 'ai-brain' && (
           <div className="animate-fade-in">
             <SovereignAIBrain lang={lang} />
+          </div>
+        )}
+
+        {/* ==================== TAB 8: SOVEREIGN ZERO TRUST SECURITY ==================== */}
+        {activeTab === 'security' && (
+          <div className="animate-fade-in">
+            <SecurityCommandCenter lang={lang} />
+          </div>
+        )}
+
+        {/* ==================== TAB 9: SOVEREIGN NATIONAL DATA FABRIC ==================== */}
+        {activeTab === 'data-fabric' && (
+          <div className="animate-fade-in">
+            <NationalDataCommandCenter lang={lang} />
+          </div>
+        )}
+
+        {/* ==================== TAB 10: SOVEREIGN TRUST FRAMEWORK ==================== */}
+        {activeTab === 'sovereign-trust' && (
+          <div className="animate-fade-in">
+            <NationalIdentityCommandCenter lang={lang} />
           </div>
         )}
 
