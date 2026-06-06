@@ -1,21 +1,7 @@
-import { ClearanceLevel } from '../security';
-
-export interface IdentityProfile {
-  id: string;
-  fullName: {
-    en: string;
-    ar: string;
-    ku: string;
-  };
-  role: string;
-  ministry: string;
-  clearance: ClearanceLevel;
-  biometricRegistered: boolean;
-  hardwareKeyId: string;
+export interface IdentityDTO {
+  // Define based on identity mock usage (e.g. citizens, businesses)
 }
 
-export interface IdentityContract {
-  getEmployeeProfile(id: string): IdentityProfile | undefined;
-  listProfilesByClearance(level: ClearanceLevel): IdentityProfile[];
-  validateIdentitySignature(id: string, signatureHex: string): boolean;
+export interface IdentityRepository {
+  // Define methods based on usage
 }

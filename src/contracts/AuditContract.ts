@@ -1,22 +1,12 @@
-export interface AuditLogEntry {
+export interface AuditLogDTO {
   id: string;
-  eventType: string;
   timestamp: string;
-  subjectUsername: string;
-  actionSummary: string;
-  status: string;
+  actor: string;
+  action: string;
+  status: 'success' | 'failure';
+  details: string;
 }
 
-export interface SovereignBlock {
-  index: number;
-  hash: string;
-  prevHash: string;
-  timestamp: string;
-  data: string;
-}
-
-export interface AuditContract {
-  logEvent(entry: Omit<AuditLogEntry, 'id' | 'timestamp'>): void;
-  getLogs(): AuditLogEntry[];
-  getLedgerBlocks(): SovereignBlock[];
+export interface AuditRepository {
+  getLogs(): Promise<AuditLogDTO[]>;
 }

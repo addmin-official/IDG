@@ -16,22 +16,22 @@ export interface HITLApproval {
 export const getPromptTemplate = (id: string, lang: 'en' | 'ar' | 'ku') => {
   switch(id) {
     case 'hs-prompt':
-      return lang === 'ku' 
-        ? `[ڕێنمایی گشتی سیستەم: پۆلێنکردنی کاڵاکانی گومرگ]\nتۆ مێشکی بەرپرسیاری زیرەکی دەستکردی بۆ دیاریکردنی کۆدی تاریفەی دەروازەی عێراق.\nئەم زانیارییانەی خوارەوە بۆ بارهەڵگرەکە پشتڕاستبکەرەوە بۆ وەرگرتنی کۆدی نێودەوڵەتی (HS Code):\n\nپێناسەی کاڵاکە: {{description}}\nوڵاتی سەرچاوە: {{origin}}\nبەهای پارە: {{cost}}\n\nدیاری بکە: (١) کۆدی ٨ خانەیی دروست، (٢) ڕێژەی مۆری گومرگی، (٣) ئاستی شیاوی مەترسی بارهەڵگرەکە.`
+      return lang === 'ku'
+        ? `[ڕێنمایی سیستەمی زیرەکیی دەستکرد: پۆلێنکردنی کاڵاکان]\nتۆ مێشکی بەرپرسیاری پۆلێنکردنی کاڵاکانی گومرگی بۆ دەروازەکانی عێراقیت.\nتکایە وردبینی بۆ ئەم کاڵایەی خوارەوە بکە بۆ دەستنیشانکردنی کۆدی نێودەوڵەتی (HS Code):\n\nپێناسەی کاڵاکە: {{description}}\nوڵاتی سەرچاوە: {{origin}}\nبەها: {{cost}}\n\nپێویستە دیاری بکرێت: (١) کۆدی ٨ خانەیی دروست، (٢) ڕێژەی ڕەسومی گومرگی، (٣) ئاستی مەترسیی بارهەڵگرەکە.`
         : lang === 'ar'
-        ? `[تعليمات النظام: محاكي تصنيف البضائع الموحد]\nأنت العقل والذكاء المعتمد لتصنيف البضائع الجمركية للبوابة الرقمية العراقية.\nقم بتدقيق الشحنة التالية لتحديد رمز التنسيق العالمي (HS Code):\n\nوصف البضاعة: {{description}}\nبلد المنشأ المصرح به: {{origin}}\nالتكلفة المصرح بها: {{cost}}\n\nحدد: (١) الرمز الصحيح المكون من ٨ أرقام، (٢) الرسوم الجمركية، (٣) معامل المخاطر والشبهات.`
-        : `[SYSTEM_INSTRUCTION: ACT_AS_SOVEREIGN_IDG_CLASSIFIER]\nYou are the secure HS Classification AI for the Iraq Gateway.\nCargo Description: {{description}}\nOrigin: {{origin}}\nCost: {{cost}}\nDetermine: (1) Correct HS Code, (2) Recommended Duty rate, (3) Risk profile.`;
+        ? `[تعليمات النظام: محاكي تصنيف البضائع الموحد]\nأنت العقل الاصطناعي المعتمد لتصنيف البضائع الجمركية في البوابة الوطنية العراقية.\nقم بتدقيق الشحنة التالية لتحديد رمز النظام المنسق (HS Code):\n\nوصف البضاعة: {{description}}\nبلد المنشأ: {{origin}}\nالقيمة المصرح بها: {{cost}}\n\nحدد: (١) الرمز الجمركي المكون من ٨ خانات، (٢) الرسوم الجمركية المترتبة، (٣) مؤشر المخاطر والتهديدات.`
+        : `[SYSTEM_INSTRUCTION: ACT_AS_SOVEREIGN_IDG_CLASSIFIER]\nYou are the secure HS Classification AI for the Iraq Gateway.\nCargo Description: {{description}}\nOrigin: {{origin}}\nCost: {{cost}}\nDetermine: (1) Correct 8-digit HS Code, (2) Recommended Duty rate, (3) Risk profile.`;
     case 'eval-prompt':
       return lang === 'ku'
-        ? `[ڕێنمایی گشتی: فەرمانبەری پاراستنی داهاتی نیشتمانی]\nبه‌راوردی نرخی ڕاگه‌یه‌ندراوی کاڵاکە بکە لەگەڵ پێوه‌رە فه‌رمییه‌کانی بازرگانی نێودەوڵەتی.`
+        ? `[ڕێنمایی گشتی: فەرمانبەری پاراستنی داهاتی گشتی]\nنرخی ڕاگەیەندراوی کاڵاکە بەراورد بکە لەگەڵ پێوەرە فەرمییەکانی بازرگانیی نێودەوڵەتی.`
         : lang === 'ar'
-        ? `[توجيه: ضابط حماية العائد المالي الوطني]\nقارن الأسعار المصرح بها للمواد بأسعار الأسواق العالمية القياسية المقررة.`
+        ? `[توجيه: ضابط حماية العائد المالي الوطني]\nقارن الأسعار المصرح بها للمواد بمتوسط أسعار الأسواق العالمية القياسية.`
         : `[INSTRUCTION: CHIEF_REVENUE_PROTECT_AGENT]\nCompare the declared price against raw trade indices.\nDescription: {{description}}\nDeclared Value: {{cost}}\nExporter origin: {{origin}}\nEstimate deviation.`;
     case 'quarantine-prompt':
       return lang === 'ku'
-        ? `[پشکنەری کشتوکاڵی و بایۆلۆجی دەروازەکان]\nشیکردنەوەی بارهەڵگرەکانی کهرتی کشتوکاڵ بکە بۆ ڕێگریکردن لە نەخۆشی جۆراوجۆر.`
+        ? `[پشکنەری کشتوکاڵی و بایۆلۆجیی دەروازەکان]\nشیکردنەوەی بارهەڵگرەکانی کەرتی کشتوکاڵ بکە بۆ دڵنیابوون لە پابەندبوون بە مەرجەکانی سەلامەتیی تەندروستی.`
         : lang === 'ar'
-        ? `[فلتر الفحص والحجر الصحي والبيولوجي الموحد]\nحلل طبيعة الشحنات الزراعية ومدى مطابقتها لضوابط السلامة الفيدرالية.`
+        ? `[فلتر الفحص والحجر الصحي والبيولوجي الموحد]\nحلل طبيعة الشحنات الزراعية ومدى مطابقتها للضوابط والمعايير الصحية الاتحادية.`
         : `[SAFETY_INSPECT_FILTER]\nAnalyze agricultural cargos and quarantine codes.\nProduct description: {{description}}\nOrigin: {{origin}}\nCheck biological alerts.`;
     default:
       return '';
@@ -42,7 +42,7 @@ export const getStandardResponse = (playDesc: string, lang: 'en' | 'ar' | 'ku') 
   const isDrillPipe = playDesc.toLowerCase().includes('drill') || playDesc.toLowerCase().includes('pipe');
   if (isDrillPipe) {
     if (lang === 'ku') {
-      return `[بزوێنەری بڕیاردانی زیرەکی نیشتمانی]\n١. HS-CODE: 7304.22.00\n٢. تاریفە: ٨٪\n٣. مەترسی: سەوز`;
+     return `[بزوێنەری بڕیاردانی زیرەکی نیشتمانی]\n١. HS-CODE: 7304.22.00\n٢. تاریفە: ٨٪\n٣. مەترسی: سەوز`;
     }
     if (lang === 'ar') {
       return `[محرك الاستدلال السيادي]\n١. الرمز (HS-CODE): 7304.22.00\n٢. الرسوم: ٨٪\n٣. تقرير المخاطر: خضراء`;
@@ -79,7 +79,6 @@ export const getRegistryPrompts = (lang: 'en' | 'ar' | 'ku') => ({
     cost: '$620 USD / Ton'
   }
 });
-
 export interface AIModule {
   id: string;
   index: string;

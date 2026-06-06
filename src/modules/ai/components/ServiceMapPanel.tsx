@@ -16,20 +16,6 @@ export const ServiceMapPanel: React.FC<ServiceMapPanelProps> = React.memo(({
   setActiveModule,
   aiModules
 }) => {
-  const getModuleName = (id: string) => {
-    switch (id) {
-      case 'hs-classifier': return lang === 'ku' ? 'زیرەکی پۆلێنکردنی تاریفەکان (HS Classifier)' : lang === 'ar' ? 'ذكاء تصنيف البضائع والتعرفة' : 'HS Classification AI';
-      case 'customs-auditor': return lang === 'ku' ? 'هاوکار و عەقڵی گشتی گومرگ (Customs Assistant)' : lang === 'ar' ? 'مساعد التدقيق الجمركي الآلي' : 'Customs Assistant AI';
-      case 'logistics-seq': return lang === 'ku' ? 'بزوێنەری مۆنیتۆری هۆشیاری لۆجستی (Logistics Core)' : lang === 'ar' ? 'محرك جدولة اللوجستية والمسارات' : 'Logistics AI Core';
-      case 'compliance-intercept': return lang === 'ku' ? 'زیرەکی پاراستنی بەڵگەنامە گشتییەکان (Compliance AI)' : lang === 'ar' ? 'ذكاء مراقبة الحوالات والامتثال' : 'Compliance Intercept AI';
-      case 'risk-assessment': return lang === 'ku' ? 'تۆڕی هەڵسەنگاندنی مەترسییەکان (Risk Assessment)' : lang === 'ar' ? 'تحليل المخاطر العصبية للمنافذ' : 'Risk Assessment neural';
-      case 'decision-support': return lang === 'ku' ? 'سیرڤسی هاوکاری بڕیاری وەزارەت (Decision Support)' : lang === 'ar' ? 'وكيل دعم القرار الوزاري' : 'Decision Support Agent';
-      case 'predictive-corridors': return lang === 'ku' ? 'زیرەکی پێشبینیکردنی ڕێڕەوەکانی ترانزیت (Predictive Transit)' : lang === 'ar' ? 'ذكاء مسارات الترانزيت التنبؤي' : 'Predictive Transit AI';
-      case 'economic-forecaster': return lang === 'ku' ? 'تۆڕی زانیاریی ئابووری نیشتمانیی (Economic Intel)' : lang === 'ar' ? 'الشبكة الاستخباراتية الاقتصادية' : 'Economic Intel Network';
-      default: return id;
-    }
-  };
-
   const getModuleStatus = (id: string) => {
     switch (id) {
       case 'hs-classifier': return lang === 'ku' ? 'چالاک و پێشنیارکەر' : lang === 'ar' ? 'متصل ويقدم التوصيات' : 'Live & Recommending';
@@ -44,47 +30,56 @@ export const ServiceMapPanel: React.FC<ServiceMapPanelProps> = React.memo(({
     }
   };
 
+  const getModuleName = (id: string) => {
+    switch (id) {
+      case 'hs-classifier': return lang === 'ku' ? 'زیرەکیی پۆلێنکردنی کۆدەکانی گومرگی (HS)' : lang === 'ar' ? 'ذكاء تصنيف البضائع والتعرفة الجمركية' : 'HS Classification AI';
+      case 'customs-auditor': return lang === 'ku' ? 'هاوکاری زیرەکی وردبینیی گومرگی' : lang === 'ar' ? 'مساعد التدقيق الجمركي الآلي' : 'Customs Assistant AI';
+      case 'logistics-seq': return lang === 'ku' ? 'بزوێنەری مۆنیتۆری لۆجستیی نیشتمانی' : lang === 'ar' ? 'محرك جدولة اللوجستية والمسارات' : 'Logistics AI Core';
+      case 'compliance-intercept': return lang === 'ku' ? 'زیرەکیی چاودێریی پابەندبوون و دراو' : lang === 'ar' ? 'ذكاء مراقبة الحوالات والامتثال المالي' : 'Compliance Intercept AI';
+      case 'risk-assessment': return lang === 'ku' ? 'تۆڕی هەڵسەنگاندنی مەترسییەکانی سنوور' : lang === 'ar' ? 'تحليل المخاطر السيادية للمنافذ' : 'Risk Assessment neural';
+      case 'decision-support': return lang === 'ku' ? 'سیرڤسی هاوکاریی بڕیاردانی وەزارەتی' : lang === 'ar' ? 'وكيل دعم القرار الوزاري' : 'Decision Support Agent';
+      case 'predictive-corridors': return lang === 'ku' ? 'زیرەکیی پێشبینیی ڕێڕەوەکانی ترانزیت' : lang === 'ar' ? 'ذكاء مسارات الترانزيت التنبؤي' : 'Predictive Transit AI';
+      case 'economic-forecaster': return lang === 'ku' ? 'تۆڕی زانیاریی ئابووریی نیشتمانی' : lang === 'ar' ? 'الشبكة الاستخباراتية الاقتصادية الوطنية' : 'Economic Intel Network';
+      default: return id;
+    }
+  };
+
   const getModuleDetail = (id: string) => {
     switch (id) {
       case 'hs-classifier': return lang === 'ku'
-        ? 'پۆلێنکەری جۆری کاڵاکان بە شێوازێکی کارامە مانیفێستەکان بە زمانەکانی کوردی و عەرەبی لێکدەداتەوە بۆ پێدانی کۆدی گونجاو و ڕێگەگرتن لە شاردنەوەی سەرچاوە فەرمییەکان.'
+        ? 'پۆلێنکردنی کاڵاکان بەپێی مانیفێستی دیجیتاڵی بە زمانەکانی کوردی و عەرەبی بۆ دیاریکردنی دروستی کۆدەکانی (HS) و ڕێگری لە شاردنەوەی جۆری ماددەکان.'
         : lang === 'ar'
-        ? 'يقوم مصنف ترميز البضائع بتحليل المانيفستات متعددة اللغات باللغات الكردية والعربية وغيرها ومطابقتها بمؤشرات السلع العالمية لمنع التهريب الجمركي ومحالات تزييف البضائع.'
-        : 'Our HS Code Classifier parses multi-language manifests in Kurdish, Arabic, and Western scripts, matching declared item textures to global custom indices. This intercepts intentional misclassifications designed to hide toxic industrial chemicals or avoid tariffs.';
+        ? 'يقوم مصنف ترميز البضائع بتحليل المانيفستات متعددة اللغات ومطابقتها بالمؤشرات الجمركية العالمية لمنع التهريب وتصنيف المواد الخطرة.'
+        : 'Parses multi-language manifests to match cargo descriptions with global HS-Code indices, intercepting intentional misclassifications intended to bypass tariff regulations.';
       case 'customs-auditor': return lang === 'ku'
-        ? 'سیستەمی دیاریکردنی کەمکردنەوەی فاکتۆرەکان. هەڵسەنگاندنی بەهای ڕاستەقینەی کاڵاکان دەکات بۆ پاراستنی داهاتی گشتی عێراق بە شێوازێکی زۆر خێرا.'
+        ? 'شیکارکاریی بەهای فاکتۆرەکان. هەڵسەنگاندنی بەهای ڕاستەقینەی کاڵاکان بەراورد بە تێکڕای بازاڕی جیهانی بۆ پاراستنی داهاتی گشتیی فیدراڵی.'
         : lang === 'ar'
-        ? 'محلل خفض قيمة الفواتير العادلة للشحنات. يقارن أسعار الفواتير بالنطاق السعري في الأسواق العالمية حماية للعائد المالي السيادي الوطني.'
-        : 'Under-invoicing analyzer. Examines container item valuations and correlates them against global market averages. Generates instant revenue protection warnings if cargo worth deviates sharply from trade averages.';
-      case 'logistics-seq': return lang === 'ku'
-        ? 'سیستەم بە شێوەیەکی خۆکار لۆجستی و جووڵەی بارهەڵگرەکان لە نێوان دەروازەی باشوور و دەروازە وشکانییەکاندا بە وردی ڕێکدەخات.'
-        : lang === 'ar'
-        ? 'ينظم طوابير الشاحنات لوجستياً بشكل مستقل تماماً. يربط بين كثافة الطوابير في معبر إبراهيم الخليل ومنفذ طريبيل لتنظيم التدفق بذكاء.'
-        : 'Autonomously sequences logistics backlogs. Correlates queue densities at Trebil, Ibrahim Khalil, and southern harbors to predict custom processing congestions and schedules automatic re-routes.';
+        ? 'محلل تقييم الفواتير الجمركية. يقارن أسعار الشحنات بالنطاق السعري في الأسواق العالمية حمايةً للعائد المالي السيادي الوطني.'
+        : 'Under-invoicing analyzer. Correlates item valuations against global market averages. Generates instant revenue protection warnings if cargo worth deviates sharply from trade averages.';
       case 'compliance-intercept': return lang === 'ku'
-        ? 'تۆڕی پاراستنی بەڵگەنامە گشتییەکان. هاوشێوەکردنی جووڵەی پارە نێردراوەکان دەکات بۆ ڕێگری لە بردنە دەرەوەی زیانبەخشی دراوی قورس و سپیکردنەوە.'
+        ? 'تۆڕی پاراستنی پابەندبوونی دارایی. چاودێریکردنی وردی حوالاتەکانی نافزەی فرۆشتنی دراو بۆ ڕێگریکردن لە سپیکردنەوەی پارە و هەناردەی وەهمی.'
         : lang === 'ar'
-        ? 'محور الامتثال السيادي لتعاملات البنك المركزي العراقي. يكشف عمليات تهريب الدولار، تهريب العملات والاستيرادات الوهمية غير الحقيقية.'
-        : 'Sovereign compliance interlock. Matches high-frequency financial wire transfers matching CBI auction indices. Exposes capital evasion, currency manipulations, and phantom imports.';
-      case 'risk-assessment': return lang === 'ku'
-        ? 'هەڵسەنگاندنی ئاستی مەترسی بارهەڵگرەکان دەکات. پەیوەندی نێوان بەندەرەکان و کۆمپانیاکان چاودێری دەکات بۆ تەرخانکردنی کاتی پشکنینی فیزیکی لە دەروازەکان.'
+        ? 'محور الامتثال السيادي لتعاملات نافذة بيع العملة. يكشف عمليات تهريب العملات والاستيرادات الوهمية غير الحقيقية.'
+        : 'Sovereign compliance interlock. Monitors high-frequency financial transfers against CBI indices. Exposes capital evasion, currency manipulation, and phantom imports.';
+     case 'risk-assessment': return lang === 'ku'
+        ? 'هەڵسەنگاندنی ئاستی مەترسیی بارهەڵگرەکان. چاودێریی پەیوەندیی نێوان بەندەرەکان و کۆمپانیاکان دەکات بۆ دیاریکردنی پێشینەی پشکنینی فیزیکی لە دەروازە سنوورییەکان.'
         : lang === 'ar'
-        ? 'يقيم درجات المخاطرة للشحنات الواردة. يربط بين الموانئ، والشركات المصدرة والناقلة لتحديد الشحنات المشتبه بها للتدقيق اليدوي.'
+        ? 'تقييم درجات المخاطرة للشحنات الواردة. يربط بين بيانات الموانئ والشركات المصدرة والناقلة لتحديد الشحنات المشتبه بها للتدقيق اليدوي الجمركي.'
         : 'Evaluates risk profiles on all inbound shipments. Cross-references shippers, shipping ports, transport fleets, and cargo descriptions to flag physical inspection priorities without impacting clean traders.';
       case 'decision-support': return lang === 'ku'
-        ? 'ڕاوێژکاری ستراتیژی بڕیاردانی وەزارەتەکان. کۆکەرەوەی داتاکانی داهات و گومرگییە بۆ پیشاندانی پێشبینییە فەرمییەکان بە ڕاستەوخۆیی لەسەر کۆمپیوتەری بەردەست.'
+        ? 'ڕاوێژکاری ستراتیژی بۆ بڕیارە وەزارییەکان. داتاکانی داهات و گومرگ کۆدەکاتەوە بۆ پێشکەشکردنی پێشبینییە فەرمییەکان بە ئامانجی پشتیوانیکردنی سیاسەتە داراییەکان.'
         : lang === 'ar'
-        ? 'مستشار الدعم الاستراتيجي لصناع القرار الوزاري. يلخص العوائد والضرائب ويوفر توقعات واضحة لدعم السياسات المالية الفيدرالية والمحلية.'
+        ? 'مستشار الدعم الاستراتيجي لصناع القرار. يلخص العوائد والضرائب ويوفر توقعات دقيقة لدعم السياسات المالية الاتحادية والمحلية.'
         : 'Strategic statecraft advisor. Synthesizes fiscal outcomes, trade tax yields, and commodity flows to provide ministries with forecast summaries, tariff optimizations, and policy projections.';
       case 'predictive-corridors': return lang === 'ku'
-        ? 'چاودێری ڕێڕەوە وشکانییەکان دەکات. کۆنترۆڵکردنی بارهەڵگرەکانی ترانزیت دەکات لە یەکەم دەروازەی هاتنەوە تا دەروازەی کۆتایی بە ئۆتۆماتیکی.'
+        ? 'چاودێریی ڕێڕەوە وشکانییەکان دەکات. بە ئۆتۆماتیکی چاودێریی جووڵەی بارهەڵگرەکانی ترانزیت دەکات لە یەکەم دەروازەی هاتنەوە تا دەروازەی کۆتایی.'
         : lang === 'ar'
-        ? 'يراقب التدفق المستمر عبر الممرات الجافة الإقليمية. يتتبع حركة شحنات الترانزيت ويتأكد من الأختام الجمركية الإلكترونية وحرمتها.'
+        ? 'مراقبة التدفق المستمر عبر الممرات الجافة الإقليمية. يتتبع حركة شحنات الترانزيت ويتحقق من سلامة الأختام الجمركية الإلكترونية.'
         : 'Monitors transit currents across active regional dry links. Tracks transshipments and verifies sealing integrity from initial seaport gates to regional egress terminals.';
       case 'economic-forecaster': return lang === 'ku'
-        ? 'کۆکەرەوەی هاوسەنگی بازرگانی نێوان حکومەتی فیدراڵ و هەرێمی کوردستانە. متمانە و یارمەتی وەزارەتی دارایی دەدات بۆ پێشبینی نرخەکان.'
+        ? 'یەکخستنی داتاکانی بازرگانیی نێوان حکومەتی فیدراڵی و هەرێمی کوردستان. هاوکاریی وەزارەتی دارایی دەکات لە پێشبینیکردنی نرخەکان و جموجۆڵی بازرگانیدا.'
         : lang === 'ar'
-        ? 'يوحد البيانات التجارية بين المركز والإقليم. يساعد وزارة المالية في رصد حركة البضائع والأسعار والتوقعات المالية بدقة ووضوح.'
+        ? 'توحيد البيانات التجارية بين الحكومة الاتحادية وإقليم كردستان. يساعد وزارة المالية في رصد حركة البضائع والأسعار والتوقعات المالية بدقة.'
         : 'Consolidates trade balance data vectors across Iraq and Kurdistan borders. Assists the Ministry of Finance in predicting domestic market pricing and trade surplus developments.';
       default: return '';
     }

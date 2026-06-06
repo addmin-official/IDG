@@ -43,30 +43,31 @@ export const HitlReviewPanel: React.FC<HitlReviewPanelProps> = React.memo(({
     return cargo;
   };
 
-  const getAnomalyLabel = (anomaly: string) => {
-    if (anomaly.includes('Weight/volume')) {
-      return lang === 'ku'
-        ? 'ڕێژەی کێش بەرامبەر قەبارە بە ڕێژەی ٤٢٪ جیاوازە لە پێوەرە فەرمییەکان'
-        : lang === 'ar'
-        ? 'معدل الوزن مقابل الحجم يختلف بنسبة ٤٢٪ عن المعايير المعتمدة للشحن'
-        : 'Weight/volume ratio diverges by 42% from standard merchant profiles';
-    }
-    if (anomaly.includes('Exporter matching')) {
-      return lang === 'ku'
-        ? 'وەرگری بێ تەل بە بێ مۆری فەرمی وەزارەتی بەرگری هاوردەکراوە کە مەترسی هەیە'
-        : lang === 'ar'
-        ? 'تم رصد مصدر لاسلكي مشبوه ضمن المواد ثنائية الاستخدام دون تصريح الدفاع'
-        : 'Exporter matching flagged on dual-use RF transmitter registry without MoD seal';
-    }
-    if (anomaly.includes('Grain checking') || anomaly.includes('Grain inspection')) {
-      return lang === 'ku'
-        ? 'تۆماری پشکنینی تەندروستی دانەوێڵە گونجاو نییە لەگەڵ مۆری فەرمی بەرگری کشتوکاڵ'
-        : lang === 'ar'
-        ? 'تفاصيل شهادة فحص واختبار الحبوب لا تتطابق مع ترميز الفحص الصحي المعتمد'
-        : 'Grain inspection certificates mismatch phytosanitary stamp hash';
-    }
-    return anomaly;
-  };
+  // بەشی دیاریکردنی جۆری ناڕێکییەکان بەپێی ستانداردی گومرگی
+const getAnomalyLabel = (anomaly: string) => {
+  if (anomaly.includes('Weight/volume')) {
+    return lang === 'ku'
+      ? 'جیاوازیی کێش و قەبارە بە ڕێژەی ٤٢٪ بەراورد بە پێوەرە فەرمییەکان'
+      : lang === 'ar'
+      ? 'تباين الوزن مقابل الحجم بنسبة ٤٢٪ عن المعايير الجمركية المعتمدة'
+      : 'Weight/volume ratio diverges by 42% from standard merchant profiles';
+  }
+  if (anomaly.includes('Exporter matching')) {
+    return lang === 'ku'
+      ? 'سەرچاوەی بێتەلی بەکارهێنراو لە لیستی مۆڵەتی وەزارەتی بەرگری تۆمار نەکراوە'
+      : lang === 'ar'
+      ? 'تم رصد مصدر لاسلكي ثنائي الاستخدام غير مدرج ضمن تصاريح وزارة الدفاع'
+      : 'Exporter matching flagged on dual-use RF transmitter registry without MoD seal';
+  }
+  if (anomaly.includes('Grain checking') || anomaly.includes('Grain inspection')) {
+    return lang === 'ku'
+      ? 'بەڵگەنامەی پشکنینی تەندروستیی دانەوێڵە لەگەڵ مۆری فەرمیی کشتوکاڵ ناگونجێت'
+      : lang === 'ar'
+      ? 'عدم تطابق شهادة الفحص الصحي للحبوب مع الختم الرقمي المعتمد'
+      : 'Grain inspection certificates mismatch phytosanitary stamp hash';
+  }
+  return anomaly;
+};
 
   return (
     <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 text-start">
