@@ -512,34 +512,52 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
             </div>
 
             {/* Static high-fidelity diagram detailing trace flows in key layout */}
-            <div className="border border-slate-850 p-4 rounded-xl bg-slate-950/40" dir="ltr">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block mb-3 font-mono">System Visual Pathway Route Map</span>
+            <div className="border border-slate-850 p-4 rounded-xl bg-slate-950/40" dir={isRtl ? 'rtl' : 'ltr'}>
+              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 block mb-3 font-mono">
+                {getLabel('System Visual Pathway Route Map', 'خارطة مسار تداول النظم الفنية للبيانات', 'نەخشەی ڕێڕەوی گواستنەوەی جۆراوجۆری زانیارییەکان')}
+              </span>
               <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center text-xs font-mono">
                 
                 <div className="bg-[#111e2e] border border-slate-800 p-3 rounded-lg w-full md:w-36">
-                  <strong className="text-white block text-[11px]">Primary DBs</strong>
-                  <span className="text-[9px] text-[#E0A96D] block mt-0.5">Raw Encrypted Sources</span>
+                  <strong className="text-white block text-[11px]">
+                    {getLabel('Primary DBs', 'قواعد البيانات الأساسية', 'قاعیدەکانی داتای سەرەکی')}
+                  </strong>
+                  <span className="text-[9px] text-[#E0A96D] block mt-0.5">
+                    {getLabel('Raw Encrypted Sources', 'المصادر المبدئية المشفرة', 'سەرچاوە خاوە کۆدکراوەکانی داتا')}
+                  </span>
                 </div>
 
                 <div className="text-slate-600 font-extrabold text-[15px]">⇄</div>
 
                 <div className="bg-[#111e2e] border border-emerald-900 w-full md:w-36 p-3 rounded-lg relative">
-                  <strong className="text-white block text-[11px]">IDG ETL Node</strong>
-                  <span className="text-[9px] text-[#52B788] block mt-0.5">Resolution Engine</span>
+                  <strong className="text-white block text-[11px]">
+                    {getLabel('IDG ETL Node', 'عقدة معالجة البوابة IDG', 'خاڵی پرۆسێسکردنی دەروازەی نیشتمانی')}
+                  </strong>
+                  <span className="text-[9px] text-[#52B788] block mt-0.5">
+                    {getLabel('Resolution Engine', 'بزوێنەری مطابقة السجلات', 'مۆتۆڕی بڕیاردان و یەکخستن')}
+                  </span>
                 </div>
 
                 <div className="text-slate-600 font-extrabold text-[15px]">⇄</div>
 
                 <div className="bg-[#111e2e] border border-slate-800 p-3 rounded-lg w-full md:w-36">
-                  <strong className="text-white block text-[11px]">Secure Datalake</strong>
-                  <span className="text-[9px] text-cyan-400 block mt-0.5">Gold Master Index</span>
+                  <strong className="text-white block text-[11px]">
+                    {getLabel('Secure Datalake', 'بحيرة البيانات الآمنة', 'دەریاچەی داتای پارێزراو')}
+                  </strong>
+                  <span className="text-[9px] text-cyan-400 block mt-0.5">
+                    {getLabel('Gold Master Index', 'الفهرس الذهبي الموحد', 'پێڕستی زێڕینی هاوبەش')}
+                  </span>
                 </div>
 
                 <div className="text-slate-600 font-extrabold text-[15px]">⇄</div>
 
                 <div className="bg-[#111e2e] border border-purple-900 p-3 rounded-lg w-full md:w-36">
-                  <strong className="text-white block text-[11px]">Secure API / Auth</strong>
-                  <span className="text-[9px] text-purple-400 block mt-0.5">Dual Signature Gate</span>
+                  <strong className="text-white block text-[11px]">
+                    {getLabel('Secure API / Auth', 'بوابة الواجهات والتصاريح', 'سەرچاوەی دەروازەی کارپێکردن')}
+                  </strong>
+                  <span className="text-[9px] text-purple-400 block mt-0.5">
+                    {getLabel('Dual Signature Gate', 'بوابة التوقيع الثنائي الموثوق', 'دەروازەی مۆرکردنی دوولایەنە')}
+                  </span>
                 </div>
 
               </div>
@@ -551,22 +569,26 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
 
         {/* Right Area Column */}
         <div className="flex flex-col gap-6">
-          
+
           {/* Section 3: Live Decoupled Event Bus streams watcher */}
           <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800 shadow-xl flex flex-col gap-4 text-start">
             <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-widest pb-2 border-b border-slate-900 flex justify-between items-center">
               <span className="flex items-center gap-1.5 font-sans">
                 <Activity className="text-[#E0A96D] w-4.5 h-4.5" />
-                Live Federated Event Streams
+                {getLabel('Live Federated Event Streams', 'تدفقات الأحداث الفيدرالية المباشرة', 'ڕاپۆرتە ڕاستەوخۆکانی گواستنەوەی فیدراڵی')}
               </span>
             </h3>
 
             {/* Simulated Event Trigger Sandbox */}
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-900 flex flex-col gap-3 font-mono text-xs">
-              <span className="text-[10px] text-[#E0A96D] font-bold uppercase block border-b border-slate-900 pb-1">Event Broker Simulator Sandbox</span>
+              <span className="text-[10px] text-[#E0A96D] font-bold uppercase block border-b border-slate-900 pb-1">
+                {getLabel('Event Broker Simulator Sandbox', 'بيئة محاكاة موزع الأحداث المشفرة', 'تاقیکردنەوەی خێرای ناردنی زانیاری دەروازە')}
+              </span>
               
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] text-slate-400">Select Core Event Topic</label>
+                <label className="text-[10px] text-slate-400">
+                  {getLabel('Select Core Event Topic', 'اختر موضوع الحدث الرئيسي للبث', 'بابەتی گواستنەوەی سەرەکی لێرە دەستنیشان بکە')}
+                </label>
                 <select
                   value={simTopic}
                   onChange={(e) => setSimTopic(e.target.value as any)}
@@ -579,18 +601,20 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] text-slate-400">Custom Payload Data Keys Structure</label>
+                <label className="text-[10px] text-slate-400">
+                  {getLabel('Custom Payload Data Keys Structure', 'هيكل حقول البيانات الإضافية', 'پێکهاتەی زانیاری داتای نێو پەیڵۆد')}
+                </label>
                 <div className="grid grid-cols-2 gap-2">
                   <input 
                     type="text" 
-                    placeholder="Key (e.g. weight)" 
+                    placeholder={getLabel('Key (e.g. weight)', 'المفتاح (مثال: الوزن)', 'کلیل (وەکو کێش)')} 
                     value={simPayloadKey} 
                     onChange={(e) => setSimPayloadKey(e.target.value)}
                     className="bg-[#111e2e] border border-slate-800 text-[10.5px] p-1.5 rounded text-white focus:outline-none"
                   />
                   <input 
                     type="text" 
-                    placeholder="Value (e.g. 52.8)" 
+                    placeholder={getLabel('Value (e.g. 52.8)', 'القيمة (مثال: ٥٢.٨)', 'بەها (وەکو ٥٢.٨)')} 
                     value={simPayloadValue} 
                     onChange={(e) => setSimPayloadValue(e.target.value)}
                     className="bg-[#111e2e] border border-slate-800 text-[10.5px] p-1.5 rounded text-white focus:outline-none"
@@ -604,7 +628,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                 onClick={dispatchCustomSimulatorEvent}
                 className="bg-[#E0A96D] hover:bg-[#E0A96D]/90 text-slate-950 font-bold text-[11px] w-full mt-1.5 py-1.5"
               >
-                Publish Decoupled Event
+                {getLabel('Publish Decoupled Event', 'نشر وتوقيع الحدث الفيدرالي بالتوازي', 'ناردن و بڵاوکردنەوەی زانیاری')}
               </Button>
             </div>
 
@@ -642,7 +666,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                     </div>
 
                     <span className="text-[9px] text-slate-500 break-all leading-none italic font-normal">
-                      HMAC Sig: {evt.securitySignature}
+                      {getLabel('HMAC Sig: ', 'توقيع HMAC المشفر: ', 'مۆری دیجیتاڵیی HMAC: ')}{evt.securitySignature}
                     </span>
                   </div>
                 );
@@ -656,29 +680,37 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
             <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-widest pb-2 border-b border-slate-900 flex justify-between items-center font-sans">
               <span className="flex items-center gap-1.5">
                 <ArrowLeftRight className="text-[#E0A96D] w-4.5 h-4.5" />
-                Golden Master Entity Resolution
+                {getLabel('Golden Master Entity Resolution', 'مطابقة البيانات وتوحيد السجلات الذهبية', 'چارەسەرکردنی هاوتایی زانیارییە گشتییەکان')}
               </span>
             </h3>
 
             {duplicates.length === 0 ? (
               <span className="text-[11px] text-emerald-400 bg-emerald-950/20 p-3 rounded border border-emerald-900 font-mono">
-                ✓ 100% Resolved: All citizen and business identities reconciled successfully inside the Golden Record ledger.
+                {getLabel(
+                  '✓ 100% Resolved: All citizen and business identities reconciled successfully inside the Golden Record ledger.',
+                  '✓ تم الحل بنسبة ١٠٠٪: تم دمج وتوحيد كافة السجلات المدنية والشركات في دفتر الحسابات الذهبي الفيدرالي المستقل بنجاح.',
+                  '✓ بە ڕێژەی ١٠٠٪ چارەسەر کراوە: سەرجەم کۆمپانیا و ناسنامەکانی هاووڵاتیان بە سەرکەوتوویی یەکخران لە دەفتەری زێڕینی هاوبەش.'
+                )}
               </span>
             ) : (
               <div className="flex flex-col gap-3 font-mono text-xs">
                 {duplicates.map((dup) => (
                   <div key={dup.id} className="p-3 bg-slate-900 border border-slate-850 rounded flex flex-col gap-2">
                     <div className="flex justify-between border-b border-slate-950 pb-1 text-[10px] text-slate-400">
-                      <span>Conflict ID: {dup.id}</span>
-                      <span className="text-amber-400 font-bold">{Math.round(dup.similarityRatio * 100)}% Match Similarity</span>
+                      <span>{getLabel('Conflict ID: ', 'رمز التناقض: ', 'ناسنامەی ناکۆکی: ')}{dup.id}</span>
+                      <span className="text-amber-400 font-bold">{Math.round(dup.similarityRatio * 100)}% {getLabel('Match Similarity', 'نسبة المطابقة والتشابه المشفر', 'ڕێژەی هاوشێوەیی کۆدکراو')}</span>
                     </div>
 
                     <p className="text-slate-200 font-sans text-[11px] leading-relaxed">
-                      Similarity resolution flagged potential company conflict details: <strong className="text-white block font-mono">Babylon Food Imports vs {dup.conflictingSourceId.split('-').slice(-1)}</strong>.
+                      {getLabel(
+                        'Similarity resolution flagged potential company conflict details: ',
+                        'بزوێنەری مطابقة السجلات رصد تناقضاً محتملاً في التفاصيل: ',
+                        'سیستەمی گونجاندنی زانیاری گومان دەخاتە سەر هاوشێوەیی لە ناوی کۆمپانیاکان: '
+                      )} <strong className="text-white block font-mono">Babylon Food Imports vs {dup.conflictingSourceId.split('-').slice(-1)}</strong>.
                     </p>
 
                     <div className="text-[10px] text-slate-500">
-                      Unresolved attributes: {dup.unresolvedFields.join(', ')}
+                      {getLabel('Unresolved attributes: ', 'الحقول غير المطابقة المعلقة: ', 'کەم و کوڕییەکانی نێو زانیارییەکان: ')}{dup.unresolvedFields.join(', ')}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 mt-1">
@@ -688,7 +720,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                         onClick={() => resolveMdmDuplicate(dup.id, 'MERGE')}
                         className="bg-[#52B788] hover:bg-[#52B788]/90 text-slate-950 font-bold text-[10px] py-1"
                       >
-                        Merge Golden Record
+                        {getLabel('Merge Golden Record', 'دمج وتوثيق السجل الذهبي الفيدرالي', 'یەکخستنی و تۆمارکردنی داتای فەرمی')}
                       </Button>
                       <Button
                         size="sm"
@@ -696,7 +728,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                         onClick={() => resolveMdmDuplicate(dup.id, 'REJECT_OUTLIER')}
                         className="border-slate-800 text-slate-350 hover:bg-slate-950 font-bold text-[10px] py-1"
                       >
-                        Keep Segregated
+                        {getLabel('Keep Segregated', 'إبقاء السجلات معزولة', 'جیاکردنەوەی دۆکیومێنت')}
                       </Button>
                     </div>
                   </div>
@@ -710,7 +742,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
             <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-widest pb-2 border-b border-slate-900 flex justify-between items-center font-sans">
               <span className="flex items-center gap-1.5">
                 <ShieldAlert className="text-[#E0A96D] w-4.5 h-4.5" />
-                Active Governance Workflows
+                {getLabel('Active Governance Workflows', 'عمليات سير الحوكمة المنهجية النشطة', 'ڕێڕەوە چالاکەکانی بەڕێوەبردنی گشتی')}
               </span>
             </h3>
 
@@ -727,8 +759,8 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                     </div>
 
                     <p className="text-slate-200 font-sans text-[11px] leading-snug">
-                      Requestor: <strong className="text-white block font-mono">{wf.requestorUsername} ({wf.requestorRole})</strong>
-                      Targeting: <strong className="text-cyan-400 font-mono block">{wf.targetDatasetId} ({wf.requiredClassification})</strong>
+                      {getLabel('Requestor: ', 'مقدّم الطلب: ', 'داواکار: ')}<strong className="text-white block font-mono">{wf.requestorUsername} ({wf.requestorRole})</strong>
+                      {getLabel('Targeting: ', 'المستهدف: ', 'مەبەست: ')}<strong className="text-cyan-400 font-mono block">{wf.targetDatasetId} ({wf.requiredClassification})</strong>
                     </p>
 
                     <p className="text-[10px] text-slate-400 italic bg-slate-950/70 p-1.5 rounded border border-slate-950">
@@ -736,12 +768,16 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                     </p>
 
                     <div className="flex flex-col gap-1.5 mt-1 border-t border-slate-950 pt-2 text-[10px]">
-                      <span className="text-[9px] uppercase font-bold text-slate-500 block">Ministry Chain Sign-offs</span>
+                      <span className="text-[9px] uppercase font-bold text-slate-500 block">
+                        {getLabel('Ministry Chain Sign-offs', 'مسار التواقيع والمصادقة الوزارية', 'ڕێڕەوی مۆرکردنی وەزارەتەکانی دەوڵەت')}
+                      </span>
                       {wf.approversChain.map((step, idx) => (
                         <div key={idx} className="flex justify-between items-center bg-slate-950 p-1.5 px-2.5 rounded text-[10px]">
                           <span className="text-slate-400">{step.role}</span>
                           {step.signed ? (
-                            <span className="text-[#52B788] font-bold">✓ Signed ({step.name})</span>
+                            <span className="text-[#52B788] font-bold">
+                              {getLabel('✓ Signed (', '✓ تم التوقيع بواسطة (', '✓ مۆرکرا لەلایەن (')}{step.name})
+                            </span>
                           ) : (
                             <Button
                               size="sm"
@@ -749,7 +785,7 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
                               onClick={() => executeApprovalSignoff(wf.id, step.role, 'Dr. Tariq Al-Jamil')}
                               className="text-[9px] font-bold px-1.5 py-0.5"
                             >
-                              Sign Approval
+                              {getLabel('Sign Approval', 'توقيع المصادقة', 'مۆرکردنی ڕەزامەندی')}
                             </Button>
                           )}
                         </div>
