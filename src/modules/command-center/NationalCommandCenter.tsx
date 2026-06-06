@@ -1,88 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { 
-  Building2, Landmark, Shield, AlertTriangle, Activity, BarChart3, 
-  TrendingUp, Compass, Cpu, AlertCircle, CheckCircle2, MapPin, 
-  Monitor, HelpCircle, HardDrive, Network, Layers, BadgeAlert, 
-  FileText, Coins, RefreshCw, Zap, Users, ShieldAlert, ArrowRight, Eye, Play, Sparkles
+  Shield, Landmark, Activity, Network, Layers, BadgeAlert, FileText, Cpu, AlertTriangle, Play 
 } from 'lucide-react';
-import { Language, Checkpoint } from '../../types';
-import { CHECKPOINTS } from '../../mockData';
+import { Language } from '../../types';
 
-// Expose IDG Component Library and Icon Wrappers
-import { 
-  Button, 
-  Card, 
-  Badge, 
-  Alert, 
-  Table, 
-  Select, 
-  Input, 
-  StatCard, 
-  MetricCard, 
-  ChartCard, 
-  PageHeader, 
-  SectionHeader, 
-  EmptyState,
-  ChartContainer,
-  LineChart,
-  BarChart,
-  PieChart,
-  Heatmap,
-  Timeline,
-  FlowDiagram
-} from '../../ui';
+// Standardized UI wrappers
+import { Card, Badge, PageHeader, FlowDiagram, Button } from '../../ui';
 
-import { colors } from '../../design-system/tokens/colors';
-import { radius } from '../../design-system/tokens/radius';
-import { spacing } from '../../design-system/tokens/spacing';
+// National Command Center Refactored Core Elements
+import { useNationalCommandCenter } from './hooks/useNationalCommandCenter';
+import { t } from './localization/ccTranslations';
+import { RoleSelectorPanel } from './components/RoleSelectorPanel';
+import { GatesMonitorPanel } from './components/GatesMonitorPanel';
+import { CrisisControlPanel } from './components/CrisisControlPanel';
+import { VisualAnalyticsPanel } from './components/VisualAnalyticsPanel';
 
 interface NationalCommandCenterProps {
   lang: Language;
 }
 
 export default function NationalCommandCenter({ lang }: NationalCommandCenterProps) {
-  // Active User Profile Role Selection
-  const [activeRole, setActiveRole] = useState<'pmo' | 'ministries' | 'customs' | 'border' | 'economic'>('pmo');
-
-  // Selected Gate/Checkpoint for granular analysis
-  const [selectedGate, setSelectedGate] = useState<Checkpoint>(CHECKPOINTS[0]);
-
-  // Command Desk Live Simulations
-  const [thermalSensors, setThermalSensors] = useState<Record<string, number>>({ 'Umm Qasr Sea': 42.1, 'Ibrahim Khalil Land': 37.4, 'Trebil Land': 39.5, 'Baghdad Air Cargo': 21.4 });
-  const [fiberOpticsSpeed, setFiberOpticsSpeed] = useState<number>(982); // mbps
-  const [unresolvedCrisisList, setUnresolvedCrisisList] = useState([
-    { id: 'c-01', location: 'Trebil Border Compound', type: 'Hazardous Chemicals', desc: 'Custom cargo scanning reported 18 tons of chemical reagents without Ministry of Defense dual-use clearance stamps.', severity: 'high', timestamp: '10 mins ago', actionRequired: 'Hold & Alert Military Police' },
-    { id: 'c-02', location: 'Umm Qasr Seaport', type: 'Severe Vessel Backlog', desc: 'High-speed Basra pilotage reported minor basin congestion due to tidal fluctuations; vessel queues expanded to 6 anchors.', severity: 'medium', timestamp: '34 mins ago', actionRequired: 'Deploy AI Logistics Sequence' },
-    { id: 'c-03', location: 'Ibrahim Khalil Crossing', type: 'Currency Outflow Risk', desc: 'Central trade wire compliance flags value inflation of imported European machinery by 410% relative to market median.', severity: 'critical', timestamp: '1 hr ago', actionRequired: 'Initiate CBI Interdiction Anchor' }
-  ]);
-
-  const [crisisResolutionNote, setCrisisResolutionNote] = useState<Record<string, string>>({});
-  const [pastResolutions, setPastResolutions] = useState<Array<{ id: string; location: string; action: string; note: string; timestamp: string }>>([]);
-
-  // Live ticker metric simulation
-  useEffect(() => {
-    const liveCCTVTicker = setInterval(() => {
-      setThermalSensors(prev => ({
-        'Umm Qasr Sea': Number((42.0 + Math.random() * 0.4).toFixed(1)),
-        'Ibrahim Khalil Land': Number((37.2 + Math.random() * 0.5).toFixed(1)),
-        'Trebil Land': Number((39.3 + Math.random() * 0.4).toFixed(1)),
-        'Baghdad Air Cargo': Number((21.2 + Math.random() * 0.3).toFixed(1))
-      }));
-      setFiberOpticsSpeed(prev => Math.floor(980 + Math.random() * 10 - 5));
-    }, 5000);
-    return () => clearInterval(liveCCTVTicker);
-  }, []);
-
-  const handleResolveCrisis = (id: string, location: string) => {
-    const note = crisisResolutionNote[id] || 'Sovereign override executed without comment.';
-    setUnresolvedCrisisList(prev => prev.filter(c => c.id !== id));
-    setPastResolutions(prev => [
-      { id, location, action: 'Mitigation Program Initiated', note, timestamp: 'Just now by SECURE_JWT_098' },
-      ...prev
-    ]);
-  };
-
+  const model = useNationalCommandCenter(lang);
   const isRtl = lang !== 'en';
+
   const getLabel = (en: string, ar: string, ku: string) => {
     if (lang === 'en') return en;
     if (lang === 'ar') return ar;
@@ -96,134 +36,38 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
     return type;
   };
 
-  const translateCrisisType = (type: string) => {
-    if (type === 'Hazardous Chemicals') return lang === 'en' ? 'Hazardous Chemicals' : lang === 'ar' ? 'مواد كيميائية خطرة' : 'ماددە کیمیاییە مەترسیدارەکان';
-    if (type === 'Severe Vessel Backlog') return lang === 'en' ? 'Severe Vessel Backlog' : lang === 'ar' ? 'تكدس شديد للسفن' : 'کۆبوونەوەی زۆری کەشتییەکان';
-    if (type === 'Currency Outflow Risk') return lang === 'en' ? 'Currency Outflow Risk' : lang === 'ar' ? 'مخاطر تدفق العملة للخارج' : 'مەترسی دەرچوونی دراو';
-    return type;
-  };
-
-  const translateLocation = (loc: string) => {
-    if (loc.includes('Trebil')) return lang === 'en' ? 'Trebil Border Compound' : lang === 'ar' ? 'منفذ طريبيل الحدودي' : 'دەروازەی سنووریی ترێبێل';
-    if (loc.includes('Umm Qasr')) return lang === 'en' ? 'Umm Qasr Seaport' : lang === 'ar' ? 'ميناء أم قصر' : 'بەندەری ئوم قەسر';
-    if (loc.includes('Ibrahim Khalil')) return lang === 'en' ? 'Ibrahim Khalil Crossing' : lang === 'ar' ? 'معبر إبراهيم الخليل' : 'دەروازەی سنووریی ئیبراهیم خەلیل';
-    return loc;
-  };
-
-  const translateCrisisDesc = (desc: string) => {
-    if (desc.includes('18 tons')) {
-      return lang === 'en' ? desc : lang === 'ar' ? 'كشف فحص الشحنات عن 18 طناً من المواد الكيميائية دون موافقة وزارة الدفاع للامتثال.' : 'پشکنینی گومرگی ۱۸ تەن ماددەی کیمیایی مەترسیداری نیشانداوە بە بێ مۆری فەرمی وەزارەتی بەرگری.';
-    }
-    if (desc.includes('Basra')) {
-      return lang === 'en' ? desc : lang === 'ar' ? 'أبلغت إدارة ميناء البصرة عن ازدحام مؤقت في الحوض بسبب التقلبات وتراكم السفن.' : 'بەشی ڕێنیشاندەری بەسرە ڕاپۆرتی لەسەر کۆبوونەوەی کاتیی کەشتییەکان داوە بەهۆی کێشەی شەپۆلەکانەوە.';
-    }
-    if (desc.includes('CBI') || desc.includes('Central trade wire')) {
-      return lang === 'en' ? desc : lang === 'ar' ? 'أبلغ نظام الامتثال للبنك المركزي عن تضخم في فواتير الآلات الأوروبية المستوردة بنسبة 410٪.' : 'سیستەمی پابەندبوونی بانکی ناوەندی بەرزبوونەوەی نابەجێی نرخی ئامێرە هاوردەکراوەکانی بە ڕێژەی ٤١٠٪ تۆمار کردووە.';
-    }
-    return desc;
-  };
-
-  const translateActionRequired = (act: string) => {
-    if (act.includes('Hold & Alert')) return lang === 'en' ? act : lang === 'ar' ? 'إيقاف وإبلاغ الشرطة العسكرية' : 'ڕاگرتن و ئاگادارکردنەوەی پۆلیسی سەربازی';
-    if (act.includes('Deploy AI')) return lang === 'en' ? act : lang === 'ar' ? 'تفعيل نظام الجدولة الذكي' : 'تەنسیقکردنی ڕێڕەوی لۆجستی بە زیرەکی دەستکرد';
-    if (act.includes('Initiate CBI')) return lang === 'en' ? act : lang === 'ar' ? 'بدء تحقيق البنك المركزي' : 'دەستپێکردنی پشکنینی دارایی لەلایەن بانکی ناوەندی عێراقەوە';
-    return act;
-  };
-
-  const labels: Record<string, Record<string, string>> = {
-    pmo: {
-      title: lang === 'en' ? "Prime Minister's Executive Briefing" : lang === 'ar' ? 'المستشارية التنفيذية لريادة الوزراء' : 'نوسینگەی ڕێنمایی و ستراتیژی سەرۆک وەزیران',
-      sub: lang === 'en' ? 'Supreme Strategy Decision Matrix & Budget Allocation Monitoring' : lang === 'ar' ? 'مصفوفة اتخاذ القرارات العليا ومراقبة الموازنات والموارد الوطنية' : 'ماتریسی بڕیاری ستراتیژی باڵا و چاودێری دابەشکردنی بودجەی نیشتمانیی',
-    },
-    ministries: {
-      title: lang === 'en' ? 'Inter-Agency Ministerial Gateway' : lang === 'ar' ? 'بوابة التكامل الوزاري المشترك' : 'بەرەی هاوئاهەنگی نێوان وەزارەتەکان',
-      sub: lang === 'en' ? 'Custom Clearance Accords, Quality Control (COSQC), and Defense Dual-Use Interlocks' : lang === 'ar' ? 'تنسيق مطابقة المواصفات والسيطرة النوعية وموافقات الإعفاءات الصناعية' : 'ڕێککەوتنەکانی گومرگ، کۆنترۆڵی جۆری (COSQC)، و هاوئاهەنگی وەزارەتەکان',
-    },
-    customs: {
-      title: lang === 'en' ? 'Federal Customs Control Command' : lang === 'ar' ? 'قيادة هيئة الجمارك الاتحادية المركزية' : 'فەرماندەیی گشتی کۆنتڕۆڵی گومرگی فیدراڵ',
-      sub: lang === 'en' ? 'Real-Time Tariffs, Classification Audit Engine, and Revenue Anti-Corruption Shield' : lang === 'ar' ? 'إدارة الرسوم الجمركية ومحرك تدقيق السلع وحماية الإيرادات من الهدر مالي' : 'تاریفەی ڕاستەوخۆ، بزوێنەری لێکۆڵینەوەی پۆلێنکردن، و قەڵغانی بەرەنگاربوونەوەی هاوچەرخ',
-    },
-    border: {
-      title: lang === 'en' ? 'National Border Security & Logistics Hub' : lang === 'ar' ? 'قيادة المنافذ الحدودية واللوجستية نينوى-البصرة' : 'ژێرخانی نیشتمانیی بازرگانی و دەروازە لۆجستییەکان',
-      sub: lang === 'en' ? 'X-Ray Scanners, Quarantine Alarms, and Biosecurity Gate Clearance Signals' : lang === 'ar' ? 'أجهزة السونار وأجهزة الفحص الإشعاعي وصمامات السلامة والطب الإحيائي' : 'ئامێرەکانی سۆنەر و سکێنەری تیشکی و ئامێرەکانی هۆشداری تەندروستی گومرگی',
-    },
-    economic: {
-      title: lang === 'en' ? 'National Trade Council Operations Desk' : lang === 'ar' ? 'غرفة التحكم لمجلس التجارة والاقتصاد الوطني' : 'ناوەندی گشتی هاوسەنگی بازرگانی و دارایی نیشتمانیی',
-      sub: lang === 'en' ? 'Foreign Exchange Matching, Balance of Payments Index, and Regional Expansion Scenarios' : lang === 'ar' ? 'مطابقة حوالات مزاد العملة ومراقبة ميزان المدفوعات ونشاط المستثمرين' : 'هاوتاکردنی مۆڵەتی کڕینی دراو، چاودێری هاوردەی گشتی دەرەکی، و گەشەسەندنی ئاستی بازرگانی',
-    }
-  };
-
-  // Custom data models for visualizations
-  const pmoRevenueData = [
-    { label: getLabel('Umm Qasr', 'ميناء أم قصر', 'ئوم قەسر'), value: 240 },
-    { label: getLabel('Ibrahim Khalil', 'إبراهيم الخليل', 'ئیبراهیم خەلیل'), value: 310 },
-    { label: getLabel('Trebil', 'طريبيل', 'ترێبێل'), value: 180 },
-    { label: getLabel('Baghdad Airport', 'مطار بغداد', 'فڕۆکەخانەی بەغداد'), value: 120 },
-    { label: getLabel('Bashmakh', 'باشماخ', 'باشماخ'), value: 95 }
-  ];
-
-  const checkpointFlowNodes = [
-    { id: '1', label: getLabel('Manifest Decrypt', 'فك التشفير', 'پشکنینی مانیفێست'), status: 'passed' as const },
-    { id: '2', label: getLabel('CBI Asset Match', 'طوابق البنك', 'هاوتاکردنی داهاتی CBI'), status: 'passed' as const },
-    { id: '3', label: getLabel('Gemini Risk Audit', 'تدقيق المخاطر', 'تدقیقی مەترسییەکانی زانیاری'), status: 'active' as const },
-    { id: '4', label: getLabel('Ledger Write', 'سلسلة الكتل', 'تۆمارکردن لە دەفتەری نیشتمانیی'), status: 'pending' as const },
-    { id: '5', label: getLabel('State Clearance', 'تخليص الجمرك', 'تەواوکردنی ڕێکارەکان'), status: 'pending' as const }
-  ];
-
-  const hourlyTrafficData = [
-    { label: '03:00Z', value: 32 },
-    { label: '06:00Z', value: 55 },
-    { label: '09:00Z', value: 92 },
-    { label: '12:00Z', value: 81 },
-    { label: '15:00Z', value: 44 },
-    { label: '18:00Z', value: 15 }
-  ];
-
-  const scanningHeatmapData = [
-    { name: getLabel('Lane 01 Scanners', 'مفرزة السونار ١', 'مەفرەزەی فلتەری تیشکی ١'), densities: [0.2, 0.4, 0.9, 0.8, 0.3, 0.1] },
-    { name: getLabel('Lane 02 Decryptors', 'مفرزة التشفير ٢', 'مەفرەزەی فلتەری تیشکی ٢'), densities: [0.1, 0.2, 0.5, 0.9, 0.6, 0.2] }
-  ];
-
-  const customsClassifications = [
-    { hs: '8471.3000', label: getLabel('Portable Computers', 'أجهزة حاسوب محمولة', 'حاسیبەی دەستی'), declared: '$41,200', taxRate: '5%', status: getLabel('100% Match', '١٠٠٪ مطابقة', '١٠٠٪ هاوتا'), node: 'DUHOK_GATE' },
-    { hs: '8703.2300', label: getLabel('Motor Passenger Car', 'سيارة صالون ركاب', 'ئۆتۆمبێلی گواستنەوەی نەفەر'), declared: `$12,400 (${getLabel('Low Valuation', 'تقييم منخفض', 'نرخاندنی کەم')})`, taxRate: '15%', status: getLabel('62% Check', '٦٢٪ فحص فني', '٦٢٪ پشکنین'), node: 'BASRA_SEAPORT' },
-    { hs: '3004.9000', label: getLabel('Medicinal formulation', 'مستحضرات وتركيبات طبية', 'پێکهاتەی دەرمانی پزیشکی'), declared: `$148,000 (${getLabel('MOH Health Accord', 'إعفاء وزارة الصحة', 'ڕێککەوتنی تەندروستی وەزارەت')})`, taxRate: '0%', status: getLabel('100% Match', '١٠٠٪ مطابقة', '١٠٠٪ هاوتا'), node: 'BAGHDAD_AIR' }
-  ];
-
   return (
     <Card 
       id="national-command-center-canvas" 
-      className="p-5 lg:p-6 pb-8 lg:pb-10 overflow-visible text-slate-100 border border-[#E0A96D]/15" 
+      className="p-5 lg:p-6 pb-8 lg:pb-10 overflow-visible text-slate-100 border border-[#E0A96D]/15 text-start" 
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* 4K Unified Header with PageHeader component */}
       <PageHeader
-        title={lang === 'en' ? 'Sovereign National Command Center' : lang === 'ar' ? 'غرفة العمليات الوطنية السيادية الموحدة (IDG)' : 'ناوەندی فەرمانی نیشتمانیی سەروەر'}
-        subtitle={lang === 'en' ? 'Operational command deck integrating border logistics telemetry pipelines, automated tax registers, and real-time cargo compliance audits.' :
-                  lang === 'ar' ? 'نظام العمليات والتحكم المركزي الموحد للجمهورية لدمج سونار المنافذ والتدفقات المالية للبنك المركزي.' :
-                  'سەکۆی فەرمی نیشتمانیی بۆ چاودێریکردنی جموجۆڵی دارایی گومرگ و دەروازە سنوورییەکان.'}
+        title={t(lang, 'header.title')}
+        subtitle={t(lang, 'header.subtitle')}
         badge={
           <Badge variant="gold">
-            {lang === 'en' ? 'Supreme Council' : lang === 'ar' ? 'المجلس الأعلى' : 'ئەنجومەنی باڵای نیشتمانی'}
+            {t(lang, 'header.badge')}
           </Badge>
         }
         actions={
-          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-1.5 rounded-lg">
-            <span className="text-[10px] font-mono text-slate-500 uppercase px-2 font-bold select-none">
-              {lang === 'en' ? 'Cabinet Role Selection:' : lang === 'ar' ? 'اختيار دور السلطة:' : 'دەستنیشانکردنی دەسەڵات:'}
+          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-1.5 rounded-lg text-start">
+            <span className="text-[10px] font-mono text-slate-500 uppercase px-2 font-bold select-none text-start">
+              {t(lang, 'header.roleSelectionLabel')}
             </span>
             {[
-              { id: 'pmo', label: lang === 'en' ? 'PM Office' : lang === 'ar' ? 'رئيس الوزراء' : 'سەرۆکی وەزیران' },
-              { id: 'ministries', label: lang === 'en' ? 'Ministries' : lang === 'ar' ? 'الوزارات' : 'وەزارەتەکان' },
-              { id: 'customs', label: lang === 'en' ? 'Customs' : lang === 'ar' ? 'الجمارك' : 'گومرگ' },
-              { id: 'border', label: lang === 'en' ? 'Border' : lang === 'ar' ? 'المنافذ' : 'دەروازە سنوورییەکان' },
-              { id: 'economic', label: lang === 'en' ? 'Economic' : lang === 'ar' ? 'الاقتصاد' : 'ئابووری' }
+              { id: 'pmo', label: t(lang, 'header.pmo') },
+              { id: 'ministries', label: t(lang, 'header.ministries') },
+              { id: 'customs', label: t(lang, 'header.customs') },
+              { id: 'border', label: t(lang, 'header.border') },
+              { id: 'economic', label: t(lang, 'header.economic') }
             ].map((role) => (
               <button
                 key={role.id}
-                onClick={() => setActiveRole(role.id as any)}
+                onClick={() => model.setActiveRole(role.id as any)}
                 className={`px-3 py-1.5 rounded text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
-                  activeRole === role.id 
+                  model.activeRole === role.id 
                     ? 'bg-[#1a2c42] text-[#E0A96D] border border-[#E0A96D]/30 font-bold' 
                     : 'text-slate-400 hover:text-white'
                 }`}
@@ -236,404 +80,101 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
       />
 
       {/* Access description banner in gold parameters */}
-      <div 
-        className="p-4 rounded flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-4 rtl:border-l-0 rtl:border-r-4 mt-6"
-        style={{
-          borderLeftColor: colors.accent.gold,
-          borderRightColor: isRtl ? colors.accent.gold : undefined,
-          background: 'rgba(26, 44, 66, 0.25)'
-        }}
-      >
-        <div>
-          <h3 className="font-semibold text-slate-100 flex items-center gap-2 text-xs uppercase font-mono">
-            <Sparkles className="w-4 h-4 text-[#E0A96D]" />
-            {labels[activeRole].title}
-          </h3>
-          <p className="text-xs text-slate-400 mt-1 leading-normal">
-            {labels[activeRole].sub}
-          </p>
-        </div>
-        <div className="bg-slate-900 border border-slate-800 p-2 rounded font-mono text-[10px] text-slate-400 select-none">
-          JWT_PASS: <span className="text-[#E0A96D] font-bold">{activeRole.toUpperCase()}_GOV_ROOT_SECURE</span>
-        </div>
-      </div>
+      <RoleSelectorPanel
+        lang={lang}
+        activeRole={model.activeRole}
+        setActiveRole={model.setActiveRole}
+      />
 
       {/* Main Grid: Telemetry Content left (2 cols), Command parameters right (1 col) */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6 text-start">
         
         {/* Left Column Areas */}
-        <div className="xl:col-span-2 flex flex-col gap-6">
+        <div className="xl:col-span-2 flex flex-col gap-6 text-start">
           
-          {/* PMO Dashboard View */}
-          {activeRole === 'pmo' && (
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <StatCard
-                  title={lang === 'en' ? 'Direct Customs Revenues Yield' : lang === 'ar' ? 'العوائد الجمركية المحققة' : 'داهاتی گومرگی بەدەستهاتوو'}
-                  value="8.42T IQD"
-                  subtitle={lang === 'en' ? "94.3% of 2026 targeted national customs intake" : lang === 'ar' ? "٩٤.٣٪ من الإيرادات الجمركية المستهدفة لعام ٢٠٢٦" : "٩٤.٣٪ی داهاتی گومرگی نیشتمانیی پلانداڕێژراو بۆ ساڵی ٢٠٢٦"}
-                  icon={<Coins className="w-5 h-5 text-[#E0A96D]" />}
-                  trend={{ value: '14.2%', isPositive: true }}
-                />
-                
-                <StatCard
-                  title={lang === 'en' ? 'State Interoperability Rating' : lang === 'ar' ? 'مؤشر التكامل الحكومي' : 'پێوەری یەکگرتوویی حکومی'}
-                  value="99.94%"
-                  subtitle={lang === 'en' ? "Secure redundant fiber link networks synced" : lang === 'ar' ? "شبكات الألياف الضوئية الفيدرالية متزامنة بنجاح" : "تۆڕە جیاوازەکانی ڕایەڵەی ڕیشاڵی نیشتمانی هاوکاتکراون"}
-                  icon={<Shield className="w-5 h-5 text-cyan-400" />}
-                  trend={{ value: '0.04%', isPositive: true }}
-                />
-              </div>
+          {/* Active stats, lists, lines depending on Cabin Role selection */}
+          <VisualAnalyticsPanel 
+            lang={lang}
+            activeRole={model.activeRole}
+            pmoRevenueData={model.pmoRevenueData}
+            customsClassifications={model.customsClassifications}
+          />
 
-              {/* Data Visualization inside PMO dashboard */}
-              <ChartContainer 
-                title={lang === 'en' ? 'Revenue Intake by Customs Terminal ($ USD / Day)' : lang === 'ar' ? "إيرادات المنافذ والحدود" : "داهاتەکانی دەروازەکان و سنوورەکان"}
-                subtitle={lang === 'en' ? "Calculated and locked on SHA-256 state ledgers" : lang === 'ar' ? "محسوبة ومحفوظة ببروتوكول SHA-256 الفيدرالي" : "تۆمارکراو و پارێزراو لە دەفتەری نیشتمانیی لەسەر بنەمای SHA-256"}
-              >
-                {({ width, height }) => (
-                  <BarChart data={pmoRevenueData} width={width} height={height} />
-                )}
-              </ChartContainer>
-
-              {/* Cabinet Directives */}
-              <div className="bg-slate-900/40 border border-slate-800 p-5 rounded-xl flex flex-col gap-3.5">
-                <SectionHeader title={lang === 'en' ? 'Cabinet Immediate Directives' : lang === 'ar' ? 'التوجيهات الفورية لمجلس الوزراء' : 'ڕێنمایی و بڕیارە خێراکانى ئەنجومەنی وەزیران'} />
-                
-                <Alert
-                  variant="success"
-                  title={lang === 'en' ? 'Faw Seaport Digital Harbor Integration' : lang === 'ar' ? 'ربط ميناء الفاو الكبير رقمياً' : 'گرێدانی دیجیتاڵیی بەندرە گەورەی فاو'}
-                  description={lang === 'en' ? 'Automating Deep Basin dry container customs classifications with dual-use defense clearance loops.' : lang === 'ar' ? 'ربط وميكنة الفاو بري وبحري ضمن طريق التنمية بقرارات الجمارك الاتحادية.' : 'بەدیجیتاڵکردنی تەواوی پۆلێنکردنی بارهەڵگرەکانی فاو بە هەماهەنگی لەگەڵ وەزارەتی بەرگری.'}
-                  icon={<Shield className="w-4 h-4" />}
-                />
-                
-                <Alert
-                  variant="warning"
-                  title={lang === 'en' ? 'Ibrahim Khalil Joint Accord Transshipment' : lang === 'ar' ? 'منفذ إبراهيم الخليل المشترك' : 'دەروازەی هاوبەشی ئیبراهیم خەلیل'}
-                  description={lang === 'en' ? 'Harmonizing Baghdad Custom tariffs on Turkish rail transits with bilingual Sorani/Arabic documents.' : lang === 'ar' ? 'توحيد تفتيش وجمارك المنفذ بين الإقليم والمركز بمستندات عربية وكوردية.' : 'هاوتاکردنی ڕێساکانی گومرگی بەغداد بۆ دەروازەکانی هەرێمی کوردستان بە دۆکیومێنتی دەستووری.'}
-                  icon={<AlertTriangle className="w-4 h-4" />}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Ministries View */}
-          {activeRole === 'ministries' && (
-            <div className="flex flex-col gap-6">
-              {/* Aligned Key-Value Pairs MetricCard replaces manual tables */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <MetricCard 
-                  title={lang === 'en' ? 'Ministry of Defense' : 'وزارة الدفاع'}
-                  icon={<Shield className="w-4 h-4" />}
-                  metrics={[
-                    { label: 'Dual-Use Items', value: 'Cleared', status: 'secure' },
-                    { label: 'Joint Armed Forces', value: 'Sync Active', status: 'secure' },
-                    { label: 'Chemical Precursors', value: 'Zero Holds', status: 'secure' }
-                  ]}
-                />
-                <MetricCard 
-                  title={lang === 'en' ? 'Ministry of Health' : 'وزارة الصحة'}
-                  icon={<Activity className="w-4 h-4" />}
-                  metrics={[
-                    { label: 'Biomedical Quarantine', value: 'Cleared', status: 'secure' },
-                    { label: 'Thermic Insulin', value: '11 Batches', status: 'info' },
-                    { label: 'Certified Cartridges', value: 'Approved', status: 'secure' }
-                  ]}
-                />
-                <MetricCard 
-                  title={lang === 'en' ? 'Ministry of Agriculture' : 'وزارة الزراعة'}
-                  icon={<Landmark className="w-4 h-4" />}
-                  metrics={[
-                    { label: 'Phytosanitary Accord', value: '1 Alert Hold', status: 'warning' },
-                    { label: 'Non-GMO Cereals', value: 'Verified', status: 'secure' },
-                    { label: 'Biological Cargo', value: 'Inspection Req', status: 'warning' }
-                  ]}
-                />
-              </div>
-
-              {/* COSQC Accords Table utilizing standardized Table component */}
-              <div className="bg-[#111e2e] p-5 pb-8 overflow-visible rounded-xl border border-slate-800 flex flex-col gap-4">
-                <SectionHeader 
-                  title="Central Organization for Standardization and Quality Control" 
-                  description="Pre-clearance compliance verification index matching ISO standards"
-                />
-                
-                <Table headers={['Accord Stamp', 'Origin', 'Item Subclass', 'Compliance rating', 'Certificate Seal']}>
-                  <tr>
-                    <td className="px-4 py-3 text-[#E0A96D] font-bold">COSQC-STND-2026</td>
-                    <td className="px-4 py-3">European Union</td>
-                    <td className="px-4 py-3 font-sans font-semibold text-slate-300">Automotive Brake assembly</td>
-                    <td className="px-4 py-3 text-[#52B788] font-bold">99.8% (Approved)</td>
-                    <td className="px-4 py-3 font-mono text-slate-400">EU_ISO_CERT_889</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-[#E0A96D] font-bold">COSQC-AGRI-9981</td>
-                    <td className="px-4 py-3">Regional Imports</td>
-                    <td className="px-4 py-3 font-sans font-semibold text-slate-300">Grains / Bare seed stock</td>
-                    <td className="px-4 py-3 text-[#52B788] font-bold">100.0% (Approved)</td>
-                    <td className="px-4 py-3 font-mono text-slate-400">AGRI_STATE_SEAL</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-[#E0A96D] font-bold">COSQC-ELEC-4131</td>
-                    <td className="px-4 py-3">East Asia Circ</td>
-                    <td className="px-4 py-3 font-sans font-semibold text-slate-300">High-voltage relay grid core</td>
-                    <td className="px-4 py-3 text-amber-500 font-bold">89.2% (Pending Hold)</td>
-                    <td className="px-4 py-3 font-mono text-slate-500">LAB_MANUAL_DECISION</td>
-                  </tr>
-                </Table>
-              </div>
-            </div>
-          )}
-
-          {/* Customs Control View */}
-          {activeRole === 'customs' && (
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl text-center">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono block">Import Filings</span>
-                  <span className="text-xl font-bold font-mono text-white mt-1 block">14,204</span>
-                </div>
-                <div className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl text-center">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono block">Tax Stream (Daily)</span>
-                  <span className="text-xl font-bold font-mono text-[#E0A96D] mt-1 block">22.4B IQD</span>
-                </div>
-                <div className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl text-center animate-pulse">
-                  <span className="text-[10px] text-red-400 uppercase font-mono block">Risk Holds Count</span>
-                  <span className="text-xl font-bold font-mono text-red-500 mt-1 block">342</span>
-                </div>
-                <div className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl text-center">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono block">HS Classifier Match</span>
-                  <span className="text-xl font-bold font-mono text-cyan-400 mt-1 block">98.92%</span>
-                </div>
-              </div>
-
-              {/* Live Classification using structured elements */}
-              <div className="bg-slate-900/50 border border-slate-800 p-5 rounded-xl flex flex-col gap-4">
-                <SectionHeader title="Live Customs Classification Stream" description="Cross-referencing global tariff indexes dynamically" />
-                
-                <div className="flex flex-col gap-3 font-mono text-xs">
-                  {customsClassifications.map((item, index) => (
-                    <div 
-                      key={index} 
-                      className="bg-slate-950 p-4 rounded-lg border border-slate-800/80 flex flex-col md:flex-row justify-between items-start md:items-center gap-3"
-                    >
-                      <div>
-                        <span className="text-[#E0A96D] font-bold block text-xs">[HS: {item.hs}] - {item.label}</span>
-                        <span className="text-[10px] text-slate-400 mt-1 block">Declared Value: {item.declared} • Tariff Rate: {item.taxRate}</span>
-                      </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0">
-                        <Badge variant={item.status.includes('100%') ? 'success' : 'warning'}>
-                          {item.status}
-                        </Badge>
-                        <span className="text-[10px] text-slate-500">{item.node} sync active</span>
-                      </div>
+          {/* Real-time Border thermal and metrics (When Role is set to Border Security) */}
+          {model.activeRole === 'border' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-start">
+              {Object.entries(model.thermalSensors).map(([port, temp]) => {
+                const tempNum = temp as number;
+                const isHot = tempNum > 40;
+                return (
+                  <div key={port} className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl flex flex-col justify-between gap-3 text-start">
+                    <div className="flex justify-between items-center border-b border-slate-900 pb-2 w-full">
+                      <span className="white font-bold text-xs uppercase tracking-wider">{port} Crossing</span>
+                      <Badge variant={isHot ? 'warning' : 'success'}>
+                        {isHot ? 'High load' : 'Secure'}
+                      </Badge>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Border View */}
-          {activeRole === 'border' && (
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(thermalSensors).map(([port, temp]) => {
-                  const tempNum = temp as number;
-                  const isHot = tempNum > 40;
-                  return (
-                    <div key={port} className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl flex flex-col justify-between gap-3 text-start">
-                      <div className="flex justify-between items-center border-b border-slate-900 pb-2">
-                        <span className="text-white font-bold text-xs uppercase tracking-wider">{port} Crossing</span>
-                        <Badge variant={isHot ? 'warning' : 'success'}>
-                          {isHot ? 'High load' : 'Secure'}
-                        </Badge>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400 font-mono">
-                        <p>X-Ray Scanner TEMP: <span className={isHot ? 'text-amber-400 font-bold' : 'text-[#52B788] font-bold'}>{tempNum}°C</span></p>
-                        <p>Fiber Uplink speed: <span className="text-white font-bold">{fiberOpticsSpeed} Mbps</span></p>
-                        <p>Generators FEED: <span className="text-[#52B788] font-bold">100% Stable</span></p>
-                        <p>Local Standby DB: <span className="text-cyan-400 font-bold">Fully Synced</span></p>
-                      </div>
+                    <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-404 font-mono">
+                      <p>X-Ray Scanner TEMP: <span className={isHot ? 'text-amber-400 font-bold' : 'text-[#52B788] font-bold'}>{tempNum}°C</span></p>
+                      <p>Fiber Uplink speed: <span className="text-white font-bold">{model.fiberOpticsSpeed} Mbps</span></p>
+                      <p>Generators FEED: <span className="text-[#52B788] font-bold">100% Stable</span></p>
+                      <p>Local Standby DB: <span className="text-cyan-400 font-bold">Fully Synced</span></p>
                     </div>
-                  );
-                })}
-              </div>
-
-              {/* Scanner Grid Heatmap integration */}
-              <ChartContainer title="Live Checkpoint Scanning Frequency Heatmap" subtitle="Density index indicating lane traffic frequency hourly">
-                {({ width, height }) => (
-                  <Heatmap 
-                    rows={scanningHeatmapData} 
-                    labels={['00-04Z', '04-08Z', '08-12Z', '12-16Z', '16-20Z', '20-00Z']} 
-                    width={width} 
-                    height={height} 
-                  />
-                )}
-              </ChartContainer>
-            </div>
-          )}
-
-          {/* Economic View */}
-          {activeRole === 'economic' && (
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-[#0b1420] border border-slate-800 p-4.5 rounded-xl text-start flex flex-col gap-2">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono">Foreign Exchange Match ratio</span>
-                  <span className="text-2xl font-bold text-[#52B788] font-mono leading-none">98.15%</span>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
-                    Automated CBI audit stream validation comparing trade finance ledger transactions to custom manifests, preventing over-invoicing evasion.
-                  </p>
-                </div>
-
-                <div className="bg-[#0b1420] border border-slate-800 p-4.5 rounded-xl text-start flex flex-col gap-2">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono">Current Account Balance Projection</span>
-                  <span className="text-2xl font-bold text-[#E0A96D] font-mono leading-none">+$9.18B USD</span>
-                  <p className="text-[10px] text-slate-500 mt-1 leading-relaxed">
-                    Surplus projections from consolidated national border revenues, oil transfer receipts, and active industrial corridors.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/40 border border-slate-800 p-5 rounded-xl flex flex-col gap-3.5 text-start">
-                <SectionHeader title="Active Economic Expansion Corridors" description="Scenario planning models for state development pipelines" />
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="p-4 bg-slate-950 rounded-lg border border-slate-850">
-                    <span className="text-[#E0A96D] font-mono uppercase font-bold text-[11px] block">Gulf-Basra Corridor</span>
-                    <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
-                      Sovereign transit path linking Faw seaport with Turkish mesh railways. Estimated to process 40M tons of commercial bulk loads yearly.
-                    </p>
                   </div>
-                  <div className="p-4 bg-slate-950 rounded-lg border border-slate-850">
-                    <span className="text-[#E0A96D] font-mono uppercase font-bold text-[11px] block">Levant Transit Corridor</span>
-                    <p className="text-[11px] text-slate-404 mt-1.5 leading-relaxed">
-                      Connecting western chemical and agricultural dry hubs to Mediterranean ports, bypassing traditional maritime congestions.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
           )}
 
           {/* Granular Active Checkpoint Detail Gauge Panel (Universal across Roles) */}
-          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-5 text-start">
-            <div className="border-b border-slate-900 pb-2.5 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-              <div>
-                <span className="text-[10px] text-[#E0A96D] uppercase font-mono tracking-widest font-bold block">
-                  {selectedGate.region[lang]}
-                </span>
-                <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2 mt-1 font-display">
-                  <span className="w-2 h-2 rounded-full bg-[#52B788] animate-pulse"></span>
-                  {selectedGate.name[lang]} - {lang === 'en' ? 'Custom Node Metrics' : lang === 'ar' ? 'مؤشرات العقدة الجمركية' : 'پێوەرەکانی گرێی گومرگی'}
-                </h3>
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono">
-                {lang === 'en' ? 'NODE RECONCILED ACCURACY' : lang === 'ar' ? 'دقة مطابقة بيانات المنفذ' : 'ڕێژەی دروستی هاوتاسازی گرێ'}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-start font-mono">
-              <div className="bg-[#0b1420] p-3 rounded.5 border border-slate-850">
-                <span className="text-slate-500 text-[9px] uppercase block mb-1">
-                  {lang === 'en' ? 'Tax Audit Rate' : lang === 'ar' ? 'معدل تدقيق الضرائب' : 'ڕێژەی پشکنینی باج'}
-                </span>
-                <span className="text-xs font-bold text-cyan-400 block">
-                  {lang === 'en' ? 'Zero-Trust LOCK' : lang === 'ar' ? 'قفل صفر ثقة' : 'قوفڵی متمانەی سفر'}
-                </span>
-              </div>
-              <div className="bg-[#0b1420] p-3 rounded.5 border border-slate-850">
-                <span className="text-slate-500 text-[9px] uppercase block mb-1">
-                  {lang === 'en' ? 'Intake Today' : lang === 'ar' ? 'المستلم اليوم' : 'وەرگیراوی ئەمڕۆ'}
-                </span>
-                <span className="text-xs font-bold text-[#E0A96D] block">{(selectedGate.revenueRaw * 1000).toLocaleString()} IQD</span>
-              </div>
-              <div className="bg-[#0b1420] p-3 rounded.5 border border-slate-850">
-                <span className="text-slate-500 text-[9px] uppercase block mb-1">
-                  {lang === 'en' ? 'Trucks Processed' : lang === 'ar' ? 'الشاحنات المنجزة' : 'ژمارەی بارهەڵگرە پشکنراوەکان'}
-                </span>
-                <span className="text-xs font-bold text-slate-200 block">
-                  {selectedGate.processedToday} {lang === 'en' ? 'manifests' : lang === 'ar' ? 'البيانات' : 'مۆڵەت پشکنراوەکان'}
-                </span>
-              </div>
-              <div className="bg-[#0b1420] p-3 rounded.5 border border-slate-850">
-                <span className="text-slate-500 text-[9px] uppercase block mb-1">
-                  {lang === 'en' ? 'Scanner Grade' : lang === 'ar' ? 'مستوى الفحص الصنعوني' : 'ئاستی پشکنەری سکان'}
-                </span>
-                <span className="text-xs font-semibold text-slate-400 uppercase block">{translateGateType(selectedGate.type)}</span>
-              </div>
-            </div>
-
-            {/* Micro-visualization showing hourly flow sequence */}
-            <ChartContainer title={lang === 'en' ? 'Node Hourly Cargo Queue Speed' : lang === 'ar' ? 'معدل تدفق الحاويات بالساعة للمنفذ' : 'توقعات تدفق بارهەڵگرەكان'} subtitle="Live predictive queue flow rate per hour">
-              {({ width, height }) => (
-                <LineChart data={hourlyTrafficData} width={width} height={height} />
-              )}
-            </ChartContainer>
-
-            {/* Selector Nodes Grid */}
-            <div className="bg-[#0b1420] p-4.5 rounded-xl border border-slate-850 flex flex-col gap-2.5">
-              <span className="text-[10px] uppercase tracking-wider font-mono text-slate-500 block font-bold">
-                {lang === 'en' ? 'Select Active Custom Node to Inspect:' : lang === 'ar' ? 'اختر المنفذ الجمركي النشط للفحص:' : 'گرێی گومرگی چالاک دەستنیشان بکە بۆ پشکنین:'}
-              </span>
-              <div className="flex flex-wrap gap-2.5">
-                {CHECKPOINTS.map((checkpoint) => (
-                  <button
-                    key={checkpoint.id}
-                    onClick={() => setSelectedGate(checkpoint)}
-                    className={`px-3.5 py-2.5 rounded text-xs font-mono font-medium transition-all cursor-pointer ${
-                      selectedGate.id === checkpoint.id
-                        ? 'bg-[#1a2c42] border border-[#E0A96D]/45 text-[#E0A96D] font-bold shadow'
-                        : 'bg-slate-900 border border-slate-850 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                    }`}
-                  >
-                    {checkpoint.name[lang]}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+          <GatesMonitorPanel 
+            lang={lang}
+            selectedGate={model.selectedGate}
+            setSelectedGate={model.setSelectedGate}
+            hourlyTrafficData={model.hourlyTrafficData}
+          />
 
         </div>
 
         {/* Right Column / Sidebar Area */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 text-start">
 
           {/* Sequence Workflows in single visual language */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 shadow-xl flex flex-col gap-4 text-start">
-            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
+            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-2">
-                <Layers className="text-[#E0A96D] w-4.5 h-4.5" />
-                {getLabel('Sovereign Manifest Loop', 'دورة المستندات السيادية', 'زنجیرەی بەڵگەنامە سەروەرەکان')}
+                <Layers className="text-[#E0A96D] w-4.5 h-4.5 shrink-0" />
+                {t(lang, 'sidebar.loopTitle')}
               </span>
             </h3>
 
             {/* Connected node sequence viz */}
-            <div className="bg-[#0b1420] p-4 rounded-xl border border-slate-850 flex items-center justify-center min-h-[140px]">
-              <FlowDiagram nodes={checkpointFlowNodes} width={280} height={110} />
+            <div className="bg-[#0b1420] p-4 rounded-xl border border-slate-800 flex items-center justify-center min-h-[140px] w-full">
+              <FlowDiagram nodes={model.checkpointFlowNodes} width={280} height={110} />
             </div>
           </div>
 
-          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800/80 flex flex-col gap-4 shadow-xl text-start">
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
+          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 shadow-xl text-start">
+            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-2">
-                <Network className="text-[#E0A96D] w-4.5 h-4.5" />
-                {getLabel('Sovereign Operations Directory', 'دليل العمليات الفيدرالي', 'دایرێکتۆریی ئۆپەراسیۆنە سەروەرەکان')}
+                <Network className="text-[#E0A96D] w-4.5 h-4.5 shrink-0" />
+                {t(lang, 'sidebar.directoryTitle')}
               </span>
             </h3>
 
-            <div className="flex flex-col gap-2.5 text-xs">
+            <div className="flex flex-col gap-2.5 text-xs text-start">
               {[
                 { icon: <Shield className="w-4 h-4 text-[#52B788]" />, label: getLabel('Federal Customs Interop', 'الربط الموحد', 'یەکگرتنی گومرگی فیدراڵ'), status: getLabel('Active', 'نشط', 'چالاک') },
                 { icon: <Landmark className="w-4 h-4 text-[#E0A96D]" />, label: getLabel('Central Financial Ledger', 'دفتر حساب البنك', 'دەفتەری سەرەکی دارایی'), status: getLabel('Synced', 'متزامن', 'هاوکاتکراو') },
                 { icon: <Activity className="w-4 h-4 text-cyan-400" />, label: getLabel('Anti-Fraud System', 'مكافحة الاحتيال', 'سیستەمی دژە ساختەکاری'), status: getLabel('Secured', 'مؤمن', 'پارێزراو') },
-                { icon: <FileText className="w-4 h-4 text-amber-550" />, label: getLabel('KRG Boundary Node', 'منافذ الإقليم', 'گرێی سنووری هەرێم'), status: getLabel('Verify', 'تدقيق', 'پشکنین') }
+                { icon: <FileText className="w-4 h-4 text-slate-500" />, label: getLabel('KRG Boundary Node', 'منافذ الإقليم', 'گرێی سنووری هەرێم'), status: getLabel('Verify', 'تدقيق', 'پشکنین') }
               ].map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="flex items-center gap-3 bg-[#102235]/40 p-3.5 border border-slate-800/80 hover:border-[#E0A96D]/35 rounded-lg select-none transition-all cursor-pointer"
+                  className="flex items-center gap-3 bg-[#102235]/40 p-3.5 border border-slate-800 hover:border-[#E0A96D]/35 rounded-lg select-none transition-all cursor-pointer w-full text-start"
                 >
                   {item.icon}
-                  <span className="font-bold text-slate-200">{item.label}</span>
+                  <span className="font-bold text-slate-205">{item.label}</span>
                   <div className="flex-grow"></div>
                   <Badge variant={item.status === 'Active' || item.status === 'Synced' || item.status === 'Secured' || item.status === 'چالاک' || item.status === 'هاوکاتکراو' || item.status === 'پارێزراو' ? 'success' : 'slate'}>
                     {item.status}
@@ -644,23 +185,23 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </div>
 
           {/* AI Advisor Panel */}
-          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800/80 flex flex-col gap-4 text-start">
-            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center">
+          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 text-start shadow-xl">
+            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-1.5">
-                <Cpu className="text-[#E0A96D] w-4 h-4" />
-                {lang === 'en' ? 'Sovereign AI Decision Shield' : lang === 'ar' ? 'درع القرار للذكاء الاصطناعي السيادي' : 'قەڵغانی بڕیاردانی زیرەکی دەستکردی نیشتمانی'}
+                <Cpu className="text-[#E0A96D] w-4 h-4 shrink-0" />
+                {t(lang, 'sidebar.advisorTitle')}
               </span>
             </h3>
 
-            <div className="flex flex-col gap-3.5 text-xs text-slate-300">
-              <div className="bg-[#1a2c42]/20 border-l-3 border-[#52B788] p-3.5 rounded">
-                <span className="text-[9px] text-[#E0A96D] font-mono font-bold block mb-1">
+            <div className="flex flex-col gap-3.5 text-xs text-slate-300 text-start">
+              <div className="bg-[#1a2c42]/20 border-l-3 border-[#52B788] p-3.5 rounded text-start">
+                <span className="text-[9px] text-[#E0A96D] font-mono font-bold block mb-1 text-start">
                   {lang === 'en' ? 'CLASSIFICATION AUDITING (ACTIVE)' : lang === 'ar' ? 'تدقيق التصنيف (نشط)' : 'پشکنینی پۆلێنکردن (چالاک)'}
                 </span>
-                <span className="font-bold text-slate-200 block">
+                <span className="font-bold text-slate-200 block text-start">
                   {lang === 'en' ? 'Correct Barley HS mismatch from southerly sea cargo' : lang === 'ar' ? 'تصحيح عدم تطابق رمز النظام المنسق للشعير' : 'چاککردنەوەی هەڵەی کۆدی HS جۆ لە باری دەریایی باشوور'}
                 </span>
-                <p className="text-[11px] text-slate-404 mt-1 lines-normal">
+                <p className="text-[11px] text-slate-400 mt-1 leading-normal text-start">
                   {lang === 'en' ? 'Importers declared tariff class [HS-1002] representing feed grain, but physical density scan maps [HS-1003]. Auto override recovers 28M IQD duties.' :
                    lang === 'ar' ? 'صرح المستوردون بفئة التعرفة [HS-1002] التي تمثل علف الحبوب، لكن فحص الكثافة الفعلي أظهر [HS-1003]. تجاوز تلقائي يسترد 28 مليون دينار عراقي.' :
                    'هاوردەکاران پۆلی باجی [HS-1002] ی ئاژەڵیی خواردەمەنییان تۆمار کردووە بەڵام پشکنینی فیزیکی کۆدی ڕاستەقینەی [HS-1003] پیشان دەدات. چاکسازیی خۆکارانە ٢٨ ملیۆن دیناری باجی لەدەستچوو وەردەگرێتەوە.'}
@@ -675,74 +216,13 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </div>
 
           {/* Inter-agency Crisis panel */}
-          <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 text-start">
-            <div className="border-b border-slate-900 pb-2.5">
-              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider flex items-center gap-2">
-                <AlertTriangle className="text-amber-500 w-4 h-4 animate-bounce" />
-                {lang === 'en' ? 'Inter-Agency Crisis Intercepts' : lang === 'ar' ? 'الاعتراضات والتدخلات المشتركة للأزمات' : 'هۆشدارییە هاوبەشەکانی دەمەقەیران'}
-              </h3>
-              <p className="text-[11px] text-slate-404 mt-1 leading-normal">
-                {lang === 'en' ? 'Active border sensor alarms requiring manual sovereign cabinet interdictions.' :
-                 lang === 'ar' ? 'إنذارات أجهزة الاستشعار الحدودية النشطة التي تتطلب تدخلات وزارية.' :
-                 'هۆشدارییە چاڵاکەکانی سۆنەر و سکێنەری سنوورەکان کە پێویستیان بە بڕیار و دەستوەردانی ئەنجومەنی وەزیرانە.'}
-              </p>
-            </div>
-
-            {unresolvedCrisisList.length === 0 ? (
-              <div className="bg-emerald-950/20 border border-[#52B788]/20 p-4 rounded text-center text-xs">
-                <p className="text-[#52B788] font-bold mb-1">
-                  {lang === 'en' ? '✓ ALL INCIDENTS RESOLVED' : lang === 'ar' ? '✓ تم حل جميع الحوادث' : '✓ هەموو هۆشدارییەکان چارەسەر کراون'}
-                </p>
-                <p className="text-[11px] text-slate-404 leading-relaxed">
-                  {lang === 'en' ? 'Regional border checkpoints are functioning securely under optimal clearance configurations.' :
-                   lang === 'ar' ? 'المنافذ والحدود تعمل بأمان تام وتوافق مع أنظمة الجدولة الذكية.' :
-                   'دەروازە سنوورییەکان بە پارێزراوی و کارایی تەواوەوە لە ژێر باشترین ڕێکاردا کار دەکەن.'}
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {unresolvedCrisisList.map((crisis) => (
-                  <div key={crisis.id} className="bg-slate-900 p-4 rounded-lg border border-slate-850 flex flex-col gap-3 text-xs text-slate-300">
-                    <div className="flex justify-between items-center">
-                      <Badge variant={crisis.severity === 'critical' ? 'danger' : 'warning'}>
-                        {crisis.severity} • {crisis.timestamp}
-                      </Badge>
-                      <strong className="text-slate-500 font-mono text-[9px]">{crisis.id}</strong>
-                    </div>
-
-                    <div>
-                      <h4 className="font-bold text-slate-200">{translateCrisisType(crisis.type)}</h4>
-                      <p className="text-[11px] text-slate-440 mt-0.5 leading-normal">{translateLocation(crisis.location)}</p>
-                      <p className="text-slate-300 leading-relaxed text-[11px] mt-2 bg-slate-950/80 p-2.5 border border-slate-850/40 rounded italic">
-                        "{translateCrisisDesc(crisis.desc)}"
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-2 pt-2 border-t border-slate-850/50">
-                      <span className="text-[#E0A96D] font-mono uppercase text-[9px] font-bold">
-                        {lang === 'en' ? 'Mitigation target: ' : lang === 'ar' ? 'أهداف المعالجة الفورية: ' : 'ئامانجی چارەسەری: '} {translateActionRequired(crisis.actionRequired)}
-                      </span>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          placeholder={lang === 'en' ? 'Provide audit override note ledger item...' : lang === 'ar' ? 'أدخل ملاحظة التدقيق للكتل المشفرة...' : 'تێبینی دەستکاریکردنی پشکنین بنووسە...'}
-                          value={crisisResolutionNote[crisis.id] || ''}
-                          onChange={(e) => setCrisisResolutionNote(prev => ({ ...prev, [crisis.id]: e.target.value }))}
-                          className="flex-1 bg-[#0b1420] border border-slate-800 rounded px-2.5 py-1 text-[#E0A96D] font-mono text-[10px] placeholder-slate-650 focus:outline-none focus:ring-1 focus:ring-[#E0A96D]"
-                        />
-                        <button
-                          onClick={() => handleResolveCrisis(crisis.id, crisis.location)}
-                          className="px-3 py-1 bg-[#E0A96D] hover:bg-[#E0A96D]/90 text-slate-950 font-bold rounded text-[10px] uppercase tracking-wide font-mono transition-all shrink-0 cursor-pointer"
-                        >
-                          {lang === 'en' ? 'Intercept' : lang === 'ar' ? 'اعتراض وفلترة' : 'ڕێگریکردن'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <CrisisControlPanel 
+            lang={lang}
+            unresolvedCrisisList={model.unresolvedCrisisList}
+            crisisResolutionNote={model.crisisResolutionNote}
+            setCrisisResolutionNote={model.setCrisisResolutionNote}
+            handleResolveCrisis={model.handleResolveCrisis}
+          />
 
         </div>
 
