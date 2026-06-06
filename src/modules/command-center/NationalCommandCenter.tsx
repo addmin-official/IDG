@@ -24,16 +24,14 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   const isRtl = lang !== 'en';
 
   const getLabel = (en: string, ar: string, ku: string) => {
-    if (lang === 'en') return en;
-    if (lang === 'ar') return ar;
-    return ku;
+    const labels = { en, ar, ku };
+    return labels[lang] || en;
   };
 
   const translateGateType = (type: string) => {
-    if (type === 'land') return lang === 'en' ? 'land border' : lang === 'ar' ? 'منفذ بري' : 'سنووری وشکانی';
-    if (type === 'sea') return lang === 'en' ? 'seaport deep' : lang === 'ar' ? 'منفذ بحري' : 'سنووری دەریایی';
-    if (type === 'air') return lang === 'en' ? 'airport cargo' : lang === 'ar' ? 'شحن جوي' : 'بارهەڵگری ئاسمانی';
-    return type;
+    const key = `gateTypes.${type}`;
+    const result = t(lang, key);
+    return result === key ? type : result;
   };
 
   return (

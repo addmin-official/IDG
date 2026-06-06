@@ -130,6 +130,11 @@ export const ccTranslations = {
     target: { en: 'Mitigation target: ', ar: 'أهداف المعالجة الفورية: ', ku: 'ئامانجی چارەسەری: ' },
     placeholder: { en: 'Provide audit override note ledger item...', ar: 'أدخل ملاحظة التدقيق للكتل المشفرة...', ku: 'تێبینی دەستکاریکردنی پشکنین بنووسە...' },
     interceptBtn: { en: 'Intercept', ar: 'اعتراض وفلترة', ku: 'ڕێگریکردن' }
+  },
+  gateTypes: {
+    land: { en: 'land border', ar: 'منفذ بري', ku: 'سنووری وشکانی' },
+    sea: { en: 'seaport deep', ar: 'منفذ بحري', ku: 'سنووری دەریایی' },
+    air: { en: 'airport cargo', ar: 'شحن جوي', ku: 'بارهەڵگری ئاسمانی' }
   }
 };
 

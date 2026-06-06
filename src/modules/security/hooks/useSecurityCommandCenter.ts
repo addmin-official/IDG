@@ -18,33 +18,29 @@ export function useSecurityCommandCenter() {
   const auditManager = SovereignAuditTrailManager.getInstance();
   const accessEngine = AccessControlEngine.getInstance();
 
-  // Primary States
   const [activeSessions, setActiveSessions] = useState<ZeroTrustSession[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditEvent[]>([]);
   const [keysList, setKeysList] = useState(encryptionService.getKeyChainList());
   const [securityScore, setSecurityScore] = useState(99.42);
 
-  // Simulator Inputs
-  const [simSubjectId, setSimSubjectId] = useState('emp-customs-011');
-  const [simPermission, setSimPermission] = useState('APPROVE_CLEARANCE');
-  const [simResourceRequiredClearance, setSimResourceRequiredClearance] = useState<ClearanceLevel>('SECRET');
-  const [simResourceMinistry, setSimResourceMinistry] = useState('Ministry of Finance');
-  const [simDeviceVerified, setSimDeviceVerified] = useState(true);
-  const [simRiskScore, setSimRiskScore] = useState(12);
+  const [simInputs, setSimInputs] = useState({
+    subjectId: 'emp-customs-011',
+    permission: 'APPROVE_CLEARANCE',
+    resourceRequiredClearance: 'SECRET' as ClearanceLevel,
+    resourceMinistry: 'Ministry of Finance',
+    deviceVerified: true,
+    riskScore: 12
+  });
   const [simResult, setSimResult] = useState<any>(null);
-
-  // Audit Filter State
   const [auditFilter, setAuditFilter] = useState<'ALL' | 'LOGIN' | 'KEY_ROTATION' | 'SECURITY_VIOLATION'>('ALL');
 
-  // Load Initial Data
   useEffect(() => {
     setActiveSessions(sessionManager.getAllActiveSessions());
     setAuditLogs(auditManager.getLogs());
   }, []);
 
-  // Compute ABAC Simulation Result
   const executePolicySimTest = useCallback(() => {
-    const subjectProfile = idp.getEmployeeProfile(simSubjectId);
+    const subjectProfile = idp.getEmployeeProfile(simInputs.subjectId);
     if (!subjectProfile) return;
 
     const accessSubject = {
@@ -52,36 +48,29 @@ export function useSecurityCommandCenter() {
       role: subjectProfile.role as UserRole,
       ministry: subjectProfile.ministry,
       clearance: subjectProfile.clearance,
-      region: simSubjectId === 'emp-border-022' ? 'ERBIL' : 'BAGHDAD',
-      borderOutpost: simSubjectId === 'emp-border-022' ? 'Ibrahim Khalil Outpost' : undefined
+      region: simInputs.subjectId === 'emp-border-022' ? 'ERBIL' : 'BAGHDAD',
+      borderOutpost: simInputs.subjectId === 'emp-border-022' ? 'Ibrahim Khalil Outpost' : undefined
     };
 
     const accessResource = {
       id: 'sim-resource-idg',
       type: 'cargo' as const,
-      ownerMinistry: simResourceMinistry || undefined,
-      requiredClearance: simResourceRequiredClearance,
-      targetBorderOutpost: simSubjectId === 'emp-border-022' ? 'Ibrahim Khalil Outpost' : undefined
+      ownerMinistry: simInputs.resourceMinistry || undefined,
+      requiredClearance: simInputs.resourceRequiredClearance,
+      targetBorderOutpost: simInputs.subjectId === 'emp-border-022' ? 'Ibrahim Khalil Outpost' : undefined
     };
 
     const accessEnvironment = {
-      ipAddress: simSubjectId === 'emp-pmo-001' ? '10.100.1.5' : '10.240.40.11',
+      ipAddress: simInputs.subjectId === 'emp-pmo-001' ? '10.100.1.5' : '10.240.40.11',
       geolocationRegion: 'BAGHDAD',
-      deviceVerified: simDeviceVerified,
+      deviceVerified: simInputs.deviceVerified,
       mfaAuthenticated: true,
-      riskScore: simRiskScore
+      riskScore: simInputs.riskScore
     };
 
-    const evalRes = accessEngine.evaluateAccess(
-      accessSubject,
-      simPermission as any,
-      accessResource,
-      accessEnvironment
-    );
-
+    const evalRes = accessEngine.evaluateAccess(accessSubject, simInputs.permission as any, accessResource, accessEnvironment);
     setSimResult(evalRes);
 
-    // Record trace in audit logs
     auditManager.logEvent({
       eventType: 'PERMISSION_CHANGE',
       subjectUserId: 'sys-sim-validator',
@@ -89,35 +78,23 @@ export function useSecurityCommandCenter() {
       subjectRole: 'Auditor',
       clearanceLevel: 'SECRET',
       actionSummary: `Simulated ABAC dry-run valuation: [${evalRes.allowed ? 'APPROVED' : 'BLOCKED'}].`,
-      resourceDetails: `Permission target: ${simPermission}. Applied policies: ${evalRes.appliedPolicies.join(', ')}`,
+      resourceDetails: `Permission target: ${simInputs.permission}. Applied policies: ${evalRes.appliedPolicies.join(', ')}`,
       ipAddress: '127.0.0.1',
       geolocation: 'SIMULATOR_SANDBOX',
       status: evalRes.allowed ? 'SUCCESS' : 'POLICY_DENIED'
     });
     setAuditLogs(auditManager.getLogs());
-  }, [
-    simSubjectId,
-    simPermission,
-    simResourceRequiredClearance,
-    simResourceMinistry,
-    simDeviceVerified,
-    simRiskScore
-  ]);
+  }, [simInputs]);
 
-  // Sync simulator updates dynamically
   useEffect(() => {
     executePolicySimTest();
   }, [executePolicySimTest]);
 
-  // Recalculates average environmental health factors 
   const triggerTelemetryAudit = useCallback(() => {
     sessionManager.executeGlobalThreadAudit();
     const updatedSess = sessionManager.getAllActiveSessions();
     setActiveSessions(updatedSess);
-    
-    const isAnomalyActive = updatedSess.some(s => s.status === 'LOCKED_BY_THREAT_DETECTION');
-    const newScore = isAnomalyActive ? 94.18 : 99.42;
-    setSecurityScore(newScore);
+    setSecurityScore(updatedSess.some(s => s.status === 'LOCKED_BY_THREAT_DETECTION') ? 94.18 : 99.42);
 
     auditManager.logEvent({
       eventType: 'MUTATION',
@@ -134,7 +111,6 @@ export function useSecurityCommandCenter() {
     setAuditLogs(auditManager.getLogs());
   }, []);
 
-  // Terminate anomalous sessions
   const terminateSessionSocket = useCallback((sessionId: string, username: string) => {
     sessionManager.terminateSession(sessionId);
     setActiveSessions(sessionManager.getAllActiveSessions());
@@ -154,7 +130,6 @@ export function useSecurityCommandCenter() {
     setAuditLogs(auditManager.getLogs());
   }, []);
 
-  // HSM Cryptographic Key Rotation
   const triggerKeyRollover = useCallback(() => {
     const rolledKey = encryptionService.rotateActiveKey();
     setKeysList([...encryptionService.getKeyChainList()]);
@@ -175,28 +150,21 @@ export function useSecurityCommandCenter() {
   }, []);
 
   return {
-    activeSessions,
-    auditLogs,
-    keysList,
-    securityScore,
-    simSubjectId,
-    setSimSubjectId,
-    simPermission,
-    setSimPermission,
-    simResourceRequiredClearance,
-    setSimResourceRequiredClearance,
-    simResourceMinistry,
-    setSimResourceMinistry,
-    simDeviceVerified,
-    setSimDeviceVerified,
-    simRiskScore,
-    setSimRiskScore,
-    simResult,
-    auditFilter,
-    setAuditFilter,
-    triggerTelemetryAudit,
-    terminateSessionSocket,
-    triggerKeyRollover,
+    activeSessions, auditLogs, keysList, securityScore,
+    simSubjectId: simInputs.subjectId,
+    setSimSubjectId: (id: string) => setSimInputs(prev => ({ ...prev, subjectId: id })),
+    simPermission: simInputs.permission,
+    setSimPermission: (perm: string) => setSimInputs(prev => ({ ...prev, permission: perm })),
+    simResourceRequiredClearance: simInputs.resourceRequiredClearance,
+    setSimResourceRequiredClearance: (cl: ClearanceLevel) => setSimInputs(prev => ({ ...prev, resourceRequiredClearance: cl })),
+    simResourceMinistry: simInputs.resourceMinistry,
+    setSimResourceMinistry: (m: string) => setSimInputs(prev => ({ ...prev, resourceMinistry: m })),
+    simDeviceVerified: simInputs.deviceVerified,
+    setSimDeviceVerified: (v: boolean) => setSimInputs(prev => ({ ...prev, deviceVerified: v })),
+    simRiskScore: simInputs.riskScore,
+    setSimRiskScore: (r: number) => setSimInputs(prev => ({ ...prev, riskScore: r })),
+    simResult, auditFilter, setAuditFilter,
+    triggerTelemetryAudit, terminateSessionSocket, triggerKeyRollover,
     employeeProfiles: idp
   };
 }

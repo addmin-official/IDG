@@ -136,6 +136,18 @@ export const workflowTranslations = {
       status: { en: 'Audit Status', ar: 'حالة التدقيق الجمركي', ku: 'بارودۆخی پێداچوونەوە' },
       detail: { en: 'Execution Log Detail', ar: 'تفاصيل سجل التنفيذ اللحظي', ku: 'زانیاری نووسراوی ڕاپۆرت' },
       time: { en: 'Sequence Timestamp', ar: 'التوقيت الرقمي', ku: 'کاتی گواستنەوە' }
+    },
+    log: {
+      successDetail: {
+        en: 'Cleared stage under {scenario} credentials.',
+        ar: 'تم اجتياز المرحلة بنجاح وفق وثائق تفويض المعبر.',
+        ku: 'بە سەرکەوتوویی لەم قۆناغە تێپەڕی بە پێی بەڵگەنامەکانی دەروازە.'
+      },
+      justNow: {
+        en: 'Just now',
+        ar: 'الآن',
+        ku: 'ئێستا'
+      }
     }
   },
   governance: {

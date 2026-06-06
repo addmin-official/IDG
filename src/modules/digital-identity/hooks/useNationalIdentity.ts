@@ -18,6 +18,7 @@ import {
   ConsentAgreement,
   FederatedIdentityBroker
 } from '../../../digital-identity';
+import { IdentityViewModel } from '../../../shared/view-models';
 
 export function useNationalIdentity() {
   const registry = NationalIdentityRegistry.getInstance();
@@ -28,50 +29,51 @@ export function useNationalIdentity() {
   const consentRegistry = CitizenConsentRegistry.getInstance();
   const federationManager = IdentityFederationBrokerManager.getInstance();
 
-  // Dynamic Lists from engines
-  const [citizens, setCitizens] = useState<CitizenIdentity[]>([]);
-  const [businesses, setBusinesses] = useState<BusinessIdentity[]>([]);
-  const [employees, setEmployees] = useState<GovernmentEmployeeIdentity[]>([]);
-  const [principals, setPrincipals] = useState<ServicePrincipalIdentity[]>([]);
-  const [credentials, setCredentials] = useState<VerifiableCredential[]>([]);
-  const [wallets, setWallets] = useState<NationalSovereignWallet[]>([]);
-  const [certs, setCerts] = useState<PKICertificate[]>([]);
-  const [documents, setDocuments] = useState<SovereignDocument[]>([]);
-  const [consents, setConsents] = useState<ConsentAgreement[]>([]);
-  const [brokers, setBrokers] = useState<FederatedIdentityBroker[]>([]);
+  const [registryData, setRegistryData] = useState({
+    citizens: [] as CitizenIdentity[],
+    businesses: [] as BusinessIdentity[],
+    employees: [] as GovernmentEmployeeIdentity[],
+    principals: [] as ServicePrincipalIdentity[],
+    credentials: [] as VerifiableCredential[],
+    wallets: [] as NationalSovereignWallet[],
+    certs: [] as PKICertificate[],
+    documents: [] as SovereignDocument[],
+    consents: [] as ConsentAgreement[],
+    brokers: [] as FederatedIdentityBroker[],
+  });
 
-  // Simulation Form States
   const [pkiCheckSerial, setPkiCheckSerial] = useState('03:DF:00:11:AA:BB:CC:99');
   const [pkiValidationResult, setPkiValidationResult] = useState<{ isValid: boolean; chain: string[] } | null>(null);
 
-  // Verifiable Credentials manual form state
-  const [issueHolderDid, setIssueHolderDid] = useState('did:idg:citizen:iq-883190');
-  const [issueType, setIssueType] = useState('SovereignCustomsImportPermit');
-  const [issueClaimKey, setIssueClaimKey] = useState('importPermitCargoWeightTons');
-  const [issueClaimValue, setIssueClaimValue] = useState('420.5');
+  const [vcForm, setVcForm] = useState({
+    holderDid: 'did:idg:citizen:iq-883190',
+    type: 'SovereignCustomsImportPermit',
+    claimKey: 'importPermitCargoWeightTons',
+    claimValue: '420.5'
+  });
   const [newVcNotice, setNewVcNotice] = useState<string | null>(null);
 
-  // Document Multi-sig form state
   const [sigSelectedDocId, setSigSelectedDocId] = useState('doc-customs-99120');
   const [sigSignerRole, setSigSignerRole] = useState('did:idg:gov:customs-director-01');
-
-  // Search
   const [registrySearch, setRegistrySearch] = useState('');
 
   const refreshAllStates = useCallback(() => {
-    setCitizens(registry.getAllCitizens());
-    setBusinesses(registry.getAllBusinesses());
-    setEmployees(registry.getAllEmployees());
-    setPrincipals(registry.getAllPrincipals());
-    setCredentials(vcEngine.getAllCredentials());
-    setWallets(walletManager.getAllWallets());
-    setCerts(trustPlatform.getAllCertificates());
-    setDocuments(sigEngine.getAllDocuments());
-    setConsents(consentRegistry.getAllConsents());
     federationManager.simulatePingRefresh();
-    setBrokers(federationManager.getBrokers());
-    runPkiPathCheck('03:DF:00:11:AA:BB:CC:99');
-  }, []);
+    setRegistryData({
+      citizens: registry.getAllCitizens(),
+      businesses: registry.getAllBusinesses(),
+      employees: registry.getAllEmployees(),
+      principals: registry.getAllPrincipals(),
+      credentials: vcEngine.getAllCredentials(),
+      wallets: walletManager.getAllWallets(),
+      certs: trustPlatform.getAllCertificates(),
+      documents: sigEngine.getAllDocuments(),
+      consents: consentRegistry.getAllConsents(),
+      brokers: federationManager.getBrokers(),
+    });
+    const res = trustPlatform.validateTrustPath(pkiCheckSerial);
+    setPkiValidationResult(res);
+  }, [pkiCheckSerial]);
 
   const runPkiPathCheck = useCallback((serial: string) => {
     setPkiCheckSerial(serial);
@@ -81,26 +83,21 @@ export function useNationalIdentity() {
 
   const handleIssueCredential = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    const claims: Record<string, any> = {};
-    claims[issueClaimKey] = issueClaimValue;
-    claims['assignedDataStewardRole'] = 'Federal System Self-Issued Agent';
+    const claims = {
+      [vcForm.claimKey]: vcForm.claimValue,
+      assignedDataStewardRole: 'Federal System Self-Issued Agent'
+    };
 
-    const newVc = vcEngine.issueCredential(
-      issueHolderDid, 
-      'did:idg:authority:digital-cabinet',
-      issueType,
-      claims
-    );
-
-    const targetWallet = walletManager.getWallet(issueHolderDid);
+    const newVc = vcEngine.issueCredential(vcForm.holderDid, 'did:idg:authority:digital-cabinet', vcForm.type, claims);
+    const targetWallet = walletManager.getWallet(vcForm.holderDid);
     if (targetWallet) {
       targetWallet.associatedCredentials.push(newVc);
     }
 
-    setNewVcNotice(`Successfully issued W3C Verifiable Credential: ${newVc.id}. Cryptographically stored in ${issueHolderDid}'s secured digital wallet.`);
+    setNewVcNotice(`Successfully issued W3C Verifiable Credential: ${newVc.id}. Cryptographically stored in ${vcForm.holderDid}'s secured digital wallet.`);
     refreshAllStates();
     setTimeout(() => setNewVcNotice(null), 8500);
-  }, [issueHolderDid, issueType, issueClaimKey, issueClaimValue, refreshAllStates]);
+  }, [vcForm, refreshAllStates]);
 
   const handleSignDocument = useCallback((docId: string, signerDid: string) => {
     let title = 'Customs Commissioner Inspector General';
@@ -131,56 +128,48 @@ export function useNationalIdentity() {
     refreshAllStates();
   }, [refreshAllStates]);
 
-  // Compute trust score
-  const computeTrustReadinessScore = useCallback(() => {
+  const trustScore = (() => {
     let score = 92.5;
-    const revokedCount = certs.filter(c => c.isRevoked).length;
-    score -= revokedCount * 1.5;
-    score += credentials.length * 0.4;
-    const sealsCompleted = documents.filter(d => d.status === 'FULLY_SEALED').length;
-    score += sealsCompleted * 1.2;
+    score -= registryData.certs.filter(c => c.isRevoked).length * 1.5;
+    score += registryData.credentials.length * 0.4;
+    score += registryData.documents.filter(d => d.status === 'FULLY_SEALED').length * 1.2;
     return Math.min(100, Math.round(score * 10) / 10);
-  }, [certs, credentials, documents]);
+  })();
+
+  const identityViewModel = new IdentityViewModel(
+    registryData.citizens,
+    registryData.businesses,
+    registryData.employees,
+    registryData.principals,
+    registryData.credentials,
+    registryData.wallets,
+    registryData.certs,
+    registryData.documents,
+    registryData.consents,
+    registryData.brokers,
+    trustScore,
+    federationManager.getTokens()
+  );
 
   useEffect(() => {
     refreshAllStates();
   }, [refreshAllStates]);
 
   return {
-    citizens,
-    businesses,
-    employees,
-    principals,
-    credentials,
-    wallets,
-    certs,
-    documents,
-    consents,
-    brokers,
-    pkiCheckSerial,
-    pkiValidationResult,
-    issueHolderDid,
-    setIssueHolderDid,
-    issueType,
-    setIssueType,
-    issueClaimKey,
-    setIssueClaimKey,
-    issueClaimValue,
-    setIssueClaimValue,
-    newVcNotice,
-    sigSelectedDocId,
-    setSigSelectedDocId,
-    sigSignerRole,
-    setSigSignerRole,
-    registrySearch,
-    setRegistrySearch,
-    refreshAllStates,
-    runPkiPathCheck,
-    handleIssueCredential,
-    handleSignDocument,
-    handleRevokeConsent,
-    handleRevokeCredential,
-    trustScore: computeTrustReadinessScore(),
+    identityViewModel,
+    pkiCheckSerial, pkiValidationResult,
+    issueHolderDid: vcForm.holderDid,
+    setIssueHolderDid: (h: string) => setVcForm(prev => ({ ...prev, holderDid: h })),
+    issueType: vcForm.type,
+    setIssueType: (t: string) => setVcForm(prev => ({ ...prev, type: t })),
+    issueClaimKey: vcForm.claimKey,
+    setIssueClaimKey: (k: string) => setVcForm(prev => ({ ...prev, claimKey: k })),
+    issueClaimValue: vcForm.claimValue,
+    setIssueClaimValue: (v: string) => setVcForm(prev => ({ ...prev, claimValue: v })),
+    newVcNotice, sigSelectedDocId, setSigSelectedDocId,
+    sigSignerRole, setSigSignerRole, registrySearch, setRegistrySearch,
+    refreshAllStates, runPkiPathCheck, handleIssueCredential,
+    handleSignDocument, handleRevokeConsent, handleRevokeCredential,
     tokens: federationManager.getTokens()
   };
 }

@@ -135,9 +135,9 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'registry' && (
           <RegistryPanel 
             lang={lang}
-            citizens={model.citizens}
-            businesses={model.businesses}
-            employees={model.employees}
+            citizens={model.identityViewModel.citizens}
+            businesses={model.identityViewModel.businesses}
+            employees={model.identityViewModel.employees}
             registrySearch={model.registrySearch}
             setRegistrySearch={model.setRegistrySearch}
           />
@@ -146,14 +146,14 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'wallet' && (
           <WalletPanel 
             lang={lang}
-            wallets={model.wallets}
+            wallets={model.identityViewModel.wallets}
           />
         )}
 
         {panelTab === 'credentials' && (
           <CredentialsPanel 
             lang={lang}
-            credentials={model.credentials}
+            credentials={model.identityViewModel.credentials}
             issueHolderDid={model.issueHolderDid}
             setIssueHolderDid={model.setIssueHolderDid}
             issueType={model.issueType}
@@ -172,7 +172,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'pki' && (
           <PkiPanel 
             lang={lang}
-            certs={model.certs}
+            certs={model.identityViewModel.certs}
             pkiCheckSerial={model.pkiCheckSerial}
             pkiValidationResult={model.pkiValidationResult}
             runPkiPathCheck={model.runPkiPathCheck}
@@ -182,7 +182,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'signatures' && (
           <SignaturesPanel 
             lang={lang}
-            documents={model.documents}
+            documents={model.identityViewModel.documents}
             sigSelectedDocId={model.sigSelectedDocId}
             setSigSelectedDocId={model.setSigSelectedDocId}
             sigSignerRole={model.sigSignerRole}
@@ -194,7 +194,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'consent' && (
           <ConsentPanel 
             lang={lang}
-            consents={model.consents}
+            consents={model.identityViewModel.consents}
             handleRevokeConsent={model.handleRevokeConsent}
           />
         )}
@@ -202,7 +202,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         {panelTab === 'federation' && (
           <FederationPanel 
             lang={lang}
-            brokers={model.brokers}
+            brokers={model.identityViewModel.brokers}
             tokens={model.tokens}
           />
         )}
@@ -246,7 +246,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         <div className="xl:w-1/3 bg-[#0b1420] border border-slate-800 p-5 rounded-xl flex flex-col justify-center items-center text-center gap-1.5 shrink-0 self-center">
           <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest font-mono">Total Trust Readiness Score</span>
           <h3 className="text-4xl font-extrabold text-[#E0A96D] font-sans tracking-tight">
-            {model.trustScore}%
+            {model.identityViewModel.trustScore}%
           </h3>
           <Badge variant="success" className="text-[9.5px] uppercase tracking-wider py-0.5">
             CLASS G5 APPROVED

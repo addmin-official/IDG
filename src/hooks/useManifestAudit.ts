@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CargoManifest, AIAnalysisResult } from '../core/types';
 import { CARGO_PRESETS } from '../mockData';
 import { AIService } from '../services/aiService';
+import { AuditViewModel, CustomsViewModel } from '../shared/view-models';
 
 export function useManifestAudit() {
   const [selectedPreset, setSelectedPreset] = useState<string>('MNF-IRAQ-2026-9081');
@@ -52,6 +53,9 @@ export function useManifestAudit() {
     }
   };
 
+  const customManifestViewModel = new CustomsViewModel(customManifest);
+  const auditResultViewModel = auditResult ? new AuditViewModel(auditResult) : null;
+
   return {
     selectedPreset,
     setSelectedPreset,
@@ -59,6 +63,8 @@ export function useManifestAudit() {
     setCustomManifest,
     isAuditing,
     auditResult,
+    customManifestViewModel,
+    auditResultViewModel,
     handlePresetSelect,
     handleInitiateAudit
   };
