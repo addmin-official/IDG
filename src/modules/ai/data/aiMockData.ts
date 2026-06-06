@@ -80,7 +80,14 @@ export const getRegistryPrompts = (lang: 'en' | 'ar' | 'ku') => ({
   }
 });
 
-export const aiModules = [
+export interface AIModule {
+  id: string;
+  index: string;
+  accuracy: string;
+  latency: string;
+}
+
+export const aiModules: AIModule[] = [
   { id: 'hs-classifier', index: 'IDG-Cortex-V3', accuracy: '99.8%', latency: '40ms' },
   { id: 'customs-auditor', index: 'Ur-Transit-MoE', accuracy: '99.2%', latency: '52ms' },
   { id: 'logistics-seq', index: 'Tigris-Agent-V2', accuracy: '98.5%', latency: '35ms' },

@@ -67,7 +67,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
         
         <StatCard
           title={t(lang, 'stats.trustScore.title')}
-          value={`${model.trustScore}%`}
+          value={`${model.identityViewModel.trustScore}%`}
           subtitle="Measures PKI, Signing & Consent"
           icon={<ShieldCheck className="w-5 h-5 text-[#52B788]" />}
           trend={{ value: 'OPTIMAL COMPLIANCE', isPositive: true }}
@@ -83,7 +83,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
 
         <StatCard
           title={t(lang, 'stats.pki.title')}
-          value={model.certs.length.toString()}
+          value={model.identityViewModel.certs.length.toString()}
           subtitle="From Iraq Root CA G1 roots"
           icon={<Key className="w-5 h-5 text-cyan-400" />}
           trend={{ value: 'CRL Active (1 Revoked)', isPositive: true }}
@@ -91,7 +91,7 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
 
         <StatCard
           title={t(lang, 'stats.w3c.title')}
-          value={model.credentials.length.toString()}
+          value={model.identityViewModel.credentials.length.toString()}
           subtitle="Held securely inside digital wallets"
           icon={<FileCheck className="w-5 h-5 text-purple-400" />}
           trend={{ value: '100% Signature Verified', isPositive: true }}

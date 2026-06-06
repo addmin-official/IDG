@@ -4,6 +4,8 @@ import {
   getPromptTemplate, getStandardResponse, getRegistryPrompts, aiModules, HITLIncident, HITLApproval 
 } from '../data/aiMockData';
 
+export type { HITLIncident, HITLApproval, AIModule } from '../data/aiMockData';
+
 export function useSovereignAI(lang: Language) {
   const [activeModule, setActiveModule] = useState<string>('hs-classifier');
   const [activePromptId, setActivePromptId] = useState<string>('hs-prompt');

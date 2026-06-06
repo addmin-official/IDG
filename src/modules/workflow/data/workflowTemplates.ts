@@ -69,7 +69,7 @@ export const initialWorkflowSteps: WorkflowStep[] = [
   },
   {
     id: 'step-13',
-    title: { en: 'National Treasury Ledger Dispatch', ar: 'إيداع وتسوية أموال الرسوم في الخزينة المركزية', ku: 'إيداع وتسوية أموال الرسوم في الخزينة المركزية', ku: 'ناردنی داهات بۆ خەزێنەی سەرەکی دەوڵەت' },
+    title: { en: 'National Treasury Ledger Dispatch', ar: 'إيداع وتسوية أموال الرسوم في الخزينة المركزية', ku: 'ناردنی داهات بۆ خەزێنەی سەرەکی دەوڵەت' },
     actor: { en: 'Iraq Ministry of Finance', ar: 'وزارة المالية الاتحادية وخزينة الدولة', ku: 'وەزارەتی دارایی فیدراڵی عێراق' },
     detail: { en: 'Triggers dynamic payout settlements into the executive Central Treasury cash buffer account.', ar: 'تسوية الحوالة ونقل الأموال من حساب الضمان إلى الخزينة المركزية الفيدرالية رسمياً.', ku: 'ناردنی فەرمی پارەی باج بۆ ئەکاونتی گشتی خەزێنەی متمانەپێکراوی وەزارتی دارایی.' }
   }

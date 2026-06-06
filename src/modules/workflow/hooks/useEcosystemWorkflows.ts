@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Language } from '../../../types';
 import { initialWorkflowSteps } from '../data/workflowTemplates';
-import { t } from '../localization/workflowTranslations';
+import { t } from '../../../localization';
 
 export interface WorkflowStep {
   id: string;
@@ -61,8 +61,8 @@ export function useEcosystemWorkflows(lang: Language) {
               id: newTx, 
               step: `${next + 1}. ${stepObj.title[lang] || stepObj.title['en']}`, 
               status: 'Processing', 
-              detail: t(lang, 'ledger.log.successDetail').replace('{scenario}', activeScenario.toUpperCase()), 
-              timestamp: t(lang, 'ledger.log.justNow') 
+              detail: t(lang, 'workflow.ledger.log.successDetail').replace('{scenario}', activeScenario.toUpperCase()), 
+              timestamp: t(lang, 'workflow.ledger.log.justNow') 
             },
             ...prevLogs.slice(0, 11)
           ]);
