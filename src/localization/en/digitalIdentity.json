@@ -1,0 +1,114 @@
+{
+  "wallet": {
+    "title": "Sovereign Digital Identity Wallets",
+    "description": "Full client device emulation displaying digital certificate stacks, trade permits, and verified credentials held by entity DIDs.",
+    "heldSecurely": "Held securely inside digital wallets",
+    "noCredentials": "No credentials loaded yet.",
+    "citizen": "CITIZEN WALLET",
+    "business": "BUSINESS WALLET",
+    "government": "GOVERNMENT WALLET",
+    "securedDocuments": "Secured Tokenized Documents",
+    "identityRecord": "IDENTITY RECORD",
+    "tradeLicense": "TRADE LICENSE",
+    "customsCertificate": "CUSTOMS CERTIFICATE",
+    "taxCertificate": "TAX CERTIFICATE",
+    "issuer": "Issuer",
+    "serialId": "Serial ID",
+    "signedUnder": "Signed under",
+    "jsonProofs": "Associated JSON-LD Proofs",
+    "verifiedW3C": "Verified W3C VC",
+    "claimsMap": "Claims Map"
+  },
+  "citizens": {
+    "title": "Citizens Identities (Civil Status Bonds)",
+    "description": "Comprehensive registry for natural citizens, businesses, and government agents.",
+    "did": "Decentralized DID Identification",
+    "nationalId": "National ID Card Number",
+    "fullName": "Full Nominated Name",
+    "biometricMarkers": "Biometric Enrollment Markers",
+    "status": "Status",
+    "fingerprintBound": "Fingerprint: Bound",
+    "irisBound": "Iris Scanner: Bound",
+    "active": "ACTIVE"
+  },
+  "businesses": {
+    "title": "Businesses & Corporate Identities Registry",
+    "did": "Corporate DID Identification",
+    "tradeLicense": "Trade Licence Verification",
+    "sovereignCapital": "Sovereign Capital (IQD)",
+    "category": "Registered Commercial Category",
+    "publicKey": "Public Key Signature"
+  },
+  "government": {
+    "title": "Government Employees & Enforcement Agents",
+    "did": "Employee DID",
+    "badgeId": "Organization Badge ID",
+    "ministryNode": "Federal Ministry Node",
+    "signatoryTitle": "Signatory Title",
+    "clearance": "Security Clearance Class",
+    "secret": "SECRET"
+  },
+  "trust": {
+    "title": "Federal Trust & Security Infrastructure Readiness Assessment",
+    "finalized": "Assessment finalized under secure digital keys validation protocol.",
+    "cryptography": "Cryptography",
+    "optimal": "OPTIMAL CLASS 5",
+    "bioBinding": "Bio Biometric Binding",
+    "irisFinger": "IRIS + FINGERPRINT",
+    "multiAuth": "Multi-Auth Sealing",
+    "cabinetConforming": "CABINET CONFORMING",
+    "complianceRegistry": "Compliance Registry",
+    "totalScore": "Total Trust Readiness Score",
+    "approved": "CLASS G5 APPROVED"
+  },
+  "w3c": {
+    "title": "Cryptographic Credentials Issuing Panel",
+    "destDid": "Select Destination holder DID",
+    "w3cType": "Select W3C Compliant Type",
+    "claimAttributes": "Set Declared Claim Field Attributes",
+    "auditTrail": "Dynamic Verification Audit Trail",
+    "issuingAuthority": "Issuing Trust Authority",
+    "holderOwnerDid": "Holder Owner DID",
+    "issuanceTimestamp": "Issuance Timestamp",
+    "sealValidation": "Crypto Seal Validation",
+    "actions": "Actions"
+  },
+  "pki": {
+    "title": "PKI Path Verification Tool",
+    "selectCert": "Select Active Certificate To Validate",
+    "chain": "Computed Cryptographic Chain",
+    "securePath": "Trust Path Secure",
+    "caLedger": "Enrolled Certificate Authorities Ledger",
+    "validity": "Validity Calendar Days",
+    "compromised": "COMPROMISED",
+    "keyCompromise": "KEY COMPROMISE"
+  },
+  "signatures": {
+    "title": "Apply Cryptographic Document Seal",
+    "targetFile": "Select Target Document File",
+    "signatory": "Select Signatory Delegated Role User",
+    "registry": "Federal Document Registry",
+    "pending": "PENDING_SIGNATURES",
+    "requiredSig": "Required Signatures",
+    "appliedSeals": "Applied Signature Seals",
+    "verified": "Verified"
+  },
+  "consent": {
+    "serial": "Consent Agreement Serial",
+    "citizenDid": "Citizen DID Identification",
+    "department": "Authorized Department",
+    "purpose": "Legal Verification Purpose",
+    "claimsGranted": "Claims Access Granted",
+    "lifetime": "Consent Lifetime Duration",
+    "granted": "Granted",
+    "expires": "Expires"
+  },
+  "iam": {
+    "title": "SSO Federation Core System Standbys",
+    "nationalId": "National Identity IAM",
+    "corporatePortal": "Corporate Registrations Portal",
+    "tokenLedger": "Real-time Claims Token Assertions Ledger",
+    "claimsSubject": "Claims Subject",
+    "hashVerify": "Dual Sign Verify Hash"
+  }
+}

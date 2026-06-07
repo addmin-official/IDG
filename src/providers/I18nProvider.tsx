@@ -14,6 +14,7 @@ import settingsEn from '../localization/en/settings.json';
 import errorsEn from '../localization/en/errors.json';
 import validationEn from '../localization/en/validation.json';
 import notificationsEn from '../localization/en/notifications.json';
+import digitalIdentityEn from '../localization/en/digitalIdentity.json';
 
 // Arabic imports
 import commonAr from '../localization/ar/common.json';
@@ -28,6 +29,7 @@ import settingsAr from '../localization/ar/settings.json';
 import errorsAr from '../localization/ar/errors.json';
 import validationAr from '../localization/ar/validation.json';
 import notificationsAr from '../localization/ar/notifications.json';
+import digitalIdentityAr from '../localization/ar/digitalIdentity.json';
 
 // Kurdish imports
 import commonKu from '../localization/ku/common.json';
@@ -42,6 +44,7 @@ import settingsKu from '../localization/ku/settings.json';
 import errorsKu from '../localization/ku/errors.json';
 import validationKu from '../localization/ku/validation.json';
 import notificationsKu from '../localization/ku/notifications.json';
+import digitalIdentityKu from '../localization/ku/digitalIdentity.json';
 
 const translations = {
   en: {
@@ -57,6 +60,7 @@ const translations = {
     errors: errorsEn,
     validation: validationEn,
     notifications: notificationsEn,
+    digitalIdentity: digitalIdentityEn,
   },
   ar: {
     common: commonAr,
@@ -71,6 +75,7 @@ const translations = {
     errors: errorsAr,
     validation: validationAr,
     notifications: notificationsAr,
+    digitalIdentity: digitalIdentityAr,
   },
   ku: {
     common: commonKu,
@@ -85,6 +90,7 @@ const translations = {
     errors: errorsKu,
     validation: validationKu,
     notifications: notificationsKu,
+    digitalIdentity: digitalIdentityKu,
   },
 };
 

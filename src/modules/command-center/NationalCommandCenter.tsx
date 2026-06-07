@@ -50,7 +50,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </Badge>
         }
         actions={
-          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-1.5 rounded-lg text-start">
+          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-1.5 rounded-lg text-start" style={{ borderStyle: 'solid', height: '94.175px', width: '487.78700000000003px' }}>
             <span className="text-[10px] font-mono text-slate-500 uppercase px-2 font-bold select-none text-start">
               {t(lang, 'header.roleSelectionLabel')}
             </span>
