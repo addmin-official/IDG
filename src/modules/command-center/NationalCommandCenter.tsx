@@ -34,6 +34,13 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
     return result === key ? type : result;
   };
 
+  const translatePort = (port: string) => {
+    if (port.includes('Trebil')) return lang === 'en' ? 'Trebil Crossing' : lang === 'ar' ? 'منفذ طريبيل الحدودي' : 'دەروازەی سنووریی ترێبێل';
+    if (port.includes('Umm Qasr')) return lang === 'en' ? 'Umm Qasr Crossing' : lang === 'ar' ? 'منفذ أم قصر' : 'دەروازەی ئوم قەسر';
+    if (port.includes('Ibrahim Khalil')) return lang === 'en' ? 'Ibrahim Khalil Crossing' : lang === 'ar' ? 'معبر إبراهيم الخليل' : 'دەروازەی ئیبراهیم خەلیل';
+    return `${port} ${t(lang, 'borderSecurity.crossing')}`;
+  };
+
   return (
     <Card 
       id="national-command-center-canvas" 
@@ -107,16 +114,16 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                 return (
                   <div key={port} className="bg-[#0b1420] border border-slate-800 p-4 rounded-xl flex flex-col justify-between gap-3 text-start">
                     <div className="flex justify-between items-center border-b border-slate-900 pb-2 w-full">
-                      <span className="white font-bold text-xs uppercase tracking-wider">{port} Crossing</span>
+                      <span className="white font-bold text-xs uppercase tracking-wider">{translatePort(port)}</span>
                       <Badge variant={isHot ? 'warning' : 'success'}>
-                        {isHot ? 'High load' : 'Secure'}
+                        {isHot ? t(lang, 'borderSecurity.highLoad') : t(lang, 'borderSecurity.secure')}
                       </Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-404 font-mono">
-                      <p>X-Ray Scanner TEMP: <span className={isHot ? 'text-amber-400 font-bold' : 'text-[#52B788] font-bold'}>{tempNum}°C</span></p>
-                      <p>Fiber Uplink speed: <span className="text-white font-bold">{model.fiberOpticsSpeed} Mbps</span></p>
-                      <p>Generators FEED: <span className="text-[#52B788] font-bold">100% Stable</span></p>
-                      <p>Local Standby DB: <span className="text-cyan-400 font-bold">Fully Synced</span></p>
+                      <p>{t(lang, 'borderSecurity.xrayTemp')}: <span className={isHot ? 'text-amber-400 font-bold' : 'text-[#52B788] font-bold'}>{tempNum}°C</span></p>
+                      <p>{t(lang, 'borderSecurity.fiberSpeed')}: <span className="text-white font-bold">{model.fiberOpticsSpeed} Mbps</span></p>
+                      <p>{t(lang, 'borderSecurity.generatorsFeed')}: <span className="text-[#52B788] font-bold">100% {t(lang, 'borderSecurity.stable')}</span></p>
+                      <p>{t(lang, 'borderSecurity.localDb')}: <span className="text-cyan-400 font-bold">{t(lang, 'borderSecurity.synced')}</span></p>
                     </div>
                   </div>
                 );
