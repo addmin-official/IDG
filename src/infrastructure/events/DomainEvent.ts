@@ -1,5 +1,5 @@
 export interface DomainEvent {
   type: string;
-  payload: any;
+  payload: unknown;
   timestamp: string;
 }

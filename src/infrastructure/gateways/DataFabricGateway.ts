@@ -1,3 +1,3 @@
 export interface DataFabricGateway {
-  queryDataset(datasetId: string, query: any): Promise<any>;
+  queryDataset(datasetId: string, query: unknown): Promise<unknown>;
 }

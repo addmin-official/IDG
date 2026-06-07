@@ -1,3 +1,3 @@
 export interface CustomsGateway {
-  validateManifest(manifest: any): Promise<any>;
+  validateManifest(manifest: unknown): Promise<unknown>;
 }

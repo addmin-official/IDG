@@ -1,3 +1,3 @@
 export interface WorkflowGateway {
-  executeStep(stepId: string, payload: any): Promise<any>;
+  executeStep(stepId: string, payload: unknown): Promise<unknown>;
 }

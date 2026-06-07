@@ -1,4 +1,4 @@
 export interface AuthProvider {
-  login(credentials: any): Promise<any>;
+  login(credentials: unknown): Promise<unknown>;
   logout(): Promise<void>;
 }

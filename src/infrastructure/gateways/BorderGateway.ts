@@ -1,3 +1,3 @@
 export interface BorderGateway {
-  getCheckpointActivity(checkpointId: string): Promise<any>;
+  getCheckpointActivity(checkpointId: string): Promise<unknown>;
 }

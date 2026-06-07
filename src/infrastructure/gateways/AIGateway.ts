@@ -1,3 +1,3 @@
 export interface AIGateway {
-  predict(input: any): Promise<any>;
+  predict(input: unknown): Promise<unknown>;
 }

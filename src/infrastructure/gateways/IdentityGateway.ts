@@ -1,3 +1,3 @@
 export interface IdentityGateway {
-  getUserProfile(userId: string): Promise<any>;
+  getUserProfile(userId: string): Promise<unknown>;
 }

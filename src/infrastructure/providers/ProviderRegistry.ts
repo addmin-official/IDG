@@ -1,4 +1,4 @@
 export interface ProviderRegistry {
-  register(name: string, provider: any): void;
-  get(name: string): any;
+  register(name: string, provider: unknown): void;
+  get(name: string): unknown;
 }

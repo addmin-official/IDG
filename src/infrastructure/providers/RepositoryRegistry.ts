@@ -1,3 +1,3 @@
 export interface RepositoryRegistry {
-  getRepository(name: string): any;
+  getRepository(name: string): unknown;
 }

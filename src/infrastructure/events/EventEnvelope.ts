@@ -1,4 +1,4 @@
 export interface EventEnvelope<T> {
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   data: T;
 }

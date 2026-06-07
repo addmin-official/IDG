@@ -1,3 +1,3 @@
 export interface CommandCenterGateway {
-  getSystemStatus(): Promise<any>;
+  getSystemStatus(): Promise<unknown>;
 }

@@ -1,4 +1,4 @@
 export interface SessionProvider {
-  getSession(): any;
-  updateSession(session: any): void;
+  getSession(): unknown;
+  updateSession(session: unknown): void;
 }

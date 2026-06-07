@@ -1,3 +1,3 @@
 export interface AuditGateway {
-  logEvent(event: any): Promise<void>;
+  logEvent(event: unknown): Promise<void>;
 }

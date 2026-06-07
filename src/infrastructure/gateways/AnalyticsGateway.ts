@@ -1,3 +1,3 @@
 export interface AnalyticsGateway {
-  getMetricTrends(metricName: string): Promise<any>;
+  getMetricTrends(metricName: string): Promise<unknown>;
 }
