@@ -89,9 +89,10 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
       
       {/* Dynamic Page Header */}
       <PageHeader
+        icon={<Database />}
         title={t(lang, 'header.title')}
-        subtitle={t(lang, 'header.subtitle')}
-        badge={<Badge variant="gold">{t(lang, 'header.badge')}</Badge>}
+        description={t(lang, 'header.subtitle')}
+        status={<Badge variant="gold">{t(lang, 'header.badge')}</Badge>}
       />
 
       {/* Sovereign National Data Readiness Index Cards */}

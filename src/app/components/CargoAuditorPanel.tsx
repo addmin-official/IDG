@@ -1,6 +1,7 @@
 import React from 'react';
 import { Cpu, RefreshCw, Shield, Check, AlertTriangle, Server } from 'lucide-react';
 import { CARGO_PRESETS } from '../../mockData';
+import { PageHeader, Badge } from '../../ui';
 
 export interface CargoAuditorPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -30,10 +31,23 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
   handleInitiateAudit,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
-      
-      {/* Left 1 Column: Presets & Form Data Fields */}
-      <div className="lg:col-span-1 bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md">
+    <div className="flex flex-col gap-6 w-full animate-fade-in text-start">
+      <PageHeader
+        icon={<Cpu />}
+        title={lang === 'en' ? 'Sovereign Customs manifest auto-auditor' : lang === 'ar' ? 'التدقيق الذاتي الجمركي والمكوس' : 'سیستەمی چاودێری گومرگی و بازرگانی'}
+        description={lang === 'en' ? 'Federal Compliance AI analysis system designed to match trade documents, verify HS classification codes and flags potential financial under-invoicing.' : lang === 'ar' ? 'نظام التحليل التلقائي للكشف عن التهرب الجمركي وفروقات تصنيف البضائع والترميز الرمزي.' : 'سیستەمی چاودێری و شیکردنەوەی پێشکەوتووی نیشتمانیی بۆ پشتڕاستکردنەوەی بەڵگەنامە بازرگانییەکان و دۆزینەوەی فرتوفێڵی دارایی.'}
+        status={<Badge variant="gold">{lang === 'en' ? 'Cargo Auditor' : lang === 'ar' ? 'مدقق الشحنات' : 'چاودێری شتومەک'}</Badge>}
+        actions={
+          <div className="text-xs font-mono text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+            {lang === 'en' ? 'ALGORITHM: FEDERAL_HS_CLASSIFY_V3' : 'PROT: HS_CODE_CHECK'}
+          </div>
+        }
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left 1 Column: Presets & Form Data Fields */}
+        <div className="lg:col-span-1 bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md">
         <div className="mb-5">
           <span className="text-xs text-[#cca553] uppercase font-mono block">Customs Audit Core</span>
           <h2 className="text-lg font-display font-medium text-slate-100 mt-0.5">
@@ -195,7 +209,7 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
 
       {/* Right 2 Columns: Audit output reports */}
       <div className="lg:col-span-2 flex flex-col gap-6">
-        <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[500px] flex flex-col justify-between">
+        <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[420px] flex flex-col justify-between">
           
           {!auditResult && !isAuditing && (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
@@ -387,7 +401,8 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
       </div>
 
     </div>
-  );
+  </div>
+);
 };
 
 export default CargoAuditorPanel;

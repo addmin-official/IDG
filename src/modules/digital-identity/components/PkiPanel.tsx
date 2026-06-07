@@ -67,7 +67,7 @@ const PkiPanelComponent: React.FC<PkiPanelProps> = ({
           </div>
 
           {isSecurePath ? (
-            <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-lg p-3.5 flex flex-col gap-1 text-start font-[600]">
+            <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3.5 flex flex-col gap-1 text-start font-[600]">
               <div className="flex items-center gap-1.5 text-[#52B788] text-xs font-[800] uppercase font-sans">
                 <ShieldCheck className="w-4 h-4" />
                 {t(lang, 'digitalIdentity.pki.securePath')}
@@ -77,7 +77,7 @@ const PkiPanelComponent: React.FC<PkiPanelProps> = ({
               </p>
             </div>
           ) : (
-            <div className="bg-rose-950/20 border border-rose-500/30 rounded-lg p-3.5 flex flex-col gap-1 text-start font-[600]">
+            <div className="bg-rose-950/20 border border-rose-500/30 rounded-xl p-3.5 flex flex-col gap-1 text-start font-[600]">
               <div className="flex items-center gap-1.5 text-red-100 text-xs font-[800] uppercase font-sans">
                 <ShieldAlert className="w-4 h-4" />
                 {t(lang, 'digitalIdentity.pki.compromised')}

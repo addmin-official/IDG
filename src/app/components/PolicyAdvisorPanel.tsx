@@ -1,5 +1,6 @@
 import React from 'react';
-import { Send, RefreshCw, Shield } from 'lucide-react';
+import { Send, RefreshCw, Shield, Landmark } from 'lucide-react';
+import { PageHeader, Badge } from '../../ui';
 
 export interface PolicyAdvisorPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -23,20 +24,12 @@ export const PolicyAdvisorPanel: React.FC<PolicyAdvisorPanelProps> = ({
   return (
     <div className="max-w-4xl mx-auto bg-[#111e2e]/95 rounded-xl border border-slate-800/80 shadow-lg p-5 lg:p-6 flex flex-col gap-4 animate-fade-in text-start">
       
-      <div className="border-b border-slate-800 pb-3 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <div>
-          <span className="text-xs text-[#cca553] uppercase font-mono block">Unified Legal Repository</span>
-          <h2 className="text-lg font-display font-medium text-slate-100 mt-0.5">
-            {d.policyAdvisorTitle}
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Query the sovereign policy core on trade treaties, custom regulations, KRG tariffs agreements, and anti-fraud protocols.
-          </p>
-        </div>
-        <span className="bg-[#cca553]/10 text-[#cca553] border border-[#cca553]/20 px-2.5 py-1 rounded text-xs font-mono uppercase tracking-wide shrink-0">
-          Authorized Official
-        </span>
-      </div>
+      <PageHeader
+        icon={<Landmark />}
+        title={d.policyAdvisorTitle}
+        description={lang === 'en' ? 'Query the sovereign policy core on trade treaties, custom regulations, KRG tariffs agreements, and anti-fraud protocols.' : lang === 'ar' ? 'البحث في لوائح وسياسات الجمارك الموحدة والمعاهدات الجمركية لجمهورية العراق فدرالياً.' : 'گەڕان لە یاساکان و ڕێسا گومرگییەکان و ڕێککەوتنەکانی نێوان بەغدا و هەولێر.'}
+        status={<Badge variant="gold">{lang === 'en' ? 'Authorized Official' : lang === 'ar' ? 'مسؤول مخول' : 'بەرپرسی ڕێپێدراو'}</Badge>}
+      />
 
       {/* Quick suggested queries list buttons */}
       <div className="flex flex-wrap items-center gap-2">

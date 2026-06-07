@@ -37,4 +37,8 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   );
 };
 
+export const UnifiedSkeleton: React.FC<SkeletonProps> = (props) => {
+  return <Skeleton {...props} />;
+};
+
 export default Skeleton;

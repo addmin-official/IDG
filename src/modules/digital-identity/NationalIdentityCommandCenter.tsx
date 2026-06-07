@@ -43,9 +43,10 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
       
       {/* Page Header */}
       <PageHeader
+        icon={<ShieldCheck />}
         title={t(lang, 'header.title')}
-        subtitle={t(lang, 'header.subtitle')}
-        badge={
+        description={t(lang, 'header.subtitle')}
+        status={
           <Badge variant="gold">
             {t(lang, 'header.badge')}
           </Badge>

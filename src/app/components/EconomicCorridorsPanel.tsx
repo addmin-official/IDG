@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, RefreshCw, BookOpen, Shield } from 'lucide-react';
+import { PageHeader, Badge } from '../../ui';
 
 export interface EconomicCorridorsPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -29,10 +30,23 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
   handleTriggerForecast,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-start">
-      
-      {/* Left 1 Column: Inputs and Parameters controls */}
-      <div className="lg:col-span-1 bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md">
+    <div className="flex flex-col gap-6 w-full animate-fade-in text-start">
+      <PageHeader
+        icon={<TrendingUp />}
+        title={lang === 'en' ? 'Sovereign economic corridors & strategic trade modeling' : lang === 'ar' ? 'نمذجة الرواق الاقتصادي والممرات التجارية الاستراتيجية' : 'تۆماری ڕێڕەوە ئابوورییە ستراتیژییەکان'}
+        description={lang === 'en' ? 'Sovereign econometric simulation suite modeling Development Road and maritime trade corridors predictive tax collections.' : lang === 'ar' ? 'جناح المحاكاة الاقتصادية القياسية لتقدير الإيرادات الجمركية وحجم البضائع العابرة للحدود.' : 'سیستەمی نەخشەسازی و ڕوانینی ئابووریی بۆ پێشبینیکردنی داهاتەکانی گومرگ و جووڵەی کاڵاکان.'}
+        status={<Badge variant="gold">{lang === 'en' ? 'Economic Corridors' : lang === 'ar' ? 'الممرات الاقتصادية' : 'ڕێڕەوە ئابوورییەکان'}</Badge>}
+        actions={
+          <div className="text-xs font-mono text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+            {lang === 'en' ? 'MODEL: ECONOMETRIC_AI_V4' : 'STAT: IN_SYNC'}
+          </div>
+        }
+      />
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Left 1 Column: Inputs and Parameters controls */}
+        <div className="lg:col-span-1 bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md">
         <div className="mb-5">
           <span className="text-xs text-[#cca553] uppercase font-mono block">Econometric Trade Simulator</span>
           <h2 className="text-lg font-display font-medium text-slate-100 mt-0.5">
@@ -132,7 +146,7 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
       {/* Right 2 Columns: Outputs and Econometric Trends */}
       <div className="lg:col-span-2 flex flex-col gap-6">
         
-        <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[480px] flex flex-col justify-between">
+        <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[420px] flex flex-col justify-between">
           
           {!predictionResult && !isPredicting && (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
@@ -250,7 +264,8 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
       </div>
 
     </div>
-  );
+  </div>
+);
 };
 
 export default EconomicCorridorsPanel;

@@ -49,9 +49,10 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
     >
       {/* 4K Unified Header with PageHeader component */}
       <PageHeader
+        icon={<Landmark />}
         title={t(lang, 'header.title')}
-        subtitle={t(lang, 'header.subtitle')}
-        badge={
+        description={t(lang, 'header.subtitle')}
+        status={
           <Badge variant="gold">
             {t(lang, 'header.badge')}
           </Badge>
