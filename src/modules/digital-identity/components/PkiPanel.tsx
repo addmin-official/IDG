@@ -1,8 +1,9 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, ArrowDown } from 'lucide-react';
 import { Language } from '../../../types';
-import { SectionHeader, Badge, Table } from '../../../ui';
+import { SectionHeader, Table, Badge } from '../../../ui';
 import { PKICertificate } from '../../../digital-identity';
+import { t } from '../localization/identityTranslations';
 
 interface PkiPanelProps {
   lang: Language;
@@ -12,116 +13,114 @@ interface PkiPanelProps {
   runPkiPathCheck: (serial: string) => void;
 }
 
-export const PkiPanel: React.FC<PkiPanelProps> = React.memo(({
+const PkiPanelComponent: React.FC<PkiPanelProps> = ({
   lang,
   certs,
   pkiCheckSerial,
   pkiValidationResult,
   runPkiPathCheck
 }) => {
-  const getLabel = (en: string, ar: string, ku: string) => {
-    if (lang === 'en') return en;
-    if (lang === 'ar') return ar;
-    return ku;
-  };
+  const isSecurePath = pkiValidationResult?.isValid ?? false;
+  const pkiChain = pkiValidationResult?.chain ?? [];
 
   return (
-    <div className="flex flex-col gap-6 animate-fade-in text-start">
+    <div className="flex flex-col gap-6 animate-fade-in text-start font-[600]">
       <SectionHeader
-        title={getLabel(
-          'Cryptographic PKI Trust Hierarchies',
-          'مستودع المفاتيح والشهادات الفيدرالي (Sovereign PKI)',
-          'سیستەمی زنجیرەیی کلیلە متمانەپێکراوەکان بۆ فیدراڵ (Sovereign PKI)'
-        )}
-        description={getLabel(
-          'Inspect the hierarchical root public certificate authorities (CA) and dynamic path validation up to the self-signed G1 Root CA.',
-          'هندسة تسلسل الشهادات الرقمية من سلطة المعاملات الوطنية إلى فحص سلامة نقاط التداول بجميع المنافذ.',
-          'تۆڕی پارێزراوی کلیلە گشتییەکان لە دەسەڵاتی متمانەی نیشتمانییەوە تا گەیاندنی بە گرێی پۆینتەکانی دەروازە بازرگانییەکان.'
-        )}
+        title={t(lang, 'digitalIdentity.pki.secTitle')}
+        description={t(lang, 'digitalIdentity.pki.secDesc')}
+        className="font-[800]"
       />
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2">
-        <div className="bg-[#0b1420] border border-slate-800 p-5 rounded-xl flex flex-col gap-4 font-mono text-xs text-start">
-          <h4 className="text-xs font-bold uppercase text-cyan-400 border-b border-slate-900 pb-2 font-sans tracking-wider text-start">
-            PKI Path Verification Tool
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 pt-2 font-[600]">
+        <div className="bg-[#0b1420] border border-slate-850 p-5 rounded-xl flex flex-col gap-4 text-start font-mono text-xs font-[600]">
+          <h4 className="text-xs font-[800] uppercase text-[#E0A96D] border-b border-slate-900 pb-2 font-sans tracking-wider text-start">
+            {t(lang, 'digitalIdentity.pki.title')}
           </h4>
 
-          <div className="flex flex-col gap-3 text-start">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] text-slate-400 font-bold">Select Active Certificate To Validate</label>
-              <select
-                value={pkiCheckSerial}
-                onChange={(e) => runPkiPathCheck(e.target.value)}
-                className="bg-[#111e2e] border border-slate-800 rounded p-2 text-xs font-semibold text-white focus:outline-none"
-              >
-                {certs.map(c => (
-                  <option key={c.serialNumber} value={c.serialNumber}>
-                    {c.subjectCommonName.slice(0, 36)}...
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {pkiValidationResult && (
-              <div className="mt-2 pt-2 border-t border-slate-900 flex flex-col gap-3">
-                <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Computed Cryptographic Chain</span>
-                
-                <div className="flex flex-col gap-2 font-mono text-[10px]">
-                  {pkiValidationResult.chain.map((cName, idx) => (
-                    <div key={idx} className="bg-[#111e2e] p-2.5 rounded border border-slate-850 flex items-center gap-2">
-                      <span className="bg-slate-950 text-slate-500 w-4 h-4 rounded-full flex items-center justify-center text-[8.5px] shrink-0 font-bold">{idx}</span>
-                      <span className="text-slate-300 leading-tight">{cName}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {pkiValidationResult.isValid ? (
-                  <div className="bg-emerald-950/30 border border-emerald-500/30 text-[#52B788] p-3 rounded-lg text-[11px] font-bold font-sans flex items-start gap-2 leading-relaxed">
-                    <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                    <span>Trust Path Secure. Standard matching signature bound directly to Iraq Root CA G1. Cryptographically safe.</span>
-                  </div>
-                ) : (
-                  <div className="bg-red-950/20 border border-red-500/30 text-red-400 p-3 rounded-lg text-[11px] font-bold font-sans flex items-start gap-2 leading-relaxed">
-                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                    <span>Certificate Validation Failed. Compromised signature key or explicit revocation notice presence.</span>
-                  </div>
-                )}
-              </div>
-            )}
+          <div className="flex flex-col gap-1 text-start">
+            <label className="text-[10.5px] text-slate-355 font-[650] text-start">{t(lang, 'digitalIdentity.pki.selectCert')}</label>
+            <select
+              value={pkiCheckSerial}
+              onChange={(e) => runPkiPathCheck(e.target.value)}
+              className="bg-[#111e2e] border border-slate-800 rounded p-2 text-xs font-[600] text-white focus:outline-none"
+            >
+              {certs.map(c => (
+                <option key={c.serialNumber} value={c.serialNumber}>
+                  {c.subjectCommonName.slice(0, 36)}... ({c.serialNumber.slice(-8)})
+                </option>
+              ))}
+            </select>
           </div>
+
+          <div className="flex flex-col gap-2 pt-1 text-start">
+            <span className="text-[10px] uppercase text-slate-355 font-[650] block tracking-wide">{t(lang, 'digitalIdentity.pki.chain')}</span>
+            <div className="flex flex-col gap-2 items-center bg-[#070d15] p-3 rounded border border-slate-910">
+              {pkiChain.map((nodeSubject: string, idx: number) => (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <ArrowDown className="w-3.5 h-3.5 text-slate-500" />}
+                  <div className="w-full bg-[#111e2e] p-2 rounded border border-slate-800 text-[10.5px] text-start font-[600]">
+                    <span className="text-[#E0A96D] font-[800] block">{nodeSubject}</span>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
+          {isSecurePath ? (
+            <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-lg p-3.5 flex flex-col gap-1 text-start font-[600]">
+              <div className="flex items-center gap-1.5 text-[#52B788] text-xs font-[800] uppercase font-sans">
+                <ShieldCheck className="w-4 h-4" />
+                {t(lang, 'digitalIdentity.pki.securePath')}
+              </div>
+              <p className="text-[10.5px] text-slate-300 font-sans leading-relaxed">
+                {t(lang, 'digitalIdentity.pki.validationSuccess')}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-rose-950/20 border border-rose-500/30 rounded-lg p-3.5 flex flex-col gap-1 text-start font-[600]">
+              <div className="flex items-center gap-1.5 text-red-100 text-xs font-[800] uppercase font-sans">
+                <ShieldAlert className="w-4 h-4" />
+                {t(lang, 'digitalIdentity.pki.compromised')}
+              </div>
+              <p className="text-[10.5px] text-slate-300 font-sans leading-relaxed">
+                {t(lang, 'digitalIdentity.pki.validationFailure')}
+              </p>
+            </div>
+          )}
         </div>
 
-        <div className="xl:col-span-2 flex flex-col gap-2 text-start">
-          <span className="text-xs uppercase font-bold tracking-widest text-[#E0A96D] font-mono block">Enrolled Certificate Authorities Ledger</span>
-          
+        <div className="xl:col-span-2 flex flex-col gap-4 text-start font-[600]">
+          <span className="text-xs uppercase font-[800] tracking-widest text-[#52B788] font-mono block text-start">
+            {t(lang, 'digitalIdentity.pki.caLedger')}
+          </span>
+
           <div className="overflow-x-auto border border-slate-850 rounded">
-            <Table headers={['Serial / Cert Common Name', 'Issuer Parent Entity', 'Usage Type Class', 'Cryptographic Algorithm', 'Validity Calendar Days']}>
-              {certs.map(c => (
-                <tr key={c.serialNumber} className={`text-xs font-mono text-slate-300 ${c.isRevoked ? 'bg-red-950/15' : ''}`}>
-                  <td className="px-4 py-3 font-semibold text-start">
-                    <span className={`${c.hierarchyLevel === 'ROOT_CA' ? 'text-[#E0A96D]' : 'text-white'}`}>{c.subjectCommonName}</span>
-                    <span className="text-[10px] text-slate-500 block font-normal">S/N: {c.serialNumber}</span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-400">{c.issuerCommonName.slice(0, 36)}...</td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {c.keyUsage.map((ku, idx) => (
-                        <Badge key={idx} variant="slate" className="scale-90">{ku}</Badge>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">{c.signatureAlgorithm}</td>
-                  <td className="px-4 py-3">
-                    {c.isRevoked ? (
-                      <span className="text-red-400 text-[10px] leading-relaxed block font-semibold text-start">
-                        ❌ COMPROMISED: {c.revocationReason}
+            <Table headers={[
+              t(lang, 'digitalIdentity.pki.serialCertName'),
+              t(lang, 'digitalIdentity.pki.issuerParent'),
+              t(lang, 'digitalIdentity.pki.usageType'),
+              t(lang, 'digitalIdentity.pki.algorithm'),
+              t(lang, 'digitalIdentity.pki.validity')
+            ]}>
+              {certs.map(ca => (
+                <tr key={ca.serialNumber} className={`text-xs font-mono font-[600] text-slate-200 ${ca.isRevoked ? 'bg-rose-950/20' : ''}`}>
+                  <td className="px-4 py-3 font-[800] text-white">
+                    {ca.serialNumber}
+                    <span className="text-[10px] text-slate-330 block font-[600]">{ca.subjectCommonName}</span>
+                    {ca.isRevoked && (
+                      <span className="text-[9px] text-red-400 block font-[850] uppercase mt-0.5">
+                        ❌ {t(lang, 'digitalIdentity.pki.compromisedLabel')}: {ca.revocationReason || 'COMPROMISED'}
                       </span>
-                    ) : (
-                      <div className="text-[10.5px]">
-                        <span className="block text-slate-400">Til: {c.validTo.slice(0, 10)}</span>
-                        <span className="text-[9.5px] text-slate-500">From: {c.validFrom.slice(0, 10)}</span>
-                      </div>
                     )}
+                  </td>
+                  <td className="px-4 py-3 text-slate-300">{ca.issuerCommonName}</td>
+                  <td className="px-4 py-3">
+                    <Badge variant="slate" className="font-[800] font-sans scale-95">{ca.hierarchyLevel}</Badge>
+                  </td>
+                  <td className="px-4 py-3 text-slate-300">{ca.signatureAlgorithm}</td>
+                  <td className="px-4 py-3 font-[600]">
+                    <span className="block text-slate-200">{t(lang, 'digitalIdentity.pki.til')}: {ca.validTo.slice(0, 10)}</span>
+                    <span className="text-[9.5px] text-slate-400 block">{t(lang, 'digitalIdentity.pki.from')}: {ca.validFrom.slice(0, 10)}</span>
                   </td>
                 </tr>
               ))}
@@ -131,6 +130,7 @@ export const PkiPanel: React.FC<PkiPanelProps> = React.memo(({
       </div>
     </div>
   );
-});
+};
 
+export const PkiPanel = React.memo(PkiPanelComponent);
 PkiPanel.displayName = 'PkiPanel';

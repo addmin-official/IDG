@@ -1,4 +1,19 @@
 import { Language } from '../../../types';
+import digitalIdentityEn from '../../../localization/en/digitalIdentity.json';
+import digitalIdentityAr from '../../../localization/ar/digitalIdentity.json';
+import digitalIdentityKu from '../../../localization/ku/digitalIdentity.json';
+
+const fullTranslations: any = {
+  en: {
+    digitalIdentity: digitalIdentityEn
+  },
+  ar: {
+    digitalIdentity: digitalIdentityAr
+  },
+  ku: {
+    digitalIdentity: digitalIdentityKu
+  }
+};
 
 export const identityTranslations = {
   header: {
@@ -87,6 +102,30 @@ export const identityTranslations = {
 };
 
 export function t(lang: Language, keyPath: string): string {
+  if (keyPath.startsWith('digitalIdentity.')) {
+    const parts = keyPath.split('.');
+    let current: any = fullTranslations[lang];
+    
+    for (const part of parts) {
+      if (current && part in current) {
+        current = current[part];
+      } else {
+        // Fallback to English
+        let fallback: any = fullTranslations['en'];
+        for (const fpart of parts) {
+          if (fallback && fpart in fallback) {
+            fallback = fallback[fpart];
+          } else {
+            fallback = undefined;
+            break;
+          }
+        }
+        return fallback || keyPath;
+      }
+    }
+    return typeof current === 'string' ? current : keyPath;
+  }
+
   const parts = keyPath.split('.');
   let current: any = identityTranslations;
   

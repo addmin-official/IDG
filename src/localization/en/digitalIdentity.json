@@ -17,7 +17,10 @@
     "signedUnder": "Signed under",
     "jsonProofs": "Associated JSON-LD Proofs",
     "verifiedW3C": "Verified W3C VC",
-    "claimsMap": "Claims Map"
+    "claimsMap": "Claims Map",
+    "id": "Id:",
+    "sigProof": "Signature Proof:",
+    "issuerKey": "Issuer:"
   },
   "citizens": {
     "title": "Citizens Identities (Civil Status Bonds)",
@@ -50,16 +53,18 @@
   },
   "trust": {
     "title": "Federal Trust & Security Infrastructure Readiness Assessment",
-    "finalized": "Assessment finalized under secure digital keys validation protocol.",
-    "cryptography": "Cryptography",
+    "finalized": "Assessment finalized under secure digital keys validation protocol. The platform aggregates current certificate safety logs, digital signatures progress, and active cryptographic verification states to achieve high compliance. Single identity sign-ons and tokenized claim wallets are optimized for immediate multi-ministerial deployment and international trade customs interlocks.",
+    "cryptography": "A. Cryptography",
     "optimal": "OPTIMAL CLASS 5",
-    "bioBinding": "Bio Biometric Binding",
+    "bioBinding": "B. Bio Biometric Binding",
     "irisFinger": "IRIS + FINGERPRINT",
-    "multiAuth": "Multi-Auth Sealing",
+    "multiAuth": "C. Multi-Auth Sealing",
     "cabinetConforming": "CABINET CONFORMING",
-    "complianceRegistry": "Compliance Registry",
+    "complianceRegistry": "D. Compliance Registry",
+    "w3cProof": "W3C JSON-LD PROOF",
     "totalScore": "Total Trust Readiness Score",
-    "approved": "CLASS G5 APPROVED"
+    "approved": "CLASS G5 APPROVED",
+    "checksum": "Verified key checksum: 9912-S/N-IRAQ"
   },
   "w3c": {
     "title": "Cryptographic Credentials Issuing Panel",
@@ -69,9 +74,26 @@
     "auditTrail": "Dynamic Verification Audit Trail",
     "issuingAuthority": "Issuing Trust Authority",
     "holderOwnerDid": "Holder Owner DID",
-    "issuanceTimestamp": "Issuance Timestamp",
+    "issuanceTimestamp": "Issuance GMT Timestamp",
     "sealValidation": "Crypto Seal Validation",
-    "actions": "Actions"
+    "actions": "Actions",
+    "w3cId": "W3C ID Identification",
+    "sealAndDispatch": "Seal & Dispatch Credential",
+    "class": "Class",
+    "revoked": "REVOKED",
+    "cryptoVerified": "Crypto Verified",
+    "invalidProof": "Invalid Proof",
+    "revoke": "Revoke",
+    "selectDestHolder": "1. Select Destination holder DID",
+    "selectW3cType": "2. Select W3C Compliant Type",
+    "setClaimAttributes": "3. Set Declared Claim Field Attributes",
+    "keyPlaceholder": "Key (e.g. vesselLicense)",
+    "valuePlaceholder": "Value (e.g. APPROVED)",
+    "destCitizen": "Amir Al-Moussawi (Citizen)",
+    "destBusiness": "Sindbad Logistics (Business)",
+    "destAuditor": "Gov Auditor Ahmed Al-Yassiri",
+    "secTitle": "Federal W3C Credentials Issuer Center",
+    "secDesc": "Authorize, cryptographically seal, and dispatch standardized W3C claim credentials to sovereign wallets."
   },
   "pki": {
     "title": "PKI Path Verification Tool",
@@ -81,7 +103,18 @@
     "caLedger": "Enrolled Certificate Authorities Ledger",
     "validity": "Validity Calendar Days",
     "compromised": "COMPROMISED",
-    "keyCompromise": "KEY COMPROMISE"
+    "keyCompromise": "KEY COMPROMISE",
+    "secTitle": "Cryptographic PKI Trust Hierarchies",
+    "secDesc": "Inspect the hierarchical root public certificate authorities (CA) and dynamic path validation up to the self-signed G1 Root CA.",
+    "validationSuccess": "Trust Path Secure. Standard matching signature bound directly to Iraq Root CA G1. Cryptographically safe.",
+    "validationFailure": "Certificate Validation Failed. Compromised signature key or explicit revocation notice presence.",
+    "serialCertName": "Serial / Cert Common Name",
+    "issuerParent": "Issuer Parent Entity",
+    "usageType": "Usage Type Class",
+    "algorithm": "Cryptographic Algorithm",
+    "compromisedLabel": "COMPROMISED",
+    "til": "Til",
+    "from": "From"
   },
   "signatures": {
     "title": "Apply Cryptographic Document Seal",
@@ -91,7 +124,28 @@
     "pending": "PENDING_SIGNATURES",
     "requiredSig": "Required Signatures",
     "appliedSeals": "Applied Signature Seals",
-    "verified": "Verified"
+    "verified": "Verified",
+    "secTitle": "Sovereign Cryptographic Document Seals",
+    "secDesc": "Apply decentralized digital signature seals to PDF manifests, government contracts, and official border trade documents directly.",
+    "applySeal": "Apply Sovereign Signature Seal",
+    "docId": "Document ID Identification",
+    "fileName": "File Manifest Name",
+    "currentStatus": "Current status",
+    "verifySeal": "Verify Crypto Seal",
+    "cryptoVerified": "Crypto Verified",
+    "invalidProof": "Invalid Proof",
+    "sealSecured": "SEAL_SECURED",
+    "pendingSigs": "PENDING_SIGNATURES",
+    "verificationAudit": "Verification Audit:",
+    "roleSupervisor": "Amir Al-Moussawi (Customs Supervisor)",
+    "roleAuditor": "Ahmed Al-Yassiri (Director General)",
+    "roleMinister": "Tariq Al-Jamil (Cabinet Finance Director)",
+    "noSignatures": "No signatures applied yet.",
+    "typeClass": "Type Class:",
+    "org": "Org:",
+    "hash": "Hash:",
+    "verifiedBadge": "✓ Verified",
+    "affixSecureSig": "Affix Secure Identity Signature"
   },
   "consent": {
     "serial": "Consent Agreement Serial",
@@ -101,7 +155,14 @@
     "claimsGranted": "Claims Access Granted",
     "lifetime": "Consent Lifetime Duration",
     "granted": "Granted",
-    "expires": "Expires"
+    "expires": "Expires",
+    "secTitle": "Citizen Consent & Data Sharing Registry",
+    "secDesc": "Citizen-controlled dashboard managing data sharing agreements. Authorized users can inspect, revoke, or issue claims permissions across departments.",
+    "status": "Status",
+    "actions": "Actions",
+    "revokeConsent": "Revoke Consent",
+    "active": "ACTIVE",
+    "revoked": "REVOKED"
   },
   "iam": {
     "title": "SSO Federation Core System Standbys",
@@ -109,6 +170,12 @@
     "corporatePortal": "Corporate Registrations Portal",
     "tokenLedger": "Real-time Claims Token Assertions Ledger",
     "claimsSubject": "Claims Subject",
-    "hashVerify": "Dual Sign Verify Hash"
+    "hashVerify": "Dual Sign Verify Hash",
+    "secTitle": "Federated Sovereign Core Brokering",
+    "secDesc": "Secure trust endpoints connecting external banking ledgers and company registries under state federated authentication protocols.",
+    "endpoint": "Endpoint",
+    "crypto": "Crypto",
+    "ping": "Ping",
+    "issuer": "Issuer"
   }
 }

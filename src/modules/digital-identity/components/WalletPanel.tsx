@@ -68,10 +68,10 @@ export const WalletPanel: React.FC<WalletPanelProps> = React.memo(({
                     <span>{t('digitalIdentity.wallet.verifiedW3C')}</span>
                     <span>{c.type[1]}</span>
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span>Id: {c.id}</span>
-                    <span>Issuer: {c.issuer}</span>
-                    <span>Signature Proof: {c.proof.jws.slice(0, 36)}...</span>
+                  <div className="flex flex-col gap-0.5 font-[600]">
+                    <span>{t('digitalIdentity.wallet.id')} {c.id}</span>
+                    <span>{t('digitalIdentity.wallet.issuerKey')} {c.issuer}</span>
+                    <span>{t('digitalIdentity.wallet.sigProof')} {c.proof.jws.slice(0, 36)}...</span>
                     <span className="text-[#E0A96D] font-semibold mt-1">{t('digitalIdentity.wallet.claimsMap')}:</span>
                     {Object.entries(c.credentialSubject).map(([key, value]) => (
                       <span key={key} className="pl-2">- {key}: {String(value)}</span>
