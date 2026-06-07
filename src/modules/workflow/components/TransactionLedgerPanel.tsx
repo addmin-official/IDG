@@ -22,7 +22,7 @@ export const TransactionLedgerPanel: React.FC<TransactionLedgerPanelProps> = Rea
       
       {/* Desktop/Tablet table view */}
       <div className="hidden md:block overflow-x-auto text-xs font-mono text-start">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-start border-collapse">
           <thead>
             <tr className="border-b border-slate-800 text-slate-500 text-[9px] uppercase font-mono">
               <th className="pb-2 text-start">{t(lang, 'ledger.headers.txid')}</th>

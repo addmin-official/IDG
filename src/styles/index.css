@@ -42,19 +42,19 @@
 /* Base custom classes */
 body {
   background-color: #080f18;
-  color: #e2e8f0;
+  color: #f8fafc; /* High contrast white/slate-50 */
   font-family: var(--font-sans);
   overflow-x: hidden;
-  font-weight: 550;
-  line-height: 1.85;
-  letter-spacing: 0.01em;
-  max-width: 75ch;
+  font-weight: 600; /* Body: 600 */
+  line-height: 2.0; /* Optimized line-height for Kurdish readability */
+  letter-spacing: 0.015em;
+  max-width: 100%; /* Avoid 75ch constraint on dashboard */
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
-  font-weight: 700;
-  line-height: 1.3;
+  font-weight: 800; /* Headings: 800 */
+  line-height: 1.4;
 }
 
 h1, h2 {
@@ -62,12 +62,25 @@ h1, h2 {
 }
 
 table {
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.8;
 }
 
-label, .label {
-  font-weight: 550;
+label, .label, th, .table-header {
+  font-weight: 650; /* Labels & table headers: 650 */
+}
+
+/* Custom weight utilities for standard enforcement */
+.font-body {
+  font-weight: 600 !important;
+}
+
+.font-label {
+  font-weight: 650 !important;
+}
+
+.font-heading {
+  font-weight: 800 !important;
 }
 
 .glow-embed {

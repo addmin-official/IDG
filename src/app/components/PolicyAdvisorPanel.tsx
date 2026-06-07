@@ -21,7 +21,7 @@ export const PolicyAdvisorPanel: React.FC<PolicyAdvisorPanelProps> = ({
   handleSendChat,
 }) => {
   return (
-    <div className="max-w-4xl mx-auto bg-[#111e2e]/95 rounded-xl border border-slate-800/80 shadow-lg p-5 lg:p-6 flex flex-col gap-4 animate-fade-in text-left">
+    <div className="max-w-4xl mx-auto bg-[#111e2e]/95 rounded-xl border border-slate-800/80 shadow-lg p-5 lg:p-6 flex flex-col gap-4 animate-fade-in text-start">
       
       <div className="border-b border-slate-800 pb-3 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div>

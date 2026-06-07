@@ -33,7 +33,7 @@ export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }
             <button
               key={bp.id}
               onClick={() => setActiveBlueprintId(bp.id)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+              className={`w-full text-start px-3 py-2.5 rounded-lg text-xs font-[650] transition-all cursor-pointer ${
                 activeBlueprintId === bp.id 
                   ? 'bg-[#1a2c42] text-white border-l-4 border-[#cca553] shadow' 
                   : 'text-slate-400 hover:text-slate-200 hover:bg-[#0c1521]'

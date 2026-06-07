@@ -1,5 +1,5 @@
 import { initialWorkflowSteps } from '../modules/workflow/data/workflowTemplates';
-import { WorkflowStepDTO } from './contracts/WorkflowContract';
+import { WorkflowStepDTO } from '../contracts/WorkflowContract';
 
 export interface WorkflowAdapter {
   fetchAll(): Promise<WorkflowStepDTO[]>;

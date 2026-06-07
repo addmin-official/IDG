@@ -54,7 +54,7 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
                 <button
                   key={presetId}
                   onClick={() => handlePresetSelect(presetId)}
-                  className={`w-full text-left p-2.5 rounded text-xs transition-all border flex flex-col cursor-pointer ${
+                  className={`w-full text-start p-2.5 rounded text-xs transition-all border flex flex-col cursor-pointer ${
                     selectedPreset === presetId 
                       ? 'bg-[#1a2c42] border-[#E0A96D] text-white shadow-lg' 
                       : 'bg-[#101925] border-slate-800 text-slate-400 hover:text-slate-200'
@@ -234,7 +234,7 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
           )}
 
           {auditResultViewModel && (
-            <div className="flex flex-col gap-6 text-left">
+            <div className="flex flex-col gap-6 text-start">
               
               {/* Audit Top summary */}
               <div className="border-b border-slate-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -333,7 +333,7 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
                   <Shield className="w-3.5 h-3.5 text-amber-400" />
                   Risk Integrity Log Entries
                 </h4>
-                <ul className="flex flex-col gap-2 font-mono text-xs text-left">
+                <ul className="flex flex-col gap-2 font-mono text-xs text-start">
                   {auditResultViewModel.riskAnalysis.map((item: string, idx: number) => (
                     <li key={idx} className="flex gap-2 text-slate-300 leading-relaxed">
                       <span className="text-amber-400 shrink-0">■</span>
@@ -368,7 +368,7 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
                 </div>
 
                 {/* Kurdish translation */}
-                <div className="bg-slate-950/40 p-4 rounded border border-slate-800 text-left">
+                <div className="bg-slate-950/40 p-4 rounded border border-slate-800 text-right" dir="rtl">
                   <h4 className="text-amber-400 font-bold mb-2 font-sans text-xs">ڕاپۆرتی سەرەکی لێکۆڵینەوە بازرگانی نیشتمانی</h4>
                   <p className="text-slate-300/90 leading-relaxed text-[11px]">
                     {auditResultViewModel.kurdishSummary || "شتومەکەکە پشکنینی بۆ کراوە بە پشتبەستن بە یاساي گومرگي فیدراڵي."}

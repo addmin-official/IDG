@@ -24,7 +24,7 @@ import { useEconomicCorridor } from '../hooks/useEconomicCorridor';
 import { useNationalTelemetry } from '../hooks/useNationalTelemetry';
 
 export default function App() {
-  const { locale: lang, setLocale: setLang } = useI18n();
+  const { locale: lang, setLocale: setLang, t } = useI18n();
   const d = DICTIONARY[lang];
   const [activeTab, setActiveTab] = useState<string>('command-center');
 
@@ -54,13 +54,13 @@ export default function App() {
               <Shield className="w-8 h-8 text-[#E0A96D]" />
             </div>
             <div>
-              <div className="flex items-center gap-2 text-left">
+              <div className="flex items-center gap-2 text-start">
                 <h1 className="text-xl font-display font-bold tracking-wider text-white uppercase">{d.title}</h1>
                 <span className="text-xs bg-emerald-950/90 text-[#52B788] border border-emerald-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#52B788] animate-pulse"></span> Sovereign Live
                 </span>
               </div>
-              <p className="text-xs text-[#E0A96D] font-mono tracking-widest mt-0.5 font-medium text-left">{d.subtitle}</p>
+              <p className="text-xs text-[#E0A96D] font-mono tracking-widest mt-0.5 font-medium text-start">{d.subtitle}</p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs">
@@ -68,10 +68,10 @@ export default function App() {
               <span className="text-slate-400 text-[10px] uppercase font-mono tracking-wider">{d.location}</span>
               <span className="text-[#E0A96D] font-semibold">{d.securityAccess}</span>
             </div>
-            <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700 shadow-lg font-mono" dir="ltr">
-              <button onClick={() => setLang('en')} className={`cursor-pointer px-2 py-0.5 rounded text-[11px] font-bold ${lang === 'en' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>EN</button>
-              <button onClick={() => setLang('ar')} className={`cursor-pointer px-2 py-0.5 rounded text-[11px] font-bold ${lang === 'ar' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>AR</button>
-              <button onClick={() => setLang('ku')} className={`cursor-pointer px-2 py-0.5 rounded text-[11px] font-bold ${lang === 'ku' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>KU</button>
+            <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700 shadow-lg" dir="ltr">
+              <button id="lang-btn-en" onClick={() => setLang('en')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'en' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.en')}</button>
+              <button id="lang-btn-ar" onClick={() => setLang('ar')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'ar' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.ar')}</button>
+              <button id="lang-btn-ku" onClick={() => setLang('ku')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'ku' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.ku')}</button>
             </div>
           </div>
         </div>
@@ -80,22 +80,25 @@ export default function App() {
       <nav id="idg-navigation" className="bg-[#122237] border-b border-slate-800 py-1.5 px-4 shadow">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2">
           {[
-            { id: 'command-center', label: d.dashboard, icon: Activity },
-            { id: 'blueprints', label: 'Architecture Atlas', icon: Layers },
-            { id: 'ai-auditor', label: d.analyzer, icon: Cpu },
-            { id: 'policy-advisor', label: d.advisor, icon: Landmark },
-            { id: 'economic-corridors', label: d.intelligence, icon: TrendingUp },
-            { id: 'ecosystem', label: lang === 'en' ? 'Digital Borders' : 'المنافذ المستقلة', icon: Network },
-            { id: 'ai-brain', label: 'Sovereign AI', icon: Brain },
-            { id: 'security', label: lang === 'en' ? 'Sovereign Sec' : 'الأمن السيادي', icon: Lock },
-            { id: 'data-fabric', label: 'Data Fabric', icon: Database },
-            { id: 'sovereign-trust', label: 'Trust Framework', icon: Shield }
+            { id: 'command-center', label: t(lang, 'navigation.dashboard'), icon: Activity },
+            { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
+            { id: 'ai-auditor', label: t(lang, 'navigation.analyzer'), icon: Cpu },
+            { id: 'policy-advisor', label: t(lang, 'navigation.advisor'), icon: Landmark },
+            { id: 'economic-corridors', label: t(lang, 'navigation.intelligence'), icon: TrendingUp },
+            { id: 'ecosystem', label: t(lang, 'navigation.ecosystem'), icon: Network },
+            { id: 'ai-brain', label: t(lang, 'navigation.aiBrain'), icon: Brain },
+            { id: 'security', label: t(lang, 'navigation.security'), icon: Lock },
+            { id: 'data-fabric', label: t(lang, 'navigation.dataFabric'), icon: Database },
+            { id: 'sovereign-trust', label: t(lang, 'navigation.sovereignTrust'), icon: Shield }
           ].map((tab) => (
             <button
               key={tab.id}
+              id={`nav-tab-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3 py-1.5 rounded transition-all flex items-center gap-1.5 font-medium capitalize text-xs cursor-pointer ${
-                activeTab === tab.id ? 'bg-[#1a2c42] text-white border-l-2 border-[#cca553] shadow-md' : 'text-slate-400 hover:text-slate-200'
+              className={`px-3 py-1.5 rounded transition-all flex items-center gap-1.5 text-xs cursor-pointer ${
+                activeTab === tab.id 
+                  ? 'bg-[#1a2c42] text-white border-l-2 border-[#cca553] shadow-md font-[800]' 
+                  : 'text-slate-400 hover:text-slate-200 font-[700]'
               }`}
             >
               <tab.icon className="w-3.5 h-3.5 text-[#cca553]" />
@@ -157,7 +160,7 @@ export default function App() {
         {activeTab === 'sovereign-trust' && <NationalIdentityCommandCenter lang={lang} />}
       </main>
 
-      <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-left">
+      <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-[#cca553]" />

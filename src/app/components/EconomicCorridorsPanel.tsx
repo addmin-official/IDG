@@ -29,7 +29,7 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
   handleTriggerForecast,
 }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-left">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in text-start">
       
       {/* Left 1 Column: Inputs and Parameters controls */}
       <div className="lg:col-span-1 bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md">

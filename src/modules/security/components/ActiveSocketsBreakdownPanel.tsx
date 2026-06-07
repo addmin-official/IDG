@@ -35,7 +35,7 @@ export const ActiveSocketsBreakdownPanel: React.FC<ActiveSocketsBreakdownPanelPr
 
   return (
     <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800 shadow-xl text-start flex flex-col gap-4">
-      <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-widest pb-2 border-b border-slate-900 flex justify-between items-center">
+      <h3 className="text-sm font-[650] text-slate-200 uppercase tracking-widest pb-2 border-b border-slate-900 flex justify-between items-center">
         <span className="flex items-center gap-1.5">
           <Network className="text-[#E0A96D] w-4.5 h-4.5" />
           {t(lang, 'sidebar.breakdown.title')}

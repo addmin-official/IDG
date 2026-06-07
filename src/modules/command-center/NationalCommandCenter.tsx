@@ -50,7 +50,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </Badge>
         }
         actions={
-          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-1.5 rounded-lg text-start" style={{ borderStyle: 'solid', height: '94.175px', width: '487.78700000000003px' }}>
+          <div className="flex flex-wrap items-center gap-2 bg-[#0b1420] border border-slate-800 p-2.5 rounded-lg text-start">
             <span className="text-[10px] font-mono text-slate-500 uppercase px-2 font-bold select-none text-start">
               {t(lang, 'header.roleSelectionLabel')}
             </span>
@@ -139,7 +139,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* Sequence Workflows in single visual language */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 shadow-xl flex flex-col gap-4 text-start">
-            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
+            <h3 className="text-sm font-[650] text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-2">
                 <Layers className="text-[#E0A96D] w-4.5 h-4.5 shrink-0" />
                 {t(lang, 'sidebar.loopTitle')}
@@ -153,7 +153,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </div>
 
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 shadow-xl text-start">
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
+            <h3 className="text-sm font-[650] text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-2">
                 <Network className="text-[#E0A96D] w-4.5 h-4.5 shrink-0" />
                 {t(lang, 'sidebar.directoryTitle')}
@@ -184,7 +184,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
           {/* AI Advisor Panel */}
           <div className="bg-slate-950/80 p-5 rounded-xl border border-slate-800 flex flex-col gap-4 text-start shadow-xl">
-            <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
+            <h3 className="text-sm font-[650] text-slate-100 uppercase tracking-wider pb-2 border-b border-slate-900 flex justify-between items-center w-full">
               <span className="flex items-center gap-1.5">
                 <Cpu className="text-[#E0A96D] w-4 h-4 shrink-0" />
                 {t(lang, 'sidebar.advisorTitle')}

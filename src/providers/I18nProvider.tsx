@@ -15,6 +15,8 @@ import errorsEn from '../localization/en/errors.json';
 import validationEn from '../localization/en/validation.json';
 import notificationsEn from '../localization/en/notifications.json';
 import digitalIdentityEn from '../localization/en/digitalIdentity.json';
+import modulesEn from '../localization/en/modules.json';
+import languagesEn from '../localization/en/languages.json';
 
 // Arabic imports
 import commonAr from '../localization/ar/common.json';
@@ -30,6 +32,8 @@ import errorsAr from '../localization/ar/errors.json';
 import validationAr from '../localization/ar/validation.json';
 import notificationsAr from '../localization/ar/notifications.json';
 import digitalIdentityAr from '../localization/ar/digitalIdentity.json';
+import modulesAr from '../localization/ar/modules.json';
+import languagesAr from '../localization/ar/languages.json';
 
 // Kurdish imports
 import commonKu from '../localization/ku/common.json';
@@ -45,6 +49,8 @@ import errorsKu from '../localization/ku/errors.json';
 import validationKu from '../localization/ku/validation.json';
 import notificationsKu from '../localization/ku/notifications.json';
 import digitalIdentityKu from '../localization/ku/digitalIdentity.json';
+import modulesKu from '../localization/ku/modules.json';
+import languagesKu from '../localization/ku/languages.json';
 
 const translations = {
   en: {
@@ -61,6 +67,8 @@ const translations = {
     validation: validationEn,
     notifications: notificationsEn,
     digitalIdentity: digitalIdentityEn,
+    modules: modulesEn,
+    languages: languagesEn,
   },
   ar: {
     common: commonAr,
@@ -76,6 +84,8 @@ const translations = {
     validation: validationAr,
     notifications: notificationsAr,
     digitalIdentity: digitalIdentityAr,
+    modules: modulesAr,
+    languages: languagesAr,
   },
   ku: {
     common: commonKu,
@@ -91,6 +101,8 @@ const translations = {
     validation: validationKu,
     notifications: notificationsKu,
     digitalIdentity: digitalIdentityKu,
+    modules: modulesKu,
+    languages: languagesKu,
   },
 };
 
@@ -98,7 +110,7 @@ interface I18nContextType {
   locale: Language;
   direction: 'ltr' | 'rtl';
   setLocale: (locale: Language) => void;
-  t: (path: string) => string;
+  t: (pathOrLang: string, path?: string) => string;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -130,13 +142,21 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(newLocale);
   };
 
-  // Helper function to resolve dot notation paths: e.g. "navigation.dashboard"
-  const t = (path: string): string => {
-    const keys = path.split('.');
-    let current: any = translations[locale];
+  // Helper function to resolve dot notation paths, supporting t("key") and t(lang, "key")
+  const t = (pathOrLang: string, path?: string): string => {
+    let resolvedLocale = locale;
+    let resolvedPath = pathOrLang;
+
+    if (path !== undefined) {
+      resolvedLocale = pathOrLang as Language;
+      resolvedPath = path;
+    }
+
+    const keys = resolvedPath.split('.');
+    let current: any = translations[resolvedLocale] || translations['ku'];
 
     for (const key of keys) {
-      if (current[key] !== undefined) {
+      if (current && current[key] !== undefined) {
         current = current[key];
       } else {
         // Fallback to English translation key if current language key not found
@@ -149,11 +169,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
             break;
           }
         }
-        return fallback || path; // Return path if fallback is missing
+        return fallback || resolvedPath; // Return path if fallback is missing
       }
     }
 
-    return typeof current === 'string' ? current : path;
+    return typeof current === 'string' ? current : resolvedPath;
   };
 
   return (

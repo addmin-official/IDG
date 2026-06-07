@@ -23,7 +23,7 @@ export function ExpressTable<T extends { id: string | number }>({
 }: ExpressTableProps<T>) {
   return (
     <div className="overflow-x-auto w-full border border-[#1E293B] rounded-lg bg-[#111E2E]">
-      <table className="min-w-full divide-y divide-[#1E293B] text-left text-xs">
+      <table className="min-w-full divide-y divide-[#1E293B] text-start text-xs">
         <thead className="bg-[#0B1420] text-[#E0E1DD] uppercase tracking-wider font-mono">
           <tr>
             {columns.map((col) => (
