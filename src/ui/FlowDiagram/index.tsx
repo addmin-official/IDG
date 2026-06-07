@@ -68,7 +68,7 @@ export const FlowDiagram: React.FC<FlowDiagramProps> = ({
   };
 
   return (
-    <svg width={width} height={height} className="overflow-visible font-mono text-[9px] font-bold text-center">
+    <svg width={width} height={height} className="overflow-visible font-mono text-[9px] font-bold text-center" style={{ textAlign: 'center' }}>
       {/* Dynamic Connector lines behind the cards */}
       {nodes.slice(0, -1).map((node, index) => {
         const x1 = paddingX + index * (nodeWidth + spacingBetweenNodes) + nodeWidth;
