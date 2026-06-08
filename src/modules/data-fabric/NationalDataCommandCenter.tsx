@@ -26,11 +26,17 @@ import { GovernanceWorkflowPanel } from './components/GovernanceWorkflowPanel';
 // Import Centralized Localizer
 import { t } from './localization/dataFabricTranslations';
 
+// Import Government provider
+import { useGovernment } from '../../providers/GovernmentProvider';
+
 interface NationalDataCommandCenterProps {
   lang: Language;
 }
 
 export default function NationalDataCommandCenter({ lang }: NationalDataCommandCenterProps) {
+  // Extract Government context
+  const { activeContext, federalFabricSchema, krgFabricSchema } = useGovernment();
+
   // 1. Initialize Decoupled State & Actions Hooks
   const {
     datasets,
@@ -84,15 +90,23 @@ export default function NationalDataCommandCenter({ lang }: NationalDataCommandC
       })
     : datasets;
 
+  // Identify active domain credentials
+  const activeSchema = activeContext === 'KURDISTAN_REGION' ? krgFabricSchema : federalFabricSchema;
+
   return (
     <div id="national-data-fabric-command-center" className="flex flex-col gap-6 text-start" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* Dynamic Page Header */}
       <PageHeader
         icon={<Database />}
-        title={t(lang, 'header.title')}
-        description={t(lang, 'header.subtitle')}
-        status={<Badge variant="gold">{t(lang, 'header.badge')}</Badge>}
+        title={activeContext === 'FEDERAL_IRAQ' ? 'Federal Logical Data Fabric' : activeContext === 'KURDISTAN_REGION' ? 'KRG Regional Data Fabric' : t(lang, 'header.title')}
+        description={`${t(lang, 'header.subtitle')} • [Zone: ${activeSchema.storageDomain}]`}
+        status={
+          <div className="flex items-center gap-2">
+            <Badge variant="gold">{t(lang, 'header.badge')}</Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
+        }
       />
 
       {/* Sovereign National Data Readiness Index Cards */}

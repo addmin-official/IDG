@@ -24,6 +24,7 @@ import { PkiPanel } from './components/PkiPanel';
 import { SignaturesPanel } from './components/SignaturesPanel';
 import { ConsentPanel } from './components/ConsentPanel';
 import { FederationPanel } from './components/FederationPanel';
+import { useGovernment } from '../../providers/GovernmentProvider';
 
 interface NationalIdentityCommandCenterProps {
   lang: Language;
@@ -31,6 +32,7 @@ interface NationalIdentityCommandCenterProps {
 
 export default function NationalIdentityCommandCenter({ lang }: NationalIdentityCommandCenterProps) {
   const model = useNationalIdentity();
+  const { activeContext } = useGovernment();
 
   // Selected sub-tab within Identity center
   const [panelTab, setPanelTab] = useState<'registry' | 'wallet' | 'credentials' | 'pki' | 'signatures' | 'consent' | 'federation'>('registry');
@@ -44,12 +46,15 @@ export default function NationalIdentityCommandCenter({ lang }: NationalIdentity
       {/* Page Header */}
       <PageHeader
         icon={<ShieldCheck />}
-        title={t(lang, 'header.title')}
-        description={t(lang, 'header.subtitle')}
+        title={activeContext === 'FEDERAL_IRAQ' ? 'Federal Digital Identity Authority' : activeContext === 'KURDISTAN_REGION' ? 'Kurdistan Regional Identity Authority (KRG)' : t(lang, 'header.title')}
+        description={`${t(lang, 'header.subtitle')} • [Zone: ${activeContext}]`}
         status={
-          <Badge variant="gold">
-            {t(lang, 'header.badge')}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="gold">
+              {t(lang, 'header.badge')}
+            </Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
         }
         actions={
           <Button 

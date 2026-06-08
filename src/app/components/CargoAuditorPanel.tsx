@@ -2,6 +2,7 @@ import React from 'react';
 import { Cpu, RefreshCw, Shield, Check, AlertTriangle, Server } from 'lucide-react';
 import { CARGO_PRESETS } from '../../mockData';
 import { PageHeader, Badge, UnifiedEmptyState } from '../../ui';
+import { useGovernment } from '../../providers/GovernmentProvider';
 
 export interface CargoAuditorPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -30,13 +31,20 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
   handlePresetSelect,
   handleInitiateAudit,
 }) => {
+  const { activeContext } = useGovernment();
+
   return (
     <div className="flex flex-col gap-6 w-full animate-fade-in text-start">
       <PageHeader
         icon={<Cpu />}
         title={lang === 'en' ? 'Sovereign Customs manifest auto-auditor' : lang === 'ar' ? 'التدقيق الذاتي الجمركي والمكوس' : 'سیستەمی چاودێری گومرگی و بازرگانی'}
         description={lang === 'en' ? 'Federal Compliance AI analysis system designed to match trade documents, verify HS classification codes and flags potential financial under-invoicing.' : lang === 'ar' ? 'نظام التحليل التلقائي للكشف عن التهرب الجمركي وفروقات تصنيف البضائع والترميز الرمزي.' : 'سیستەمی چاودێری و شیکردنەوەی پێشکەوتووی نیشتمانیی بۆ پشتڕاستکردنەوەی بەڵگەنامە بازرگانییەکان و دۆزینەوەی فرتوفێڵی دارایی.'}
-        status={<Badge variant="gold">{lang === 'en' ? 'Cargo Auditor' : lang === 'ar' ? 'مدقق الشحنات' : 'چاودێری شتومەک'}</Badge>}
+        status={
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="gold">{lang === 'en' ? 'Cargo Auditor' : lang === 'ar' ? 'مدقق الشحنات' : 'چاودێری شتومەک'}</Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
+        }
         actions={
           <div className="text-xs font-mono text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
             {lang === 'en' ? 'ALGORITHM: FEDERAL_HS_CLASSIFY_V3' : 'PROT: HS_CODE_CHECK'}

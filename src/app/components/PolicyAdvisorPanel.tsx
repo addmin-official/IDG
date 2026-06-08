@@ -1,6 +1,7 @@
 import React from 'react';
 import { Send, RefreshCw, Shield, Landmark } from 'lucide-react';
 import { PageHeader, Badge } from '../../ui';
+import { useGovernment } from '../../providers/GovernmentProvider';
 
 export interface PolicyAdvisorPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -21,6 +22,8 @@ export const PolicyAdvisorPanel: React.FC<PolicyAdvisorPanelProps> = ({
   isChatLoading,
   handleSendChat,
 }) => {
+  const { activeContext } = useGovernment();
+
   return (
     <div className="max-w-4xl mx-auto bg-[#111e2e]/95 rounded-xl border border-slate-800/80 shadow-lg p-5 lg:p-6 flex flex-col gap-4 animate-fade-in text-start">
       
@@ -28,7 +31,12 @@ export const PolicyAdvisorPanel: React.FC<PolicyAdvisorPanelProps> = ({
         icon={<Landmark />}
         title={d.policyAdvisorTitle}
         description={lang === 'en' ? 'Query the sovereign policy core on trade treaties, custom regulations, KRG tariffs agreements, and anti-fraud protocols.' : lang === 'ar' ? 'البحث في لوائح وسياسات الجمارك الموحدة والمعاهدات الجمركية لجمهورية العراق فدرالياً.' : 'گەڕان لە یاساکان و ڕێسا گومرگییەکان و ڕێککەوتنەکانی نێوان بەغدا و هەولێر.'}
-        status={<Badge variant="gold">{lang === 'en' ? 'Authorized Official' : lang === 'ar' ? 'مسؤول مخول' : 'بەرپرسی ڕێپێدراو'}</Badge>}
+        status={
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="gold">{lang === 'en' ? 'Authorized Official' : lang === 'ar' ? 'مسؤول مخول' : 'بەرپرسی ڕێپێدراو'}</Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
+        }
       />
 
       {/* Quick suggested queries list buttons */}

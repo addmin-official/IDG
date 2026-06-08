@@ -1,6 +1,7 @@
 import React from 'react';
 import { TrendingUp, RefreshCw, BookOpen, Shield } from 'lucide-react';
 import { PageHeader, Badge, UnifiedEmptyState } from '../../ui';
+import { useGovernment } from '../../providers/GovernmentProvider';
 
 export interface EconomicCorridorsPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -29,13 +30,20 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
   predictionResult,
   handleTriggerForecast,
 }) => {
+  const { activeContext } = useGovernment();
+
   return (
     <div className="flex flex-col gap-6 w-full animate-fade-in text-start">
       <PageHeader
         icon={<TrendingUp />}
         title={lang === 'en' ? 'Sovereign economic corridors & strategic trade modeling' : lang === 'ar' ? 'نمذجة الرواق الاقتصادي والممرات التجارية الاستراتيجية' : 'تۆماری ڕێڕەوە ئابوورییە ستراتیژییەکان'}
         description={lang === 'en' ? 'Sovereign econometric simulation suite modeling Development Road and maritime trade corridors predictive tax collections.' : lang === 'ar' ? 'جناح المحاكاة الاقتصادية القياسية لتقدير الإيرادات الجمركية وحجم البضائع العابرة للحدود.' : 'سیستەمی نەخشەسازی و ڕوانینی ئابووریی بۆ پێشبینیکردنی داهاتەکانی گومرگ و جووڵەی کاڵاکان.'}
-        status={<Badge variant="gold">{lang === 'en' ? 'Economic Corridors' : lang === 'ar' ? 'الممرات الاقتصادية' : 'ڕێڕەوە ئابوورییەکان'}</Badge>}
+        status={
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="gold">{lang === 'en' ? 'Economic Corridors' : lang === 'ar' ? 'الممرات الاقتصادية' : 'ڕێڕەوە ئابوورییەکان'}</Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
+        }
         actions={
           <div className="text-xs font-mono text-slate-400 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
             {lang === 'en' ? 'MODEL: ECONOMETRIC_AI_V4' : 'STAT: IN_SYNC'}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layers, BookOpen, Shield, Activity, Database, Cpu, Server } from 'lucide-react';
 import { BLUEPRINT_METADATA } from '../../constants/blueprintMetadata';
 import { PageHeader, Badge } from '../../ui';
+import { useGovernment } from '../../providers/GovernmentProvider';
 
 export interface SovereignAtlasPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -9,6 +10,7 @@ export interface SovereignAtlasPanelProps {
 
 export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }) => {
   const [activeBlueprintId, setActiveBlueprintId] = useState<string>('system-context');
+  const { activeContext } = useGovernment();
 
   return (
     <div className="bg-[#111e2e]/90 p-5 lg:p-6 rounded-xl border border-slate-800/80 shadow-lg animate-fade-in flex flex-col gap-6">
@@ -17,7 +19,12 @@ export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }
         icon={<Layers />}
         title={lang === 'en' ? 'Sovereign Digital Infrastructure - Master Architect Blueprint Suite' : lang === 'ar' ? 'البنية التحتية القيادية الرقمية - مخططات المكتَب الهندسي الاستراتيجي العيادي' : 'ژێرخانی دیجیتاڵیی هەمەلایەن - نەخشەسازی سەرەکی ئەندازیاری نیشتمانیی'}
         description={lang === 'en' ? 'Explore the formal enterprise-grade system diagrams prepared by the Chief enterprise and systems architects for the Republic of Iraq Trade & Customs Ecosystem.' : lang === 'ar' ? 'استطلع مخططات النمذجة التقنية لجمهورية العراق المعدة من قبل المهندسين والمستشارين الفنيين لبوابة المنافذ الموحدة والمكوس.' : 'سەیری نەخشەسازی فەرمیی نیشتمانیی بکە کە لە لایەن گەورە ئەندازیارانی عێراق ئامادەکراوە بۆ هەمەجۆریی سیستەمی دەروازەی سنووری نیشتمانیی.'}
-        status={<Badge variant="gold">{lang === 'en' ? "Architecture Atlas" : lang === 'ar' ? "أطلس المعمارية" : "ئەتڵەسی تەلارسازی"}</Badge>}
+        status={
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="gold">{lang === 'en' ? "Architecture Atlas" : lang === 'ar' ? "أطلس المعمارية" : "ئەتڵەسی تەلارسازی"}</Badge>
+            <Badge variant="teal">{activeContext}</Badge>
+          </div>
+        }
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

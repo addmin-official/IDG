@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain
+  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw
 } from 'lucide-react';
 import { DICTIONARY } from '../mockData';
 import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
@@ -23,8 +23,21 @@ import { usePolicyAdvisor } from '../hooks/usePolicyAdvisor';
 import { useEconomicCorridor } from '../hooks/useEconomicCorridor';
 import { useNationalTelemetry } from '../hooks/useNationalTelemetry';
 
-export default function App() {
+// Government Provider
+import { GovernmentProvider, useGovernment } from '../providers/GovernmentProvider';
+import { GovernmentFederationProvider } from '../services/federation/GovernmentFederationProvider';
+
+function AppContent() {
   const { locale: lang, setLocale: setLang, t } = useI18n();
+  const { 
+    activeContext, 
+    setActiveContext, 
+    userRole, 
+    setUserRole, 
+    availableRoles, 
+    auditTrail 
+  } = useGovernment();
+
   const d = DICTIONARY[lang];
   const [activeTab, setActiveTab] = useState<string>('command-center');
 
@@ -47,6 +60,79 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0D1B2A] text-slate-100 flex flex-col font-sans antialiased text-sm" dir={lang !== 'en' ? 'rtl' : 'ltr'}>
+      
+      {/* 1. TOP-SHELF SOVEREIGN ADMINISTRATIVE JURISDICTION SWITCHER */}
+      <section id="idg-sovereign-switcher" className="bg-[#08101a] border-b border-[#cca553]/15 text-xs py-2 px-4 shadow-inner relative z-[60]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+          
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span className="text-[10px] text-slate-400 font-mono tracking-widest uppercase font-bold">
+              {lang === 'en' ? 'SOVEREIGN GATEWAY ADMINISTRATION CORE' : lang === 'ar' ? 'نظام إدارة البوابة السيادية' : 'سیستمی بەڕێوەبردنی دەروازەی سەروەری'}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 p-1 bg-[#101b2b] rounded-xl border border-slate-800 shadow">
+            
+            <button
+              id="switch-fed-iraq"
+              onClick={() => setActiveContext('FEDERAL_IRAQ')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeContext === 'FEDERAL_IRAQ'
+                  ? 'bg-gradient-to-r from-teal-900 to-slate-900 text-teal-300 border border-teal-500/30 shadow'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Landmark className="w-3.5 h-3.5 shrink-0" />
+              <span>{lang === 'en' ? 'Federal Iraq' : lang === 'ar' ? 'حكومة العراق الفيدرالية' : 'عێراقی فیدراڵ'}</span>
+            </button>
+
+            <button
+              id="switch-krg"
+              onClick={() => setActiveContext('KURDISTAN_REGION')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeContext === 'KURDISTAN_REGION'
+                  ? 'bg-gradient-to-r from-emerald-950 to-slate-900 text-emerald-400 border border-emerald-500/30 shadow'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 shrink-0" />
+              <span>{lang === 'en' ? 'Kurdistan Region (KRG)' : lang === 'ar' ? 'إقليم كوردستان (KRG)' : 'هەرێمی کوردستان (KRG)'}</span>
+            </button>
+
+            <button
+              id="switch-joint"
+              onClick={() => setActiveContext('JOINT_OPERATIONS')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeContext === 'JOINT_OPERATIONS'
+                  ? 'bg-gradient-to-r from-amber-950 to-slate-900 text-[#E0A96D] border border-amber-500/30 shadow'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Network className="w-3.5 h-3.5 shrink-0" />
+              <span>{lang === 'en' ? 'Joint Operations' : lang === 'ar' ? 'العمليات المشتركة' : 'ئۆپەراسیۆنە هاوبەشەکان'}</span>
+            </button>
+
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-slate-500 uppercase font-mono tracking-wider font-semibold">
+              {lang === 'en' ? 'ROLE' : lang === 'ar' ? 'الدور الناشط' : 'ڕۆڵی چالاک'}:
+            </span>
+            <select
+              value={userRole}
+              onChange={(e) => setUserRole(e.target.value)}
+              className="bg-slate-900 text-[#E0A96D] border border-slate-800 text-[11px] rounded-lg px-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-[#cca553] font-semibold"
+            >
+              {availableRoles.map(role => (
+                <option key={role} value={role}>{role}</option>
+              ))}
+            </select>
+          </div>
+
+        </div>
+      </section>
+
       <header id="idg-main-header" className="bg-[#111e2e] border-b border-[#E0A96D]/30 shadow-lg px-4 py-3.5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -56,18 +142,38 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2 text-start">
                 <h1 className="text-xl font-display font-bold tracking-wider text-white uppercase">{d.title}</h1>
-                <span className="text-xs bg-emerald-950/90 text-[#52B788] border border-emerald-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#52B788] animate-pulse"></span> Sovereign Live
-                </span>
+                
+                {/* DYNAMIC JURISDICTION BADGES */}
+                {activeContext === 'FEDERAL_IRAQ' && (
+                  <span className="text-xs bg-teal-950/90 text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1 font-extrabold shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
+                    {lang === 'en' ? 'FEDERAL JURISDICTION' : lang === 'ar' ? 'الولاية الاتحادية' : 'دەسەڵاتی فیدراڵ'}
+                  </span>
+                )}
+                {activeContext === 'KURDISTAN_REGION' && (
+                  <span className="text-xs bg-emerald-950/90 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1 font-extrabold shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    {lang === 'en' ? 'KRG JURISDICTION' : lang === 'ar' ? 'ولاية الإقليم' : 'دەسەڵاتی هەرێم'}
+                  </span>
+                )}
+                {activeContext === 'JOINT_OPERATIONS' && (
+                  <span className="text-xs bg-amber-950/90 text-amber-500 border border-amber-500/30 px-2 py-0.5 rounded font-mono uppercase tracking-widest flex items-center gap-1 font-extrabold shadow-sm animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    {lang === 'en' ? 'JOINT OPERATIONS' : lang === 'ar' ? 'العمليات المشتركة' : 'ئۆپەراسیۆنی هاوبەش'}
+                  </span>
+                )}
+
               </div>
               <p className="text-xs text-[#E0A96D] font-mono tracking-widest mt-0.5 font-medium text-start">{d.subtitle}</p>
             </div>
           </div>
+          
           <div className="flex flex-wrap items-center gap-4 text-xs">
             <div className="hidden lg:flex flex-col text-start md:text-right border-[#E0A96D]/20 pr-4 ltr:border-r rtl:border-l pl-4">
               <span className="text-slate-400 text-[10px] uppercase font-mono tracking-wider">{d.location}</span>
-              <span className="text-[#E0A96D] font-semibold">{d.securityAccess}</span>
+              <span className="text-[#E0A96D] font-semibold">{userRole}</span>
             </div>
+            
             <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700 shadow-lg" dir="ltr">
               <button id="lang-btn-en" onClick={() => setLang('en')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'en' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.en')}</button>
               <button id="lang-btn-ar" onClick={() => setLang('ar')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'ar' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.ar')}</button>
@@ -80,7 +186,7 @@ export default function App() {
       <nav id="idg-navigation" className="bg-[#122237] border-b border-slate-800 py-1.5 px-4 shadow">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2">
           {[
-            { id: 'command-center', label: t(lang, 'navigation.dashboard'), icon: Activity },
+            { id: 'command-center', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal PM Command' : lang === 'ar' ? 'قيادة رئيس الوزراء الاتحادي' : 'فەرماندەیی سەرۆک وەزیرانی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG PM Command' : lang === 'ar' ? 'قيادة رئيس وزراء الإقليم' : 'فەرماندەیی سەرۆک وەزیرانی هەرێم') : (lang === 'en' ? 'Joint Command Room' : lang === 'ar' ? 'غرفة القيادة المشتركة' : 'ژووری فەرماندەیی هاوبەش'), icon: Landmark },
             { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
             { id: 'ai-auditor', label: t(lang, 'navigation.analyzer'), icon: Cpu },
             { id: 'policy-advisor', label: t(lang, 'navigation.advisor'), icon: Landmark },
@@ -88,8 +194,8 @@ export default function App() {
             { id: 'ecosystem', label: t(lang, 'navigation.ecosystem'), icon: Network },
             { id: 'ai-brain', label: t(lang, 'navigation.aiBrain'), icon: Brain },
             { id: 'security', label: t(lang, 'navigation.security'), icon: Lock },
-            { id: 'data-fabric', label: t(lang, 'navigation.dataFabric'), icon: Database },
-            { id: 'sovereign-trust', label: t(lang, 'navigation.sovereignTrust'), icon: Shield }
+            { id: 'data-fabric', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal Data Fabric' : lang === 'ar' ? 'نسيج البيانات الفيدرالي' : 'بونیادی داتای فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG Data Fabric' : lang === 'ar' ? 'نسيج بيانات الإقليم' : 'بونیادی داتای هەرێم') : (lang === 'en' ? 'Federated Hub' : lang === 'ar' ? 'مركز البيانات الاتحادي المشترك' : 'سەنتەری داتای هاوبەش'), icon: Database },
+            { id: 'sovereign-trust', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal Identity' : lang === 'ar' ? 'الهوية الفيدرالية' : 'ناسنامەی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG Identity Authority' : lang === 'ar' ? 'سلطة هويات الإقليم' : 'دەسەڵاتی ناسنامەی هەرێم') : (lang === 'en' ? 'Federated Crypt' : lang === 'ar' ? 'التشفير الفيدرالي المشترك' : 'کلیلە هاوبەشەکان'), icon: Shield }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -113,18 +219,20 @@ export default function App() {
           <div className="flex flex-wrap gap-3 items-center">
             <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-slate-400 font-mono">SYNC: <b className="text-emerald-400">100% SECURE</b></span>
+              <span className="text-slate-400 font-mono">CONTEXT: <b className="text-emerald-400">{activeContext}</b></span>
             </span>
             <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
               <Database className="w-3 h-3 text-[#E0A96D]" />
-              <span className="text-slate-400 font-mono">BLOCKS: <b className="text-slate-200">#10,453</b></span>
+              <span className="text-slate-400 font-mono">STORAGE: <b className="text-slate-200">{activeContext === 'FEDERAL_IRAQ' ? 'BAGHDAD_SECURE_NODE_1' : activeContext === 'KURDISTAN_REGION' ? 'ERBIL_CLUSTER_DB_7' : 'FEDERATED_REPLICATED_RING'}</b></span>
             </span>
             <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
               <Shield className="w-3 h-3 text-slate-400" />
               <span className="text-slate-400 font-mono">UPTIME: <b className="text-[#E0A96D]">{uptime}%</b></span>
             </span>
           </div>
-          <span className="text-[#E0A96D] font-bold text-[11px] uppercase font-mono">{d.customStatus}</span>
+          <span className="text-[#E0A96D] font-bold text-[11px] uppercase font-mono">
+            {activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL SOVEREIGN SECURED' : activeContext === 'KURDISTAN_REGION' ? 'KRG REGIONAL AUTHORITY INTEGRAL' : 'INTER-FEDERATED INTEROPERABILITY NODE ACTIVE'}
+          </span>
         </div>
       </section>
 
@@ -165,8 +273,12 @@ export default function App() {
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-[#cca553]" />
             <div>
-              <p className="text-slate-300 font-semibold font-mono">IRAQ DIGITAL GATEWAY (IDG) • SOVEREIGN NATIONAL SECURITY STREAMS</p>
-              <p className="text-[10px] text-slate-500">Council of Ministers Unified Custom Interoperability Infrastructure</p>
+              <p className="text-slate-300 font-semibold font-mono uppercase">
+                IRAQ DIGITAL GATEWAY (IDG) • DUAL-ENGINE SOVEREIGN ADMINISTRATION
+              </p>
+              <p className="text-[10px] text-slate-500">
+                Council of Ministers Unified Custom Interoperability Infrastructure & Kurdistan Regional Government Executive Office Handshake
+              </p>
             </div>
           </div>
           <div className="flex gap-4 text-slate-500 font-mono text-[10px]">
@@ -175,5 +287,16 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  const { locale } = useI18n();
+  return (
+    <GovernmentProvider lang={locale}>
+      <GovernmentFederationProvider>
+        <AppContent />
+      </GovernmentFederationProvider>
+    </GovernmentProvider>
   );
 }
