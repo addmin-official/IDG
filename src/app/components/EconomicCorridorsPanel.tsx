@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp, RefreshCw, BookOpen, Shield } from 'lucide-react';
-import { PageHeader, Badge } from '../../ui';
+import { PageHeader, Badge, UnifiedEmptyState } from '../../ui';
 
 export interface EconomicCorridorsPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -149,16 +149,17 @@ export const EconomicCorridorsPanel: React.FC<EconomicCorridorsPanelProps> = ({
         <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[420px] flex flex-col justify-between">
           
           {!predictionResult && !isPredicting && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
-              <div className="p-4 bg-slate-900/60 rounded-full border border-slate-800 mb-4 animate-pulse">
-                <TrendingUp className="w-12 h-12 text-[#cca553]" />
-              </div>
-              <h3 className="font-semibold text-slate-200 uppercase tracking-widest text-sm mb-1">
-                Economic Corridor Simulator Standby
-              </h3>
-              <p className="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
-                Adjust macro policy levels, select a corridor trade lane on the left and synthesize future planning projections for the National Treasury.
-              </p>
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <UnifiedEmptyState 
+                type="no-data" 
+                lang={lang} 
+                action={
+                  <div className="flex items-center gap-2 text-[10px] bg-slate-950/80 px-3.5 py-2 rounded-xl text-[#E0A96D] border border-[#E0A96D]/20 font-mono uppercase tracking-wider">
+                    <TrendingUp className="w-4 h-4 shrink-0" />
+                    SIMULATOR STANDBY ACTIVE
+                  </div>
+                } 
+              />
             </div>
           )}
 

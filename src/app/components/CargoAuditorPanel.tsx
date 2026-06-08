@@ -1,7 +1,7 @@
 import React from 'react';
 import { Cpu, RefreshCw, Shield, Check, AlertTriangle, Server } from 'lucide-react';
 import { CARGO_PRESETS } from '../../mockData';
-import { PageHeader, Badge } from '../../ui';
+import { PageHeader, Badge, UnifiedEmptyState } from '../../ui';
 
 export interface CargoAuditorPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -212,20 +212,17 @@ export const CargoAuditorPanel: React.FC<CargoAuditorPanelProps> = ({
         <div className="bg-[#111e2e]/90 p-5 rounded-xl border border-slate-800/80 shadow-md min-h-[420px] flex flex-col justify-between">
           
           {!auditResult && !isAuditing && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
-              <div className="p-4 bg-slate-950/60 rounded-full border border-slate-800 mb-4 animate-pulse">
-                <Cpu className="w-12 h-12 text-[#cca553]" />
-              </div>
-              <h3 className="font-semibold text-slate-200 uppercase tracking-widest text-sm mb-1">
-                Cognitive Audit Brain Standby
-              </h3>
-              <p className="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
-                Configure your cargo parameters on the left and trigger the sovereign AI compliance algorithm to instantly map tariffs and identify contraband discrepancies under Iraqi Law No. 23.
-              </p>
-              <div className="flex items-center gap-2 text-xs bg-slate-950/50 px-3 py-1.5 rounded text-amber-400 border border-amber-500/20 font-mono">
-                <Shield className="w-4 h-4 shrink-0" />
-                FED-CLEAR SECURITY SYSTEM READY
-              </div>
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <UnifiedEmptyState 
+                type="no-data" 
+                lang={lang} 
+                action={
+                  <div className="flex items-center gap-2 text-[10px] bg-slate-950/80 px-3.5 py-2 rounded-xl text-amber-400 border border-amber-500/20 font-mono uppercase tracking-wider">
+                    <Shield className="w-4 h-4 shrink-0" />
+                    FED-CLEAR COGNITIVE READY
+                  </div>
+                } 
+              />
             </div>
           )}
 

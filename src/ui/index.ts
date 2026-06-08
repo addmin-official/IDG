@@ -28,6 +28,15 @@ export { Pagination } from './Pagination';
 export { Avatar } from './Avatar';
 export { Skeleton } from './Skeleton';
 export { EmptyState } from './EmptyState';
+export { 
+  UnifiedEmptyState, 
+  UnifiedErrorState, 
+  UnifiedToast, 
+  UnifiedToastContainer, 
+  UnifiedModal, 
+  UnifiedSearchBar 
+} from './Unified';
+
 
 // Data Visualization System
 export { ChartContainer } from './ChartContainer';
