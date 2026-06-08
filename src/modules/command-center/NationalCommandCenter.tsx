@@ -16,6 +16,7 @@ import { useGovernment, JurisdictionType } from '../../providers/GovernmentProvi
 import { FederalPrimeMinisterDesk } from '../../app/components/FederalPrimeMinisterDesk';
 import { KRGPrimeMinisterDesk } from '../../app/components/KRGPrimeMinisterDesk';
 import { JointExecutiveCouncil } from '../../app/components/JointExecutiveCouncil';
+import { FederationOperationsCenter } from '../federation/FederationOperationsCenter';
 
 interface NationalCommandCenterProps {
   lang: Language;
@@ -46,7 +47,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   
   // Capability sub-navigation inside the PM Command Center
   const [activeCapability, setActiveCapability] = useState<
-    'brief' | 'analytics' | 'security' | 'economy' | 'identity' | 'infra' | 'policy' | 'cabinet'
+    'brief' | 'analytics' | 'security' | 'economy' | 'identity' | 'infra' | 'policy' | 'cabinet' | 'federation'
   >('brief');
 
   // Multi-government titles & translation mapping
@@ -135,7 +136,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           </Badge>
         }
         actions={
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/60 p-2 border border-slate-800 rounded-xl">
+          <div className="flex flex-wrap items-center gap-1.5 bg-slate-900/60 pt-[10px] pb-2 pl-1 pr-[10px] border border-slate-800 rounded-xl">
             <span className="text-[9px] font-mono text-slate-500 uppercase px-2 font-bold select-none text-start">
               {getLabel('CAPABILITIES:', 'القدرات التنفيذية:', 'تواناکان:')}
             </span>
@@ -148,18 +149,19 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               { id: 'infra', label: getLabel('Infra', 'البنية التحتية', 'ژێرخان'), icon: Server },
               { id: 'policy', label: getLabel('Policy', 'السياسة', 'یاسا کانی'), icon: HelpCircle },
               { id: 'cabinet', label: getLabel('Cabinet', 'مجلس الوزراء', 'ئەنجومەن'), icon: Landmark },
+              { id: 'federation', label: getLabel('Federation', 'الفيدرالية', 'پەیماننامەکان'), icon: Network },
             ].map((cap) => (
               <button
                 key={cap.id}
                 onClick={() => setActiveCapability(cap.id as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer border ${
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer border ${
                   activeCapability === cap.id 
                     ? 'bg-[#1a2c42] text-[#E0A96D] border-[#E0A96D]/40 font-bold' 
                     : 'text-slate-400 hover:text-white border-transparent'
                 }`}
               >
-                <cap.icon className="w-3.5 h-3.5 text-[#cca553]" />
-                <span className="hidden md:inline">{cap.label}</span>
+                <cap.icon className="w-3.5 h-3.5 text-[#cca553] shrink-0" />
+                <span className="inline-block whitespace-nowrap">{cap.label}</span>
               </button>
             ))}
           </div>
@@ -628,6 +630,13 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
             {activeContext === 'JOINT_OPERATIONS' && (
               <JointExecutiveCouncil lang={lang} />
             )}
+          </div>
+        )}
+
+        {/* TAB 9: FEDERATION */}
+        {activeCapability === 'federation' && (
+          <div className="w-full">
+            <FederationOperationsCenter lang={lang} />
           </div>
         )}
 

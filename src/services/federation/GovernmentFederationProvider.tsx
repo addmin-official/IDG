@@ -33,7 +33,7 @@ export const GovernmentFederationProvider: React.FC<{ children: React.ReactNode 
     enableUnifiedIdentity: false,
   });
 
-  // Keep flags synchronized with mode changes
+  // هاوتاکردنی ئاڵاکانی سیستەم (Flags) لەگەڵ گۆڕانکارییەکانی دۆخی فیدراڵی
   const applyModeDefaults = (mode: FederationModeType) => {
     switch (mode) {
       case 'SEPARATED':
@@ -68,9 +68,10 @@ export const GovernmentFederationProvider: React.FC<{ children: React.ReactNode 
     localStorage.setItem('idg_federation_mode', mode);
     applyModeDefaults(mode);
     
+    // تۆمارکردنی چالاکییەکان لە سیستەمی کۆنترۆڵی باڵادا
     logAction(
       'Sovereign Architecture Controller',
-      `Federation architecture paradigm transitioned to [${mode}]. System feature gates and compliance policies synchronized.`,
+      `گۆڕینی پارادایمی تەلارسازیی فیدراڵی بۆ [${mode}]. دەروازە تایبەتمەندییەکان و سیاسەتەکانی پابەندبوون هاوتا کران.`,
       'FEDERATED_CORE_TRANSITION_PROTOCOL_V1'
     );
   };
@@ -84,7 +85,7 @@ export const GovernmentFederationProvider: React.FC<{ children: React.ReactNode 
       const updated = { ...prev, [flagName]: !prev[flagName] };
       logAction(
         'Sovereign System Controller',
-        `Adjusted capability flag [${flagName}] to [${updated[flagName] ? 'ENABLED' : 'DISABLED'}].`,
+        `ڕێکخستنی ئاڵای توانایی [${flagName}] بۆ [${updated[flagName] ? 'ENABLED' : 'DISABLED'}].`,
         'FEDERATION_CAPABILITY_ADJUSTMENT'
       );
       return updated;
@@ -106,7 +107,7 @@ export const GovernmentFederationProvider: React.FC<{ children: React.ReactNode 
 export const useFederation = () => {
   const context = useContext(FederationContext);
   if (!context) {
-    throw new Error('useFederation must be used within a GovernmentFederationProvider');
+    throw new Error('useFederation دەبێت لەناو GovernmentFederationProvider بەکاربهێنرێت');
   }
   return context;
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw
+  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw, Coins
 } from 'lucide-react';
 import { DICTIONARY } from '../mockData';
 import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
@@ -16,6 +16,7 @@ import SovereignAtlasPanel from './components/SovereignAtlasPanel';
 import CargoAuditorPanel from './components/CargoAuditorPanel';
 import PolicyAdvisorPanel from './components/PolicyAdvisorPanel';
 import EconomicCorridorsPanel from './components/EconomicCorridorsPanel';
+import { SovereignFiscalSystem } from './components/ssos/SovereignFiscalSystem';
 
 // Isolated Hooks
 import { useManifestAudit } from '../hooks/useManifestAudit';
@@ -26,6 +27,7 @@ import { useNationalTelemetry } from '../hooks/useNationalTelemetry';
 // Government Provider
 import { GovernmentProvider, useGovernment } from '../providers/GovernmentProvider';
 import { GovernmentFederationProvider } from '../services/federation/GovernmentFederationProvider';
+import { SsosProvider } from '../providers/SsosProvider';
 
 function AppContent() {
   const { locale: lang, setLocale: setLang, t } = useI18n();
@@ -188,6 +190,7 @@ function AppContent() {
           {[
             { id: 'command-center', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal PM Command' : lang === 'ar' ? 'قيادة رئيس الوزراء الاتحادي' : 'فەرماندەیی سەرۆک وەزیرانی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG PM Command' : lang === 'ar' ? 'قيادة رئيس وزراء الإقليم' : 'فەرماندەیی سەرۆک وەزیرانی هەرێم') : (lang === 'en' ? 'Joint Command Room' : lang === 'ar' ? 'غرفة القيادة المشتركة' : 'ژووری فەرماندەیی هاوبەش'), icon: Landmark },
             { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
+            { id: 'sovereign-fiscal', label: lang === 'en' ? 'Sovereign Fiscal Registry' : lang === 'ar' ? 'الخزينة والمالية السيادية' : 'گەنجینە و دارایی نیشتمانی', icon: Coins },
             { id: 'ai-auditor', label: t(lang, 'navigation.analyzer'), icon: Cpu },
             { id: 'policy-advisor', label: t(lang, 'navigation.advisor'), icon: Landmark },
             { id: 'economic-corridors', label: t(lang, 'navigation.intelligence'), icon: TrendingUp },
@@ -266,6 +269,7 @@ function AppContent() {
         {activeTab === 'security' && <SecurityCommandCenter lang={lang} />}
         {activeTab === 'data-fabric' && <NationalDataCommandCenter lang={lang} />}
         {activeTab === 'sovereign-trust' && <NationalIdentityCommandCenter lang={lang} />}
+        {activeTab === 'sovereign-fiscal' && <SovereignFiscalSystem lang={lang} />}
       </main>
 
       <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start">
@@ -295,7 +299,9 @@ export default function App() {
   return (
     <GovernmentProvider lang={locale}>
       <GovernmentFederationProvider>
-        <AppContent />
+        <SsosProvider lang={locale}>
+          <AppContent />
+        </SsosProvider>
       </GovernmentFederationProvider>
     </GovernmentProvider>
   );

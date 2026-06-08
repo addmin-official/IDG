@@ -3,7 +3,7 @@ import { GovernmentContextType, JurisdictionType } from '../../providers/Governm
 export class JurisdictionResolver {
   
   /**
-   * Translates the UI GovernmentContext into a literal database jurisdiction type
+   * وەرگێڕانی GovernmentContext-ی ڕووکار بۆ جۆرێکی لیتراڵی داتابەیسی دەسەڵاتی دادوەری (Jurisdiction)
    */
   static resolveContextToJurisdiction(context: GovernmentContextType): JurisdictionType {
     switch (context) {
@@ -19,8 +19,8 @@ export class JurisdictionResolver {
   }
 
   /**
-   * Verifies if a user role operating in the active context has strict access
-   * to a resource belonging to a specific jurisdiction.
+   * پشتڕاستکردنەوەی ئەوەی کە ئایا ڕۆڵی بەکارهێنەر لە چوارچێوەی چالاکدا ڕێگەی پێدەدرێت
+   * دەستی بگات بە سەرچاوەیەک کە سەر بە دەسەڵاتێکی دیاریکراوە.
    */
   static hasAccess({
     userRole,
@@ -34,26 +34,28 @@ export class JurisdictionResolver {
     federationMode: 'SEPARATED' | 'FEDERATED' | 'UNIFIED';
   }): boolean {
     
-    // In UNIFIED mode, all boundaries are dissolved; everyone with access of correct status can view
+    // لە دۆخی UNIFIED، هەموو سنوورەکان نامێنن؛ هەرکەسێک متمانەی گونجاوی هەبێت دەتوانێت ببینێت
     if (federationMode === 'UNIFIED') {
       return true;
     }
 
     const contextJur = this.resolveContextToJurisdiction(activeContext);
 
-    // If we are looking at Joint Operations context, we have bridged visibility (but action rules still apply!)
+    // ئەگەر لە چوارچێوەی "Joint Operations" بین، بینینی هاوبەشمان دەبێت 
+    // (بەڵام یاساکانی کارکردن هەر بەکاردێن!)
     if (activeContext === 'JOINT_OPERATIONS') {
       return true;
     }
 
-    // Strict SEPARATED mode: No cross-boundary access under any condition
+    // دۆخی SEPARATED (جیاکراوە): هیچ جۆرە دەستپێگەیشتنێکی پەڕینەوە لە سنوورەکان لە هیچ دۆخێکدا ڕێگەپێدراو نییە
     if (federationMode === 'SEPARATED') {
       return contextJur === resourceJurisdiction || resourceJurisdiction === 'joint';
     }
 
-    // FEDERATED Mode: Dual handshake allows read access but keeps data logically separate
+    // دۆخی FEDERATED (فیدراڵی): دڵنیایی دوولایەنە (Handshake) ڕێگە بە خوێندنەوە دەدات 
+    // بەڵام داتاکان بە لۆژیکی جیادەهێڵێتەوە
     if (federationMode === 'FEDERATED') {
-      // Allows viewing federal and of course native, but limits deep operational mutations
+      // ڕێگە بە بینینی فیدراڵی و خۆماڵی دەدات، بەڵام گۆڕانکارییە قووڵەکان سنووردار دەکات
       return true; 
     }
 
@@ -61,7 +63,8 @@ export class JurisdictionResolver {
   }
 
   /**
-   * Determines if the active user role can authorize federation actions (approvals, rejections).
+   * دیاری دەکات کە ئایا ڕۆڵی بەکارهێنەری چالاک دەتوانێت بڕیارەکانی فیدراڵیزەکردن پەسەند بکات
+   * (وەک پەسەندکردن یان ڕەتکردنەوە).
    */
   static canMutateFederation({
     userRole,
@@ -73,10 +76,10 @@ export class JurisdictionResolver {
     federationMode: 'SEPARATED' | 'FEDERATED' | 'UNIFIED';
   }): boolean {
     if (federationMode === 'SEPARATED') {
-      return false; // Under absolute separation, federation is deactivated
+      return false; // لە دۆخی جیابوونەوەی ڕەها، فیدراڵیزەکردن ناچالاک دەبێت
     }
 
-    // High roles can always approve or coordinate
+    // ڕۆڵە باڵاکان هەمیشە دەتوانن پەسەند یان هەماهەنگی بکەن
     const lowerRole = userRole.toLowerCase();
     const isPrimeMinister = lowerRole.includes('prime') || lowerRole.includes('pm') || lowerRole.includes('minister');
     const isDirectorOrCoordinator = lowerRole.includes('director') || lowerRole.includes('coordinator') || lowerRole.includes('authority') || lowerRole.includes('arbitrator');

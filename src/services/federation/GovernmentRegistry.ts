@@ -92,14 +92,6 @@ export const GOVERNMENT_REGISTRY: GovernmentInfo[] = [
   }
 ];
 
-export function getGovernmentByCode(code: 'FEDERAL_IRAQ' | 'KURDISTAN_REGION' | 'JOINT_OPERATIONS'): GovernmentInfo {
-  const gov = GOVERNMENT_REGISTRY.find(g => g.code === code);
-  if (!gov) {
-    throw new Error(`Government with code ${code} not found in GovernmentRegistry.`);
-  }
-  return gov;
-}
-
 export function getGovernmentTranslation(info: GovernmentInfo, lang: Language): { name: string; capital: string; governingLaw: string } {
   return {
     name: info.name[lang] || info.name.en,
