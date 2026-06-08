@@ -15,15 +15,15 @@ export interface AssetAuditRecord {
 export class AssetAuditEngine {
   private static auditLogs: AssetAuditRecord[] = [
     {
-      auditId: 'AUD-AST-001',
-      assetId: 'AST-KIRKUK-NORTHOIL',
-      timestamp: '2026-05-15T09:00:00Z',
-      auditor: 'Joint Supreme Audit Council',
-      integrityHashOk: true,
-      ownershipVerifiedOk: true,
-      valuationAccurateOk: true,
-      complianceRating: 94,
-      notes: 'Carbon reserve boundaries are validated against global cadastre. Minor infrastructure adjustments mapped.'
+      auditId: 'AUD-AST-001', // | ناسنامەی وردبینی
+      assetId: 'AST-KIRKUK-NORTHOIL', // | ناسنامەی سەروەت
+      timestamp: '2026-05-15T09:00:00Z', // | کاتی تۆمارکردن
+      auditor: '| ئەنجومەنی باڵای وردبینی هاوبەش',
+      integrityHashOk: true, // | دروستی مۆرکردن
+      ownershipVerifiedOk: true, // | پشتڕاستکردنەوەی خاوەندارێتی
+      valuationAccurateOk: true, // | وردیی نرخاندن
+      complianceRating: 94, // | ئاستی پابەندبوون
+      notes: '| سنووری یەدەگی کاربۆن بەپێی تۆماری جیهانی پشتڕاستکراونەتەوە. دەستکارییە بچووکەکانی ژێرخان نەخشەکێشران.'
     }
   ];
 
@@ -38,16 +38,16 @@ export class AssetAuditEngine {
   ): { success: boolean; record?: AssetAuditRecord; message: string } {
     const asset = NationalAssetRegistry.getAssetById(assetId);
     if (!asset) {
-      return { success: false, message: 'Asset not found in state asset database' };
+      return { success: false, message: '| سەروەتەکە لە بنکەدراوەی سەروەتی دەوڵەتدا نەدۆزرایەوە' };
     }
 
     const auditId = `AUD-AST-${String(this.auditLogs.length + 1).padStart(3, '0')}`;
     
-    // Simulate verifying chain integrity
+    // | سیمولاسیۆنی پشتڕاستکردنەوەی یەکپارچەیی زنجیرەکە
     const stateLedger = NationalAssetRegistry.getLedger().filter(l => l.assetId === assetId);
     let integrityHashOk = true;
     
-    // Verify hash chain
+    // | پشتڕاستکردنەوەی زنجیرەی مۆرەکان (Hash)
     for (let i = 1; i < stateLedger.length; i++) {
       if (stateLedger[i].previousHash !== stateLedger[i - 1].hash) {
         integrityHashOk = false;
@@ -55,7 +55,7 @@ export class AssetAuditEngine {
       }
     }
 
-    const complianceScore = 85 + Math.floor(Math.random() * 16); // 85 to 100
+    const complianceScore = 85 + Math.floor(Math.random() * 16); // | ٨٥ بۆ ١٠٠
     
     const newRecord: AssetAuditRecord = {
       auditId,
@@ -75,21 +75,21 @@ export class AssetAuditEngine {
       ...asset,
       complianceScore,
       lastAuditDate: new Date().toISOString().split('T')[0],
-      lifecycle: 'VERIFIED'
+      lifecycle: 'VERIFIED' // | پشتڕاستکراو
     };
     NationalAssetRegistry.updateAsset(updated, auditor);
 
     NationalAssetRegistry.appendLedgerRecord(
       assetId,
-      'AUDIT',
+      'AUDIT', // | وردبینی
       auditor,
-      `Full physical audit performed. Integrity verified: ${integrityHashOk ? 'YES' : 'FAIL'}. Compliance score assigned: ${complianceScore}%.`
+      `| وردبینی تەواوی فیزیکی ئەنجامدرا. یەکپارچەیی پشتڕاستکرایەوە: ${integrityHashOk ? 'بەڵێ' : 'شکست'}. نمرەی پابەندبوون دیاریکرا: ${complianceScore}٪.`
     );
 
     return {
       success: true,
       record: newRecord,
-      message: `Audit recorded successfully. Compliance score updated to ${complianceScore}%.`
+      message: `| وردبینییەکە بە سەرکەوتوویی تۆمارکرا. نمرەی پابەندبوون نوێکرایەوە بۆ ${complianceScore}٪.`
     };
   }
 }

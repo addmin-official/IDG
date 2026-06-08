@@ -1,11 +1,11 @@
 import { NationalAssetRegistry, SovereignPhysicalAsset } from './NationalAssetRegistry';
 
 export interface DepreciationScheduleItem {
-  year: number;
-  beginningBookValueUSD: number;
-  depreciationExpenseUSD: number;
-  endingBookValueUSD: number;
-  accumulatedDepreciationUSD: number;
+  year: number; // | ساڵ
+  beginningBookValueUSD: number; // | بەهای کتێبی سەرەتایی (ملیۆن دۆلار)
+  depreciationExpenseUSD: number; // | خەرجی دابەزینی نرخ (ملیۆن دۆلار)
+  endingBookValueUSD: number; // | بەهای کتێبی کۆتایی (ملیۆن دۆلار)
+  accumulatedDepreciationUSD: number; // | کۆی دابەزینی نرخ (ملیۆن دۆلار)
 }
 
 export class AssetDepreciationEngine {
@@ -36,6 +36,7 @@ export class AssetDepreciationEngine {
     return schedule;
   }
 
+  // | جێبەجێکردنی پڕۆسەی دابەزینی نرخی ساڵانە
   public static runAnnualDepreciationPass(actor: string): { success: boolean; affectedCount: number } {
     const list = NationalAssetRegistry.getAssets();
     let affectedCount = 0;
@@ -51,9 +52,9 @@ export class AssetDepreciationEngine {
         NationalAssetRegistry.updateAsset(updated, actor);
         NationalAssetRegistry.appendLedgerRecord(
           asset.id,
-          'DEPRECIATION',
+          'DEPRECIATION', // | دابەزینی نرخ
           actor,
-          `Automated depreciation amortization applied. Reduced value by $${depAmt.toFixed(2)}M.`
+          `| دابەزینی نرخی ئۆتۆماتیکی جێبەجێکرا. بەهای سەروەتەکە بە بڕی ${depAmt.toFixed(2)} ملیۆن دۆلار کەمکرایەوە.`
         );
         affectedCount++;
       }

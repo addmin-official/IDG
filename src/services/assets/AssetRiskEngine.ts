@@ -1,13 +1,13 @@
 import { NationalAssetRegistry, SovereignPhysicalAsset } from './NationalAssetRegistry';
 
 export interface AssetRiskAssessment {
-  assetId: string;
-  environmentalRiskScore: number; // 0-100
-  securityThreatScore: number; // 0-100
-  marketVolatilityScore: number; // 0-100
-  geopoliticalExposureScore: number; // 0-100
-  overallRiskScore: number; // 0-100
-  mitigationProtocol: string;
+  assetId: string; // | ناسنامەی سەروەت
+  environmentalRiskScore: number; // | نمرەی مەترسی ژینگەیی (٠-١٠٠)
+  securityThreatScore: number; // | نمرەی هەڕەشەی ئەمنی (٠-١٠٠)
+  marketVolatilityScore: number; // | نمرەی ناجێگیری بازاڕ (٠-١٠٠)
+  geopoliticalExposureScore: number; // | نمرەی بەرکەوتنی جیۆپۆلیتیکی (٠-١٠٠)
+  overallRiskScore: number; // | کۆی نمرەی مەترسی (٠-١٠٠)
+  mitigationProtocol: string; // | پڕۆتۆکۆڵی کەمکردنەوەی مەترسی
 }
 
 export class AssetRiskEngine {
@@ -21,11 +21,11 @@ export class AssetRiskEngine {
         marketVolatilityScore: 0,
         geopoliticalExposureScore: 0,
         overallRiskScore: 0,
-        mitigationProtocol: 'N/A'
+        mitigationProtocol: '| نەبوو'
       };
     }
 
-    // Deterministic raw scoring
+    // | نمرەدانانی خاو (Raw) بە شێوەیەکی دەترمینستیک
     const isStrategic = ['STRATEGIC', 'ENERGY', 'MILITARY'].includes(asset.category);
     const environmentalRiskScore = isStrategic ? 35 : 15;
     const securityThreatScore = asset.jurisdiction === 'joint' ? 45 : asset.jurisdiction === 'krg' ? 30 : 20;
@@ -37,8 +37,8 @@ export class AssetRiskEngine {
     );
 
     const mitigationProtocol = overallRiskScore > 40
-      ? 'Deploy Joint Federal-KRG Security Garrison and install automated digital surveillance nodes.'
-      : 'Standard automated checkpoint guard protocol and biennial physical audits.';
+      ? '| جێگیرکردنی گاریسۆنی ئەمنی هاوبەشی فیدراڵ-هەرێم و دامەزراندنی نوودەکانی چاودێری دیجیتاڵی ئۆتۆماتیکی.'
+      : '| پڕۆتۆکۆڵی ئاسایی پاسەوانی خاڵی پشکنینی ئۆتۆماتیکی و وردبینی فیزیایی دوو ساڵ جارێک.';
 
     return {
       assetId,
@@ -66,9 +66,9 @@ export class AssetRiskEngine {
 
     NationalAssetRegistry.appendLedgerRecord(
       assetId,
-      'RISK_UPDATE',
+      'RISK_UPDATE', // | نوێکردنەوەی مەترسی
       actor,
-      `State asset risk assessment executed. Integrated Risk Profile Score resolved to: ${assessment.overallRiskScore}%.`
+      `| هەڵسەنگاندنی مەترسی سەروەتی دەوڵەت جێبەجێکرا. نمرەی پرۆفایلی مەترسی یەکخراو دیاریکرا بۆ: ${assessment.overallRiskScore}٪.`
     );
 
     return assessment.overallRiskScore;

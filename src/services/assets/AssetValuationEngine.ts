@@ -1,12 +1,12 @@
 import { NationalAssetRegistry, SovereignPhysicalAsset } from './NationalAssetRegistry';
 
 export interface ValuationQuote {
-  basis: string;
-  previousValuationUSD: number;
-  newValuationUSD: number;
-  deltaUSD: number;
-  revaluedAt: string;
-  assessor: string;
+  basis: string; // | بنەما
+  previousValuationUSD: number; // | نرخاندنی پێشوو (ملیۆن دۆلار)
+  newValuationUSD: number; // | نرخاندنی نوێ (ملیۆن دۆلار)
+  deltaUSD: number; // | جیاوازی نرخ (ملیۆن دۆلار)
+  revaluedAt: string; // | کاتی دووبارە نرخاندن
+  assessor: string; // | هەڵسەنگێنەر
 }
 
 export class AssetValuationEngine {
@@ -18,7 +18,7 @@ export class AssetValuationEngine {
   ): { success: boolean; quote?: ValuationQuote; message: string } {
     const asset = NationalAssetRegistry.getAssetById(assetId);
     if (!asset) {
-      return { success: false, message: 'Asset not found in national registry' };
+      return { success: false, message: '| سەروەتەکە لە تۆماری نیشتمانیدا نەدۆزرایەوە' };
     }
 
     const previousValuationUSD = asset.valuationUSD;
@@ -43,18 +43,19 @@ export class AssetValuationEngine {
 
     NationalAssetRegistry.appendLedgerRecord(
       assetId,
-      'VALUATION',
+      'VALUATION', // | نرخاندن
       assessor,
-      `Asset Valuation recomputed manually. Method: ${basis}. Delta: $${deltaUSD}M USD.`
+      `| نرخاندنی سەروەت بە دەست نوێکرایەوە. ڕێگاکە: ${basis}. جیاوازی: ${deltaUSD} ملیۆن دۆلار.`
     );
 
     return {
       success: true,
       quote,
-      message: `Revaluation of $${newValuationUSD}M registered in ledger.`
+      message: `| نرخاندنی ${newValuationUSD} ملیۆن دۆلار لە دەفتەری گشتیدا تۆمارکرا.`
     };
   }
 
+  // | پێشبینیکردنی بەرزبوونەوەی نرخی سەروەت
   public static projectAssetAppreciation(assetId: string, yearsAhead: number): number[] {
     const asset = NationalAssetRegistry.getAssetById(assetId);
     if (!asset) return [];
@@ -62,7 +63,7 @@ export class AssetValuationEngine {
     let current = asset.valuationUSD;
     const path: number[] = [current];
 
-    // Simulating yield appreciation path
+    // | سیمولاسیۆنی ڕێڕەوی گەشەکردنی داهات
     for (let i = 1; i <= yearsAhead; i++) {
       const growthFactor = 1 + (asset.annualRevenueYieldUSD / (asset.valuationUSD || 1)) * 0.5 - asset.depreciationRate;
       current = Math.round(current * growthFactor * 10) / 10;

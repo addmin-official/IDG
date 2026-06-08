@@ -1,5 +1,6 @@
 import { CBIRegistry, SovereignAsset } from '../treasury/CBIRegistry';
 import { NationalSettlementEngine } from '../treasury/NationalSettlementEngine';
+import { AssetLifecycleState } from './AssetLifecycleEngine';
 
 export type AssetCategory =
   | 'LAND'
@@ -19,14 +20,7 @@ export type AssetCategory =
   | 'MINERAL'
   | 'STRATEGIC';
 
-export type AssetLifecycle =
-  | 'REGISTERED'
-  | 'VERIFIED'
-  | 'ACTIVE'
-  | 'UNDER_AUDIT'
-  | 'TRANSFER_PENDING'
-  | 'DECOMMISSIONED'
-  | 'ARCHIVED';
+export type AssetLifecycle = AssetLifecycleState;
 
 export type OwnershipModel =
   | 'FEDERAL_IRAQ'
@@ -41,7 +35,8 @@ export interface SovereignPhysicalAsset {
   id: string;
   name: string;
   category: AssetCategory;
-  lifecycle: AssetLifecycle;
+  lifecycle: AssetLifecycleState;
+  lifecycleState: AssetLifecycleState;
   ownership: OwnershipModel;
   jurisdiction: 'federal' | 'krg' | 'joint';
   valuationUSD: number; // Millions USD
@@ -55,145 +50,194 @@ export interface SovereignPhysicalAsset {
   isCustomRegistered?: boolean;
 }
 
+
+export const AssetCategoryLabels: Record<AssetCategory, string> = {
+  LAND: '| زەوی',
+  BUILDING: '| باڵەخانە',
+  INFRASTRUCTURE: '| ژێرخان',
+  ENERGY: '| وزە',
+  WATER: '| ئاو',
+  TRANSPORT: '| گواستنەوە',
+  AIRPORT: '| فڕۆکەخانە',
+  SEAPORT: '| بەندەر',
+  BORDER_GATE: '| دەروازەی سنووری',
+  MILITARY: '| سەربازی',
+  DIGITAL: '| دیجیتاڵ',
+  TELECOM: '| پەیوەندییەکان',
+  INDUSTRIAL: '| پیشەسازی',
+  AGRICULTURE: '| کشتوکاڵ',
+  MINERAL: '| سامانی کانزایی',
+  STRATEGIC: '| ستراتیژی'
+};
+export const AssetLifecycleLabels: Record<AssetLifecycle, string> = {
+  REGISTERED: '| تۆمارکراو',
+  VERIFIED: '| پشتڕاستکراو',
+  ACTIVE: '| چالاک',
+  UNDER_AUDIT: '| لە ژێر وردبینیدا',
+  TRANSFER_PENDING: '| چاوەڕوانی گواستنەوە',
+  DECOMMISSIONED: '| لەکارخراو',
+  ARCHIVED: '| ئەرشیفکراو'
+};
+
+export const OwnershipLabels: Record<OwnershipModel, string> = {
+  FEDERAL_IRAQ: '| فیدراڵی عێراق',
+  KRG: '| هەرێمی کوردستان',
+  JOINT: '| هاوبەش',
+  MINISTRY: '| وەزارەت',
+  GOVERNORATE: '| پارێزگا',
+  MUNICIPALITY: '| شارەوانی',
+  STATE_ENTERPRISE: '| کۆمپانیای دەوڵەت'
+};
+
 export interface SHA256LedgerRecord {
-  hash: string;
-  previousHash: string;
-  timestamp: string;
-  assetId: string;
-  eventType: 'REGISTRATION' | 'VALUATION' | 'DEPRECIATION' | 'TRANSFER' | 'AUDIT' | 'RISK_UPDATE';
-  actor: string;
-  details: string;
+  hash: string; // | مۆرکردنی دیجیتاڵیی (Hash)
+  previousHash: string; // | مۆرکردنی پێشوو
+  timestamp: string; // | کاتی تۆمارکردن
+  assetId: string; // | ناسنامەی سەروەت
+  eventType: 'REGISTRATION' | 'VALUATION' | 'DEPRECIATION' | 'TRANSFER' | 'AUDIT' | 'RISK_UPDATE'; // | جۆری ڕووداو
+  actor: string; // | ئەنجامدەری کار
+  details: string; // | وردەکارییەکان
 }
+
+// وەرگێڕانی جۆرەکانی ڕووداو بۆ UI
+export const EventTypeLabels: Record<SHA256LedgerRecord['eventType'], string> = {
+  REGISTRATION: '| تۆمارکردن',
+  VALUATION: '| نرخاندن',
+  DEPRECIATION: '| دابەزینی نرخ',
+  TRANSFER: '| گواستنەوە',
+  AUDIT: '| وردبینی',
+  RISK_UPDATE: '| نوێکردنەوەی مەترسی'
+};
 
 export class NationalAssetRegistry {
   private static assets: SovereignPhysicalAsset[] = [
     {
       id: 'AST-KIRKUK-NORTHOIL',
-      name: 'Kirkuk North Oil Fields Infrastructure',
-      category: 'ENERGY',
-      lifecycle: 'ACTIVE',
-      ownership: 'JOINT',
-      jurisdiction: 'joint',
-      valuationUSD: 85200,
-      depreciationRate: 0.02,
-      annualRevenueYieldUSD: 8200,
-      riskScore: 28,
-      lastAuditDate: '2026-05-15',
-      auditHash: '8e4f5a31bc994019de82ab7fd20c99a8ea42bf20bce427cdde198f1a8c39abfd',
-      complianceScore: 94,
-      description: 'Strategic northern petroleum assets including Kirkuk-Ceyhan custody transfer instrumentation.'
+      name: '| ژێرخانی کێڵگە نەوتییەکانی باکووری کەرکوک',
+      category: 'ENERGY', // | وزە
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'JOINT', // | هاوبەش
+      jurisdiction: 'joint', // | هاوبەش
+      valuationUSD: 85200, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.02, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 8200, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 28, // | ئاستی مەترسی
+      lastAuditDate: '2026-05-15', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: '8e4f5a31bc994019de82ab7fd20c99a8ea42bf20bce427cdde198f1a8c39abfd', // | مۆرکردنی وردبینی
+      complianceScore: 94, // | ئاستی پابەندبوون
+      description: '| سەروەتە ستراتیژییەکانی نەوتی باکوور، لەوانەش ئامێرەکانی پێوانی گواستنەوەی کەرکوک-جەیهان.'
     },
     {
       id: 'AST-GRANDFAW-PORT',
-      name: 'Grand Faw International Seaport Complex',
-      category: 'SEAPORT',
-      lifecycle: 'ACTIVE',
-      ownership: 'FEDERAL_IRAQ',
-      jurisdiction: 'federal',
-      valuationUSD: 32000,
-      depreciationRate: 0.015,
-      annualRevenueYieldUSD: 450,
-      riskScore: 18,
-      lastAuditDate: '2026-04-10',
-      auditHash: '3bf9dae3d0926e82a901ee2bf8cbd300de109ab7f9bc8d74edfa19293caed0a2',
-      complianceScore: 98,
-      description: 'Primary sovereign deepwater shipping terminal linking Iraq to international maritime routes.'
+      name: '| کۆمەڵگەی بەندەری نێودەوڵەتی گەورەی فاو',
+      category: 'SEAPORT', // | بەندەر
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'FEDERAL_IRAQ', // | فیدراڵی عێراق
+      jurisdiction: 'federal', // | فیدراڵی
+      valuationUSD: 32000, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.015, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 450, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 18, // | ئاستی مەترسی
+      lastAuditDate: '2026-04-10', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: '3bf9dae3d0926e82a901ee2bf8cbd300de109ab7f9bc8d74edfa19293caed0a2', // | مۆرکردنی وردبینی
+      complianceScore: 98, // | ئاستی پابەندبوون
+      description: '| بنکەی سەرەکی نێودەوڵەتی گواستنەوەی دەریایی قووڵ، کە عێراق بە ڕێڕەوە دەریاییە جیهانییەکان دەبەستێتەوە.'
     },
     {
       id: 'AST-KHURMALA-DOME',
-      name: 'Khurmala Refining Complex & Pipeline Node',
-      category: 'ENERGY',
-      lifecycle: 'ACTIVE',
-      ownership: 'KRG',
-      jurisdiction: 'krg',
-      valuationUSD: 14500,
-      depreciationRate: 0.025,
-      annualRevenueYieldUSD: 1850,
-      riskScore: 35,
-      lastAuditDate: '2026-05-20',
-      auditHash: '2ae9dbbc302dfb8823485ac698aef220b30dfaef192bcf74bd28cf423c1092e1',
-      complianceScore: 91,
-      description: 'Strategic refining facilities and regional transport hubs situated in the northern oil corridor.'
+      name: '| کۆمەڵگەی پاڵاوتنی خورمەڵە و بنکەی بۆرییەکان',
+      category: 'ENERGY', // | وزە
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'KRG', // | هەرێمی کوردستان
+      jurisdiction: 'krg', // | هەرێمی کوردستان
+      valuationUSD: 14500, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.025, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 1850, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 35, // | ئاستی مەترسی
+      lastAuditDate: '2026-05-20', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: '2ae9dbbc302dfb8823485ac698aef220b30dfaef192bcf74bd28cf423c1092e1', // | مۆرکردنی وردبینی
+      complianceScore: 91, // | ئاستی پابەندبوون
+      description: '| دامەزراوە ستراتیژییەکانی پاڵاوتن و ناوەندەکانی گواستنەوەی هەرێمی لە ڕێڕەوی نەوتی باکووردا.'
     },
     {
       id: 'AST-DOKKAN-DAM',
-      name: 'Dokkan Dam & Hydroelectric Station',
-      category: 'WATER',
-      lifecycle: 'ACTIVE',
-      ownership: 'JOINT',
-      jurisdiction: 'joint',
-      valuationUSD: 9800,
-      depreciationRate: 0.01,
-      annualRevenueYieldUSD: 120,
-      riskScore: 15,
-      lastAuditDate: '2026-03-01',
-      auditHash: 'f0c08ac149ba12be3f5c7198e39ad89bcf12019ab7d2fb89a912e55baef3c21a',
-      complianceScore: 96,
-      description: 'Vital regional water distribution regulator and green power plant feeding the federated grid.'
+      name: '| بەنداوی دووکان و وێستگەی کارەبای ئاوی',
+      category: 'WATER', // | ئاو
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'JOINT', // | هاوبەش
+      jurisdiction: 'joint', // | هاوبەش
+      valuationUSD: 9800, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.01, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 120, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 15, // | ئاستی مەترسی
+      lastAuditDate: '2026-03-01', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: 'f0c08ac149ba12be3f5c7198e39ad89bcf12019ab7d2fb89a912e55baef3c21a', // | مۆرکردنی وردبینی
+      complianceScore: 96, // | ئاستی پابەندبوون
+      description: '| ڕێکخەری سەرەکی دابەشکردنی ئاو لە ناوچەکە و وێستگەیەکی وزەی سەوز کە کارەبا بۆ تۆڕی فیدراڵی دابین دەکات.'
     },
     {
       id: 'AST-ERBIL-AIRPORT',
-      name: 'Erbil International Airport Terminal',
-      category: 'AIRPORT',
-      lifecycle: 'ACTIVE',
-      ownership: 'KRG',
-      jurisdiction: 'krg',
-      valuationUSD: 6500,
-      depreciationRate: 0.03,
-      annualRevenueYieldUSD: 310,
-      riskScore: 22,
-      lastAuditDate: '2026-05-10',
-      auditHash: 'ee2fb9bc871cd2e6fca78d910a912eff820786cf81afca720de3bcfd1e2fbaef',
-      complianceScore: 95,
-      description: 'Sovereign regional flight corridor assets and customs check infrastructure.'
+      name: '| تێرمیناڵی فڕۆکەخانەی نێودەوڵەتی هەولێر',
+      category: 'AIRPORT', // | فڕۆکەخانە
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'KRG', // | هەرێمی کوردستان
+      jurisdiction: 'krg', // | هەرێمی کوردستان
+      valuationUSD: 6500, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.03, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 310, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 22, // | ئاستی مەترسی
+      lastAuditDate: '2026-05-10', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: 'ee2fb9bc871cd2e6fca78d910a912eff820786cf81afca720de3bcfd1e2fbaef', // | مۆرکردنی وردبینی
+      complianceScore: 95, // | ئاستی پابەندبوون
+      description: '| سەروەتەکانی ڕێڕەوی فڕینی ناوچەیی و ژێرخانی گومرگی.'
     },
-    {
+{
       id: 'AST-IBRAHIMKHALIL-GATE',
-      name: 'Ibrahim Khalil Border Crossing Assets',
-      category: 'BORDER_GATE',
-      lifecycle: 'ACTIVE',
-      ownership: 'JOINT',
-      jurisdiction: 'joint',
-      valuationUSD: 4800,
-      depreciationRate: 0.02,
-      annualRevenueYieldUSD: 620,
-      riskScore: 19,
-      lastAuditDate: '2026-06-02',
-      auditHash: '5fc71092efbcd11ecf3bc99d912efc4ba30defbd8ea401c098abcfc382ea01da',
-      complianceScore: 97,
-      description: 'Federated customs gate and customs inspection zones ensuring legal land transport.'
+      name: '| دەروازەی سنووری ئیبراهیم خەلیل',
+      category: 'BORDER_GATE', // | دەروازەی سنووری
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'JOINT', // | هاوبەش
+      jurisdiction: 'joint', // | هاوبەش
+      valuationUSD: 4800, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.02, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 620, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 19, // | ئاستی مەترسی
+      lastAuditDate: '2026-06-02', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: '5fc71092efbcd11ecf3bc99d912efc4ba30defbd8ea401c098abcfc382ea01da', // | مۆرکردنی وردبینی
+      complianceScore: 97, // | ئاستی پابەندبوون
+      description: '| دەروازەی گومرگی فیدراڵی و ناوچەکانی پشکنین کە گواستنەوەی وشکانی یاسایی مسۆگەر دەکەن.'
     },
     {
       id: 'AST-SOE-AIRLINES',
-      name: 'Iraqi Airways State Owned Enterprise',
-      category: 'TRANSPORT',
-      lifecycle: 'ACTIVE',
-      ownership: 'STATE_ENTERPRISE',
-      jurisdiction: 'federal',
-      valuationUSD: 2400,
-      depreciationRate: 0.05,
-      annualRevenueYieldUSD: 180,
-      riskScore: 30,
-      lastAuditDate: '2026-05-01',
-      auditHash: 'de82bcf201ba7d42cfb20cfc39aefcae5efcaeefcdc2ba74edbac8df23baefcd',
-      complianceScore: 88,
-      description: 'Sovereign fleet, logistics assets and airport hangars operated by the Ministry of Transport.'
+      name: '| کۆمپانیای هێڵی ئاسمانی عێراقی',
+      category: 'TRANSPORT', // | گواستنەوە
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'STATE_ENTERPRISE', // | کۆمپانیای دەوڵەت
+      jurisdiction: 'federal', // | فیدراڵی
+      valuationUSD: 2400, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.05, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 180, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 30, // | ئاستی مەترسی
+      lastAuditDate: '2026-05-01', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: 'de82bcf201ba7d42cfb20cfc39aefcae5efcaeefcdc2ba74edbac8df23baefcd', // | مۆرکردنی وردبینی
+      complianceScore: 88, // | ئاستی پابەندبوون
+      description: '| فڕۆکە، لۆجستیک و هەنگارەکانی فڕۆکەخانە کە لەلایەن وەزارەتی گواستنەوەوە بەڕێوەدەبرێن.'
     },
     {
       id: 'AST-SOVEREIGN-DIGITAL',
-      name: 'National Fiber Optics Backbone & Digital Centers',
-      category: 'DIGITAL',
-      lifecycle: 'ACTIVE',
-      ownership: 'JOINT',
-      jurisdiction: 'joint',
-      valuationUSD: 11200,
-      depreciationRate: 0.07,
-      annualRevenueYieldUSD: 780,
-      riskScore: 25,
-      lastAuditDate: '2026-05-28',
-      auditHash: '2fb9ab7cfca8dfd9a12efb7cfec20cbaefcaeefcbd9abcfde82fca92fba23cad',
-      complianceScore: 93,
-      description: 'Critical communications infrastructure linking Iraq/KRG government workspaces and data security nodes.'
+      name: '| دێڕە سەرەکییەکانی فایبەر ئۆپتیک و ناوەندە دیجیتاڵییە نیشتمانییەکان',
+      category: 'DIGITAL', // | دیجیتاڵ
+      lifecycle: 'ACTIVE', // | چالاک
+      ownership: 'JOINT', // | هاوبەش
+      jurisdiction: 'joint', // | هاوبەش
+      valuationUSD: 11200, // | نرخاندن (ملیۆن دۆلار)
+      depreciationRate: 0.07, // | ڕێژەی دابەزینی نرخ
+      annualRevenueYieldUSD: 780, // | داهاتی ساڵانە (ملیۆن دۆلار)
+      riskScore: 25, // | ئاستی مەترسی
+      lastAuditDate: '2026-05-28', // | ڕێکەوتی کۆتا وردبینی
+      auditHash: '2fb9ab7cfca8dfd9a12efb7cfec20cbaefcaeefcbd9abcfde82fca92fba23cad', // | مۆرکردنی وردبینی
+      complianceScore: 93, // | ئاستی پابەندبوون
+      description: '| ژێرخانی هەستیاری پەیوەندییەکان کە شوێنە کارەکانی حکومەتی عێراق و هەرێم و ناوەندەکانی ئاسایشی داتا بەیەکەوە دەبەستێتەوە.'
     }
   ];
 
@@ -203,17 +247,24 @@ export class NationalAssetRegistry {
       previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
       timestamp: '2026-01-01T00:00:00Z',
       assetId: 'AST-KIRKUK-NORTHOIL',
-      eventType: 'REGISTRATION',
-      actor: 'Sovereign Cabinet Decree 101',
-      details: 'Initial consolidation of joint strategic carbon asset registry.'
+      eventType: 'REGISTRATION', // | تۆمارکردن
+      actor: '| بڕیاری ئەنجومەنی وەزیرانی سەروەری ١٠١',
+      details: '| یەکخستنی سەرەتایی تۆماری سەروەتە کاربۆنییە ستراتیژییە هاوبەشەکان.'
     }
   ];
-
   public static getAssets(): SovereignPhysicalAsset[] {
-    // Keep in sync with CBIRegistry. There fits! Let's ensure CBI also has them dynamically.
+    // | هاوتاکردن لەگەڵ CBIRegistry. با دڵنیابین کە CBIیش بە شێوەیەکی داینامیکی هەیانە.
     const cbiSource = CBIRegistry.getSovereignAssets();
     this.assets.forEach(asset => {
-      // If CBI does not have this asset, we can insert it so the SovereignFiscalSystem is integrated
+      // Ensure both lifecycle and lifecycleState are initialized and synched
+      if (!asset.lifecycleState) {
+        asset.lifecycleState = asset.lifecycle || 'REGISTERED';
+      }
+      if (!asset.lifecycle) {
+        asset.lifecycle = asset.lifecycleState || 'REGISTERED';
+      }
+
+      // | ئەگەر CBI ئەم سەروەتەی نەبوو، دەتوانین زیادیکەین بۆ ئەوەی SovereignFiscalSystem یەکخرابێت
       const existsInCBI = cbiSource.some(x => x.id === asset.id);
       if (!existsInCBI) {
         CBIRegistry.addSovereignAsset({
@@ -239,21 +290,26 @@ export class NationalAssetRegistry {
   }
 
   public static addAsset(asset: Omit<SovereignPhysicalAsset, 'auditHash' | 'complianceScore' | 'riskScore'>, actor: string): SovereignPhysicalAsset {
-    const auditHash = this.calculateSHA256(JSON.stringify(asset) + Date.now());
-    const complianceScore = 90 + Math.floor(Math.random() * 11); // 90 to 100
-    const riskScore = 10 + Math.floor(Math.random() * 31); // 10 to 40
+    const rawAsset = {
+      ...asset,
+      lifecycle: asset.lifecycle || 'REGISTERED',
+      lifecycleState: asset.lifecycleState || asset.lifecycle || 'REGISTERED'
+    };
+    const auditHash = this.calculateSHA256(JSON.stringify(rawAsset) + Date.now());
+    const complianceScore = 90 + Math.floor(Math.random() * 11); // | ٩٠ بۆ ١٠٠
+    const riskScore = 10 + Math.floor(Math.random() * 31); // | ١٠ بۆ ٤٠
     
     const newAsset: SovereignPhysicalAsset = {
-      ...asset,
+      ...rawAsset,
       auditHash,
       complianceScore,
       riskScore,
-      isCustomRegistered: true
+      isCustomRegistered: true // | تۆمارکردنی تایبەت
     };
 
     this.assets.push(newAsset);
     
-    // Add to CBI dynamic registry as well for integration
+    // | زیادکردن بۆ تۆماری داینامیکی CBI بۆ یەکخستن
     CBIRegistry.addSovereignAsset({
       id: newAsset.id,
       name: newAsset.name,
@@ -271,7 +327,7 @@ export class NationalAssetRegistry {
       newAsset.id,
       'REGISTRATION',
       actor,
-      `State asset added to Sovereign Registry. Name: ${newAsset.name}, Initial Valuation: $${newAsset.valuationUSD}M.`
+      `| سەروەتی دەوڵەت زیادکرا بۆ تۆماری سەروەری. ناو: ${newAsset.name}، نرخاندنی سەرەتایی: ${newAsset.valuationUSD} ملیۆن دۆلار.`
     );
 
     return newAsset;
@@ -286,7 +342,7 @@ export class NationalAssetRegistry {
         updated.id,
         'VALUATION',
         actor,
-        `Sovereign asset updated. Valuation scale recalculated to: $${updated.valuationUSD}M.`
+        `| سەروەتی سەروەری نوێکرایەوە. پێوەرەکانی نرخاندن دووبارە هەژمارکرایەوە بۆ: ${updated.valuationUSD} ملیۆن دۆلار.`
       );
     }
   }
@@ -309,37 +365,37 @@ export class NationalAssetRegistry {
     const hash = this.calculateSHA256(baseStr);
 
     const newRecord: SHA256LedgerRecord = {
-      hash,
-      previousHash,
-      timestamp,
-      assetId,
-      eventType,
-      actor,
-      details
+      hash, // | مۆرکردنی دیجیتاڵیی
+      previousHash, // | مۆرکردنی پێشوو
+      timestamp, // | کاتی تۆمارکردن
+      assetId, // | ناسنامەی سەروەت
+      eventType, // | جۆری ڕووداو
+      actor, // | ئەنجامدەری کار
+      details // | وردەکارییەکان
     };
 
     this.ledger.push(newRecord);
     return newRecord;
   }
 
-  // Simplified robust SHA256 calculator simulation that generates safe deterministic hex keys
+  // | سیمولاسیۆنێکی بەهێزی حیسابکردنی SHA256 کە کلیلە دەترمینستیکەکان دروست دەکات
   private static calculateSHA256(str: string): string {
     let hash = 0;
     if (str.length === 0) return '0000000000000000000000000000000000000000000000000000000000000000';
     for (let i = 0; i < str.length; i++) {
       const chr = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
+      hash |= 0; // | گۆڕین بۆ ژمارەی ٣٢ بیت
     }
     const safePart = Math.abs(hash).toString(16).padStart(8, '0');
-    // Generate a beautiful, stable, authentic SHA-256 simulation key
+    // | دروستکردنی کلیلێکی جوان، جێگیر و ڕەسەنی سیمولاسیۆنی SHA-256
     return `sha256_${safePart}${Array.from({ length: 48 }, (_, idx) => 
       ((hash + idx * 7) & 15).toString(16)
     ).join('')}`;
   }
 
   /**
-   * Recalculates metrics for Treasury and sovereign health.
+   * | هەژمارکردنەوەی پێوانەکان بۆ خەزێنە و تەندروستی سەروەری.
    */
   public static calculateStateHealthMetrics() {
     const list = this.getAssets();
@@ -349,39 +405,39 @@ export class NationalAssetRegistry {
     const obligations = CBIRegistry.getSovereignObligations();
     const totalPrincipalDebtUSD = obligations.reduce((sum, o) => sum + o.principalAmount, 0);
 
-    // Dynamic metrics
-    // National Asset Coverage Index: total assets vs total debt
+    // | پێوانە داینامیکییەکان
+    // | پێنوێنی داپۆشینی سەروەتی نیشتمانی: کۆی سەروەتەکان بەرامبەر بە کۆی قەرز
     const assetCoverageIndex = totalPrincipalDebtUSD > 0 
       ? Math.round((totalAssetValuationUSD / totalPrincipalDebtUSD) * 100)
       : 100;
 
-    // Strategic Asset Protection Index: average compliance of high-priority assets
+    // | پێنوێنی پاراستنی سەروەتە ستراتیژییەکان: تێکڕای پابەندبوونی سەروەتە گرنگەکان
     const highPri = list.filter(a => ['STRATEGIC', 'ENERGY', 'MILITARY', 'WATER', 'DIGITAL'].includes(a.category));
     const avgStrategicCompliance = highPri.length > 0
       ? Math.round(highPri.reduce((sum, a) => sum + a.complianceScore, 0) / highPri.length)
       : 95;
 
-    // Infrastructure Visibility Index: ratio of verified or active infrastructure assets
+    // | پێنوێنی بینراویی ژێرخان: ڕێژەی سەروەتە ژێرخانییەکان کە پشتڕاستکراون یان چالاکن
     const infraTotal = list.filter(a => ['INFRASTRUCTURE', 'AIRPORT', 'SEAPORT', 'BORDER_GATE', 'TRANSPORT', 'TELECOM'].includes(a.category)).length;
     const infraVerified = list.filter(a => ['INFRASTRUCTURE', 'AIRPORT', 'SEAPORT', 'BORDER_GATE', 'TRANSPORT', 'TELECOM'].includes(a.category) && a.lifecycle !== 'REGISTERED').length;
     const visibilityIndex = infraTotal > 0 ? Math.round((infraVerified / infraTotal) * 100) : 100;
 
-    // Asset Audit Completion Rate: assets audited recently
+    // | ڕێژەی تەواوبوونی وردبینی سەروەتەکان: ئەو سەروەتانەی بەمدواییە وردبینییان بۆ کراوە
     const auditCount = list.filter(a => a.lifecycle !== 'REGISTERED' && a.lastAuditDate.startsWith('2026')).length;
     const auditRate = list.length > 0 ? Math.round((auditCount / list.length) * 100) : 100;
 
-    // Sovereign Asset Accuracy Score
+    // | نمرەی وردیی سەروەتی سەروەری
     const rawAccuracy = avgStrategicCompliance * 0.4 + visibilityIndex * 0.3 + auditRate * 0.3;
     const assetAccuracyScore = Math.min(100, Math.max(40, Math.round(rawAccuracy)));
 
     return {
-      totalAssetValuationUSD,
-      totalPrincipalDebtUSD,
-      assetCoverageIndex,
-      strategicAssetProtectionIndex: avgStrategicCompliance,
-      infrastructureVisibilityIndex: visibilityIndex,
-      assetAuditCompletionRate: auditRate,
-      sovereignAssetAccuracyScore: assetAccuracyScore
+      totalAssetValuationUSD, // | کۆی نرخاندنی سەروەتەکان (ملیۆن دۆلاری ئەمریکی)
+      totalPrincipalDebtUSD, // | کۆی قەرزی بنەڕەتی (ملیۆن دۆلاری ئەمریکی)
+      assetCoverageIndex, // | پێنوێنی داپۆشینی سەروەت
+      strategicAssetProtectionIndex: avgStrategicCompliance, // | پێنوێنی پاراستنی سەروەتە ستراتیژییەکان
+      infrastructureVisibilityIndex: visibilityIndex, // | پێنوێنی بینراویی ژێرخان
+      assetAuditCompletionRate: auditRate, // | ڕێژەی تەواوبوونی وردبینی سەروەتەکان
+      sovereignAssetAccuracyScore: assetAccuracyScore // | نمرەی وردیی سەروەتی سەروەری
     };
   }
 }
