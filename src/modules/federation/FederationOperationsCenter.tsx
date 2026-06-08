@@ -3,16 +3,17 @@ import { FederationHealthPanel } from '../../app/components/FederationHealthPane
 import { JointTreatyCenter } from '../../app/components/JointTreatyCenter';
 import { TreatyLifecyclePanel } from '../../app/components/TreatyLifecyclePanel';
 import { CrossGovernmentWorkflowPanel } from '../../app/components/CrossGovernmentWorkflowPanel';
+import ProcurementAuditPanel from '../../app/components/procurement/ProcurementAuditPanel';
 import { Card, Badge, PageHeader } from '../../ui';
 import { 
-  Heart, Globe2, Sliders, Network, ShieldCheck, Activity, Users, Settings 
+  Heart, Globe2, Sliders, Network, ShieldCheck, Activity, Users, Settings, History 
 } from 'lucide-react';
 
 interface FederationOperationsCenterProps {
   lang: 'en' | 'ar' | 'ku';
 }
 
-type TabType = 'HEALTH' | 'TREATIES' | 'LIFECYCLE' | 'WORKFLOWS';
+type TabType = 'HEALTH' | 'TREATIES' | 'LIFECYCLE' | 'WORKFLOWS' | 'PROCUREMENT_COMPLIANCE';
 
 export const FederationOperationsCenter: React.FC<FederationOperationsCenterProps> = ({ lang }) => {
   const [activeTab, setActiveTab] = useState<TabType>('HEALTH');
@@ -24,7 +25,8 @@ export const FederationOperationsCenter: React.FC<FederationOperationsCenterProp
       tabHealth: 'Operations Health',
       tabTreaties: 'Accords Registry',
       tabLifecycle: 'Lifecycle Analyzer',
-      tabWorkflows: 'Multi-Stage Workflows'
+      tabWorkflows: 'Multi-Stage Workflows',
+      tabProcurement: 'Procurement Accords Audit'
     },
     ar: {
       title: 'مركز إدارة العمليات والاتفاقيات الفيدرالية الموحدة',
@@ -32,7 +34,8 @@ export const FederationOperationsCenter: React.FC<FederationOperationsCenterProp
       tabHealth: 'سلامة العمليات',
       tabTreaties: 'سجل الاتفاقيات',
       tabLifecycle: 'محلل المعاهدات',
-      tabWorkflows: 'مسارات التدقيق المشترك'
+      tabWorkflows: 'مسارات التدقيق المشترك',
+      tabProcurement: 'تدقيق اتفاقيات المشتريات'
     },
     ku: {
       title: 'ناوەندی بەڕێوەبردن و وەبەرهێنانی هاوبەشی فیدراڵ',
@@ -40,7 +43,8 @@ export const FederationOperationsCenter: React.FC<FederationOperationsCenterProp
       tabHealth: 'دۆخی گشتی هاوبەش',
       tabTreaties: 'پەیماننامەکان',
       tabLifecycle: 'وردبینی یاسایی',
-      tabWorkflows: 'سیستەمی هێڵەکان'
+      tabWorkflows: 'سیستەمی هێڵەکان',
+      tabProcurement: 'وردبینی پەیماننامەی تەندەرەکان'
     }
   }[lang];
 
@@ -62,7 +66,8 @@ export const FederationOperationsCenter: React.FC<FederationOperationsCenterProp
           { key: 'HEALTH', label: t.tabHealth, icon: Heart },
           { key: 'TREATIES', label: t.tabTreaties, icon: Globe2 },
           { key: 'LIFECYCLE', label: t.tabLifecycle, icon: Sliders },
-          { key: 'WORKFLOWS', label: t.tabWorkflows, icon: Network }
+          { key: 'WORKFLOWS', label: t.tabWorkflows, icon: Network },
+          { key: 'PROCUREMENT_COMPLIANCE', label: t.tabProcurement, icon: History }
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.key;
@@ -89,6 +94,7 @@ export const FederationOperationsCenter: React.FC<FederationOperationsCenterProp
         {activeTab === 'TREATIES' && <JointTreatyCenter lang={lang} />}
         {activeTab === 'LIFECYCLE' && <TreatyLifecyclePanel lang={lang} />}
         {activeTab === 'WORKFLOWS' && <CrossGovernmentWorkflowPanel lang={lang} />}
+        {activeTab === 'PROCUREMENT_COMPLIANCE' && <ProcurementAuditPanel lang={lang} />}
       </div>
 
     </div>

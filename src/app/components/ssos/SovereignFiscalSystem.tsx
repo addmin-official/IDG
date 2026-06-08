@@ -34,6 +34,10 @@ import { NationalEnergyRegistryComponent } from './NationalEnergyRegistry';
 import { NationalProjectsRegistryPanel } from './NationalProjectsRegistryPanel';
 import { RevenueSharingPanel } from './RevenueSharingPanel';
 
+// Sovereign Procurement
+import NationalTenderCenter from '../procurement/NationalTenderCenter';
+import ContractLifecyclePanel from '../procurement/ContractLifecyclePanel';
+
 interface SovereignFiscalSystemProps {
   lang: 'en' | 'ar' | 'ku';
 }
@@ -47,7 +51,7 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
   >('federal-treasury');
 
   const [masterHub, setMasterHub] = useState<'fiscal-os' | 'resource-os'>('fiscal-os');
-  const [activeResourceTab, setActiveResourceTab] = useState<'budgets' | 'sharing' | 'energy' | 'projects' | 'kpis'>('budgets');
+  const [activeResourceTab, setActiveResourceTab] = useState<'budgets' | 'sharing' | 'energy' | 'projects' | 'kpis' | 'procurement'>('budgets');
 
   // Trigger state re-renders upon mutating backend registry values
   const [ticker, setTicker] = useState(0);
@@ -1219,7 +1223,8 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
               { id: 'sharing', label: getLabel('Revenue Sharing', 'تقاسم الإيرادات المشتركة', 'دابەشکردنی داهاتی هاوبەش') },
               { id: 'energy', label: getLabel('State Energy Resources', 'حقول النفط والغاز الكلية', 'سەرچاوەکانی نەوت و گاز') },
               { id: 'projects', label: getLabel('Strategic Capital Registry', 'سجل الاستثمارات الكبرى', 'کار و پڕۆژە نیشتمانییەکان') },
-              { id: 'kpis', label: getLabel('Cabinet Performance KPI', 'مؤشرات الأداء للمؤسسات', 'دۆخی کارکردنی وەزارەتەکان') }
+              { id: 'kpis', label: getLabel('Cabinet Performance KPI', 'مؤشرات الأداء للمؤسسات', 'دۆخی کارکردنی وەزارەتەکان') },
+              { id: 'procurement', label: getLabel('Procurement Contracts', 'عقود المشتريات والترسية', 'گرێبەستی تەندەرەکان') }
             ].map(sub => (
               <button
                 key={sub.id}
@@ -1242,6 +1247,12 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
             {activeResourceTab === 'energy' && <NationalEnergyRegistryComponent lang={lang} />}
             {activeResourceTab === 'projects' && <NationalProjectsRegistryPanel lang={lang} />}
             {activeResourceTab === 'kpis' && <GovernmentPerformancePanel lang={lang} />}
+            {activeResourceTab === 'procurement' && (
+              <div className="space-y-4">
+                <NationalTenderCenter lang={lang} />
+                <ContractLifecyclePanel lang={lang} />
+              </div>
+            )}
           </div>
         </div>
       )}

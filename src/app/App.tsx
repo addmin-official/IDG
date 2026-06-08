@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw, Coins
+  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw, Coins, Building2
 } from 'lucide-react';
 import { DICTIONARY } from '../mockData';
 import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
@@ -17,6 +17,7 @@ import CargoAuditorPanel from './components/CargoAuditorPanel';
 import PolicyAdvisorPanel from './components/PolicyAdvisorPanel';
 import EconomicCorridorsPanel from './components/EconomicCorridorsPanel';
 import { SovereignFiscalSystem } from './components/ssos/SovereignFiscalSystem';
+import NationalAssetAuthorityDashboard from './components/assets/NationalAssetAuthorityDashboard';
 
 // Isolated Hooks
 import { useManifestAudit } from '../hooks/useManifestAudit';
@@ -190,6 +191,7 @@ function AppContent() {
           {[
             { id: 'command-center', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal PM Command' : lang === 'ar' ? 'قيادة رئيس الوزراء الاتحادي' : 'فەرماندەیی سەرۆک وەزیرانی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG PM Command' : lang === 'ar' ? 'قيادة رئيس وزراء الإقليم' : 'فەرماندەیی سەرۆک وەزیرانی هەرێم') : (lang === 'en' ? 'Joint Command Room' : lang === 'ar' ? 'غرفة القيادة المشتركة' : 'ژووری فەرماندەیی هاوبەش'), icon: Landmark },
             { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
+            { id: 'state-assets', label: lang === 'en' ? 'State Asset Authority' : lang === 'ar' ? 'سلطة ممتلكات الدولة' : 'رێکخراوی سامانی دەوڵەت', icon: Building2 },
             { id: 'sovereign-fiscal', label: lang === 'en' ? 'Sovereign Fiscal Registry' : lang === 'ar' ? 'الخزينة والمالية السيادية' : 'گەنجینە و دارایی نیشتمانی', icon: Coins },
             { id: 'ai-auditor', label: t(lang, 'navigation.analyzer'), icon: Cpu },
             { id: 'policy-advisor', label: t(lang, 'navigation.advisor'), icon: Landmark },
@@ -270,6 +272,7 @@ function AppContent() {
         {activeTab === 'data-fabric' && <NationalDataCommandCenter lang={lang} />}
         {activeTab === 'sovereign-trust' && <NationalIdentityCommandCenter lang={lang} />}
         {activeTab === 'sovereign-fiscal' && <SovereignFiscalSystem lang={lang} />}
+        {activeTab === 'state-assets' && <NationalAssetAuthorityDashboard lang={lang} />}
       </main>
 
       <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start">

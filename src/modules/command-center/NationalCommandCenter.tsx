@@ -18,6 +18,15 @@ import { KRGPrimeMinisterDesk } from '../../app/components/KRGPrimeMinisterDesk'
 import { JointExecutiveCouncil } from '../../app/components/JointExecutiveCouncil';
 import { FederationOperationsCenter } from '../federation/FederationOperationsCenter';
 
+// Sovereign Procurement Modules
+import NationalTenderCenter from '../../app/components/procurement/NationalTenderCenter';
+import VendorQualificationPanel from '../../app/components/procurement/VendorQualificationPanel';
+import ContractLifecyclePanel from '../../app/components/procurement/ContractLifecyclePanel';
+import BidEvaluationPanel from '../../app/components/procurement/BidEvaluationPanel';
+import ProcurementAuditPanel from '../../app/components/procurement/ProcurementAuditPanel';
+import SupplierRiskPanel from '../../app/components/procurement/SupplierRiskPanel';
+import { Coins } from 'lucide-react';
+
 interface NationalCommandCenterProps {
   lang: Language;
 }
@@ -47,8 +56,10 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   
   // Capability sub-navigation inside the PM Command Center
   const [activeCapability, setActiveCapability] = useState<
-    'brief' | 'analytics' | 'security' | 'economy' | 'identity' | 'infra' | 'policy' | 'cabinet' | 'federation'
+    'brief' | 'analytics' | 'security' | 'economy' | 'identity' | 'infra' | 'policy' | 'cabinet' | 'federation' | 'procurement'
   >('brief');
+
+  const [activeProcurementSubTab, setActiveProcurementSubTab] = useState<'tenders' | 'bids' | 'contracts' | 'vendors' | 'risk' | 'audit'>('tenders');
 
   // Multi-government titles & translation mapping
   const titleMap = {
@@ -150,6 +161,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
               { id: 'policy', label: getLabel('Policy', 'السياسة', 'یاسا کانی'), icon: HelpCircle },
               { id: 'cabinet', label: getLabel('Cabinet', 'مجلس الوزراء', 'ئەنجومەن'), icon: Landmark },
               { id: 'federation', label: getLabel('Federation', 'الفيدرالية', 'پەیماننامەکان'), icon: Network },
+              { id: 'procurement', label: getLabel('Procurement', 'العطاءات والمشتريات', 'داواکاریی تەندەر'), icon: Coins },
             ].map((cap) => (
               <button
                 key={cap.id}
@@ -637,6 +649,55 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
         {activeCapability === 'federation' && (
           <div className="w-full">
             <FederationOperationsCenter lang={lang} />
+          </div>
+        )}
+
+        {/* TAB 10: SOVEREIGN PROCUREMENT & CONTRACT AUTHORITY */}
+        {activeCapability === 'procurement' && (
+          <div className="w-full space-y-4">
+            <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-900 inline-flex select-none">
+              {[
+                { id: 'tenders', label: getLabel('Tenders Feed', 'العطاءات المنشورة', 'تەندەرەکان') },
+                { id: 'vendors', label: getLabel('Vendor Registry', 'سجل الموردين المعتمدين', 'تۆماری کۆمپانیاکان') },
+                { id: 'bids', label: getLabel('Bid Evaluation & Awards', 'تقييم وترسية العروض', 'هەڵسەنگاندن و خەڵاتکردن') },
+                { id: 'contracts', label: getLabel('Contract Escrows & Lifecycles', 'العقود ومتابعة الإنجاز', 'دۆخی گرێبەستەکان') },
+                { id: 'risk', label: getLabel('Supplier Risk Screening', 'مكافحة التواطؤ والمخاطر', 'چاودێری مەترسی') },
+                { id: 'audit', label: getLabel('Sovereign Ledger & Policies', 'سجل التدقيق والسياسات المشتركة', 'وردبینی و یاساکان') },
+              ].map(sub => (
+                <button
+                  key={sub.id}
+                  onClick={() => setActiveProcurementSubTab(sub.id as any)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
+                    activeProcurementSubTab === sub.id
+                      ? 'bg-[#1a2c42] text-[#cca553] border border-[#cca553]/20 shadow'
+                      : 'text-slate-400 hover:text-white border-transparent'
+                  }`}
+                >
+                  {sub.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-2 w-full">
+              {activeProcurementSubTab === 'tenders' && (
+                <NationalTenderCenter lang={lang} />
+              )}
+              {activeProcurementSubTab === 'vendors' && (
+                <VendorQualificationPanel lang={lang} />
+              )}
+              {activeProcurementSubTab === 'bids' && (
+                <BidEvaluationPanel lang={lang} />
+              )}
+              {activeProcurementSubTab === 'contracts' && (
+                <ContractLifecyclePanel lang={lang} />
+              )}
+              {activeProcurementSubTab === 'risk' && (
+                <SupplierRiskPanel lang={lang} />
+              )}
+              {activeProcurementSubTab === 'audit' && (
+                <ProcurementAuditPanel lang={lang} />
+              )}
+            </div>
           </div>
         )}
 
