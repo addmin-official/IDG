@@ -391,9 +391,36 @@ export const GovernmentProvider: React.FC<{ children: React.ReactNode; lang: 'en
     }
   ]);
 
-  const federalRoleList = ['Federal Prime Minister', 'Federal Customs Auditor', 'Federal Identity Analyst'];
-  const krgRoleList = ['KRG Prime Minister', 'KRG Customs Inspector', 'KRG PKI Authority'];
-  const jointRoleList = ['Joint Crisis Coordinator', 'Border Arbitrator', 'Federation Integration Director'];
+  const federalRoleList = [
+    'Federal Prime Minister', 
+    'Federal Cabinet', 
+    'Federal Border Authority', 
+    'Federal Customs Authority', 
+    'Federal Revenue Authority', 
+    'Federal Trade Authority',
+    'Federal Customs Auditor',
+    'Federal Identity Analyst'
+  ];
+  const krgRoleList = [
+    'Prime Minister of Kurdistan Region', 
+    'KRG Cabinet', 
+    'KRG Border Authority', 
+    'KRG Customs Authority', 
+    'KRG Revenue Authority', 
+    'KRG Trade Authority',
+    'KRG Prime Minister',
+    'KRG Customs Inspector', 
+    'KRG PKI Authority'
+  ];
+  const jointRoleList = [
+    'Joint Coordination Council', 
+    'Joint Revenue Board', 
+    'Joint Border Committee', 
+    'Joint Trade Committee',
+    'Joint Crisis Coordinator', 
+    'Border Arbitrator', 
+    'Federation Integration Director'
+  ];
 
   const getRolesForContext = (context: GovernmentContextType) => {
     switch (context) {

@@ -6,6 +6,7 @@ import {
 import { Language } from '../../../types';
 import { PageHeader, Badge, Button, Card } from '../../../ui';
 import { useGovernment } from '../../../providers/GovernmentProvider';
+import { useI18n } from '../../../providers/I18nProvider';
 
 // Import Domain Services
 import { BorderGateRegistry } from '../../../shared/border/BorderGateRegistry';
@@ -37,7 +38,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
   const [vehicleType, setVehicleType] = useState<'CAR' | 'TRUCK' | 'BUS'>('TRUCK');
   const [cargoVal, setCargoVal] = useState<string>('150000');
   const [cargoWeight, setCargoWeight] = useState<string>('24000');
-  const [cargoCat, setCargoCat] = useState<string>('| مەکینە و مۆلیدەی کارەبایی');
+  const [cargoCat, setCargoCat] = useState<string>('machinery');
   const [passengerNation, setPassengerNation] = useState<string>('IQ');
   const [passengerPassport, setPassengerPassport] = useState<string>('');
 
@@ -51,46 +52,17 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
   // Search filter
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  const { t } = useI18n();
+
   // Trigger pulse simulation to show live dynamic behavior
   const handlePulseSimulator = () => {
-    BorderOperationsEngine.triggerActivityPulse('| سیستەمی سیمولاتیۆنی چاودێری نیشتمانی');
+    BorderOperationsEngine.triggerActivityPulse('| ' + t('common.nationalPulse'));
     setTicker(prev => prev + 1);
   };
 
   // Kurdish localizers dictionary
   const getKurdishLabel = (key: string, enVal: string) => {
-    const table: Record<string, string> = {
-      'overview': 'تێڕوانینی گشتی',
-      'borderManager': 'بەڕێوەبردنی دەروازە سنوورییەکان',
-      'activeGates': 'دەروازە چالاکەکان',
-      'transitRecords': 'کۆنووسەکانی گواستنەوە',
-      'cargoValuation': 'بهای کاڵای هاوردەکراو',
-      'complianceRate': 'ڕێژەی پابەندبوونی گومرگی',
-      'compoundRiskIndex': 'نیشاندەری مەترسی گشتی',
-      'totalFines': 'غەرامە گومرگییەکان',
-      'actions': 'کردارەکان',
-      'status': 'بارودۆخ',
-      'registeredGates': 'دەروازە تۆمارکراوەکان',
-      'transitLog': 'تۆماری گواستنەوەی کاڵا و گەشتیاران',
-      'inspections': 'پشکنینی گومرگی و ئەمنی',
-      'riskAlerts': 'ئاگادارکردنەوەکانی مەترسی',
-      'telemetryDevices': 'ئامێرەکانی پەیوەندی و چاودێری',
-      'identityAuditChain': 'تۆماری مۆری ئەلیکترۆنی (Audit Ledger)',
-      'registerTransit': 'تۆمارکردنی گواستنەوەی نوێ',
-      'performInspection': 'کارپێکردنی پشکنینی گومرگی نوێ',
-      'resolveAlert': 'چارەسەرکردنی مەترسی',
-      'regulatoryPolicies': 'یاساکان و ڕێنماییە گومرگییەکان',
-      'gateName': 'ناوی دەروازە',
-      'gateType': 'جۆری دەروازە',
-      'utilization': 'ڕێژەی بەکارهێنان',
-      'riskScore': 'ئاستی مەترسی',
-      'jurisdiction': 'دەسەڵاتی دادوەری',
-      'authority': 'فەرماندەیی بەرپرسیار',
-      'auditHash': 'مۆری بلۆکچین',
-      'prevHash': 'مۆری پێشوو',
-      'timestamp': 'کاتی تۆمارکردن'
-    };
-    return table[key] || enVal;
+    return t(`common.${key}`);
   };
 
   // Retrieve current statistics
@@ -138,7 +110,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
       'CLOSED': 'ACTIVE'
     };
     const nextStatus = nextStatusMap[currentStatus];
-    BorderGateRegistry.updateGateStatus(gateId, nextStatus, '| سەنتەری چاودێری دەروازە نیشتمانییەکان');
+    BorderGateRegistry.updateGateStatus(gateId, nextStatus, '| ' + t('common.nationalPulse'));
     setTicker(prev => prev + 1);
   };
 
@@ -163,7 +135,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
       visibility: targetGate.visibility,
       accessPolicy: targetGate.accessPolicy,
       actionApplied: 'CLEAR'
-    }, '| ناوەندی پێشوازی مەدەنی و لۆجستی');
+    }, '| ' + t('common.civPaxCenter'));
 
     // Reset inputs
     setVehiclePlate('');
@@ -179,17 +151,17 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
     BorderInspectionEngine.performInspection({
       gateId: selectedGateId,
       trafficRecordId: inspectTrafficRecordId || undefined,
-      inspectorName: '| بەڕێوەبەرایەتی پشکنینی دەروازەی نێودەوڵەتی',
+      inspectorName: '| ' + t('common.intlInspector'),
       inspectionType: inspectType,
       complianceStatus: inspectCompliance,
       fineImposedUSD: parseFloat(inspectFinesUSD) || 0,
-      notes: inspectNotes || '| پشکنینی گومرگی ئاسایی ئەنجام درا بەبێ تێبینی دەکات.',
+      notes: inspectNotes || '| ' + t('common.normalInspection'),
       jurisdiction: targetGate.jurisdiction,
       ownership: targetGate.ownership,
       authority: targetGate.authority,
       visibility: targetGate.visibility,
       accessPolicy: targetGate.accessPolicy
-    }, '| لیژنەی پشکنین و کۆنترۆڵی جۆری');
+    }, '| ' + t('common.qualityInspectionCommittee'));
 
     setInspectTrafficRecordId('');
     setInspectFinesUSD('0');
@@ -198,12 +170,12 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
   };
 
   const handleResolveAlert = (alertId: string) => {
-    BorderRiskEngine.resolveAlert(alertId, '| ژووری کارپێکردنی ڕێگری لە قاچاخچێتی');
+    BorderRiskEngine.resolveAlert(alertId, '| ' + t('common.antiSmugglingRoom'));
     setTicker(prev => prev + 1);
   };
 
   const handlePolicyToggle = (code: string) => {
-    BorderPolicyEngine.togglePolicy(code, '| لێژنەی باڵای پاراستنی ئابووری نیشتمانی');
+    BorderPolicyEngine.togglePolicy(code, '| ' + t('common.economicProtectionCommittee'));
     setTicker(prev => prev + 1);
   };
 
@@ -213,8 +185,8 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
       {/* Page Header */}
       <PageHeader
         icon={<Shield className="text-[#cca553] w-6 h-6" />}
-        title={lang === 'en' ? 'Sovereign Border Operations & Revenue Control' : lang === 'ar' ? 'نموذج السيطرة على دەروازەكان والجمارك' : 'چاودێری دەروازە سنوورییەکان و داهاتی گومرگی'}
-        description={lang === 'en' ? 'Federal-Region Joint Border Command Center coordinating multi-point port entries, real-time customs duty evaluations, anti-evasion manifest audits, and high-security radar metrics.' : lang === 'ar' ? 'المركز الفيدرالي الإقليمي لإدارة دەروازەكان، ووزن الحاويات وتدقيق مانيسم الجمرك المشترك.' : 'سەنتەری هاوبەشی فیدراڵ-هەرێم بۆ تۆمارکردن، چاودێریکردن، خەمڵاندنی بەهای کاڵاکان و ڕێگری لە قاچاخچێتی و ڕاکردنی باج.'}
+        title={t('common.borderOpsTitle')}
+        description={t('common.borderOpsDesc')}
         status={
           <div className="flex items-center gap-2">
             <Badge variant="teal">{activeContext}</Badge>
@@ -229,7 +201,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
               className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-[#0d1b2a] shadow font-bold text-xs flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>{lang === 'en' ? 'Pulse Activity' : lang === 'ar' ? 'توليد حركة تجارية' : 'چالاککردنی بزووتنەوەی گواستنەوە'}</span>
+              <span>{t('common.pulseActivity')}</span>
             </Button>
           </div>
         }
@@ -296,7 +268,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
         <div className="flex items-center gap-2">
           <Info className="w-4 h-4 text-amber-500 shrink-0" />
           <p className="text-xs text-slate-400 font-mono">
-            {lang === 'en' ? 'SOVEREIGN GATEWAY SECURITY PROTOCOL Active:' : 'پرۆتۆکۆڵی ئاسایشی دەروازەی نیشتمانی کارایە:'} <b className="text-amber-500">LEVEL-4-JOINT-COOPERATIVE</b>. Only showing records associated with jurisdiction: <b className="text-teal-400">{activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL/JOINT' : activeContext === 'KURDISTAN_REGION' ? 'KRG/JOINT' : 'ALL_COOPERATIVE'}</b>. Cross-boundary database isolation is enforced.
+            {t('common.securityProtocol')} <b className="text-amber-500">{t('common.levelJointCooperative')}</b>. {t('common.onlyShowingRecords')} <b className="text-teal-400">{activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL/JOINT' : activeContext === 'KURDISTAN_REGION' ? 'KRG/JOINT' : 'ALL_COOPERATIVE'}</b>. {t('common.dbIsolationEnforced')}
           </p>
         </div>
       </div>
@@ -347,7 +319,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
                     <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5" />
                     <input
                       type="text"
-                      placeholder="گەڕان بەپێی ناونیشان..."
+                      placeholder={t('common.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full bg-slate-950 text-xs text-slate-300 border border-slate-800 rounded-lg pl-8.5 pr-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -428,7 +400,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
                   <div className="flex items-start gap-2">
                     <Info className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
                     <p className="text-xs text-slate-400">
-                      <b>{lang === 'en' ? 'Federal Sovereignty Rule:' : 'بنەمای بەڕێوەبردنی گشتی دەروازەکان:'}</b> {lang === 'en' ? 'All joint board gates enforce real-time electronic cargo data mirroring to both Erbil and Baghdad mainframe directories under Joint Regulatory Treaty Section 14.' : 'مۆری پشتڕاستکردنەوە نیشتمانییەکان بۆ دۆزینەوەی فرتوفێڵی دارایی و ڕاکردنی باج لەگەڵ وەزارەتەکانی فیدراڵ و هەرێم یارمەتیدەر دەبن بەپێی بڕگەی گشتی ١٤.'}
+                      <b>{t('common.fedSovereigntyRule')}</b> {t('common.borderTetherText')}
                     </p>
                   </div>
                 </div>
@@ -543,10 +515,10 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
                               onChange={(e) => setCargoCat(e.target.value)}
                               className="bg-[#0e1723] text-slate-200 border border-slate-800 rounded px-2.5 py-1.5 focus:outline-none"
                             >
-                              <option value="| مەکینە و مۆلیدەی کارەبایی">| مەکینە و مۆلیدەی کارەبایی</option>
-                              <option value="| کەرەستەی خاو و کانزایی">| کەرەستەی خاو و کانزایی</option>
-                              <option value="| خواردەمەنی و بەرهەمی پەلەوەر">| خواردەمەنی و بەرهەمی پەلەوەر</option>
-                              <option value="| جلوبەرگ و بەرهەمی قوماش">| جلوبەرگ و بەرهەمی قوماش</option>
+                              <option value="machinery">{'| ' + t('common.machineryGenerators')}</option>
+                              <option value="minerals">{'| ' + t('common.mineralRawMaterials')}</option>
+                              <option value="poultry">{'| ' + t('common.poultryFoodstuffs')}</option>
+                              <option value="textiles">{'| ' + t('common.textilesApparel')}</option>
                             </select>
                           </div>
                         </div>
@@ -724,7 +696,7 @@ export default function BorderCommandCenter({ lang }: BorderCommandCenterProps) 
                           rows={2}
                           value={inspectNotes}
                           onChange={(e) => setInspectNotes(e.target.value)}
-                          placeholder="| کێشی کەرەستە لە مانیفێست بەراورد کرا..."
+                          placeholder={'| ' + t('common.normalInspection')}
                           className="bg-[#0e1723] text-slate-200 border border-slate-800 rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-amber-500"
                         />
                       </div>

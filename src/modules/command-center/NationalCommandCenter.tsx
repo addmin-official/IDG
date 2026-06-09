@@ -17,6 +17,7 @@ import { FederalPrimeMinisterDesk } from '../../app/components/FederalPrimeMinis
 import { KRGPrimeMinisterDesk } from '../../app/components/KRGPrimeMinisterDesk';
 import { JointExecutiveCouncil } from '../../app/components/JointExecutiveCouncil';
 import { FederationOperationsCenter } from '../federation/FederationOperationsCenter';
+import { SovereignGovernanceRouter } from '../../shared/executive/SovereignGovernanceRouter';
 
 // Sovereign Procurement Modules
 import NationalTenderCenter from '../../app/components/procurement/NationalTenderCenter';
@@ -633,15 +634,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
         {/* TAB 8: CABINET */}
         {activeCapability === 'cabinet' && (
           <div className="w-full">
-            {activeContext === 'FEDERAL_IRAQ' && (
-              <FederalPrimeMinisterDesk lang={lang} />
-            )}
-            {activeContext === 'KURDISTAN_REGION' && (
-              <KRGPrimeMinisterDesk lang={lang} />
-            )}
-            {activeContext === 'JOINT_OPERATIONS' && (
-              <JointExecutiveCouncil lang={lang} />
-            )}
+            <SovereignGovernanceRouter lang={lang} />
           </div>
         )}
 

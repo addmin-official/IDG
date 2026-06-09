@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language } from '../types';
 
 // English imports
-import commonEn from '../localization/en/common.json';
+import { common as commonEn } from '../shared/localization/en/common';
 import navigationEn from '../localization/en/navigation.json';
 import dashboardEn from '../localization/en/dashboard.json';
 import customsEn from '../localization/en/customs.json';
@@ -19,7 +19,7 @@ import modulesEn from '../localization/en/modules.json';
 import languagesEn from '../localization/en/languages.json';
 
 // Arabic imports
-import commonAr from '../localization/ar/common.json';
+import { common as commonAr } from '../shared/localization/ar/common';
 import navigationAr from '../localization/ar/navigation.json';
 import dashboardAr from '../localization/ar/dashboard.json';
 import customsAr from '../localization/ar/customs.json';
@@ -36,7 +36,7 @@ import modulesAr from '../localization/ar/modules.json';
 import languagesAr from '../localization/ar/languages.json';
 
 // Kurdish imports
-import commonKu from '../localization/ku/common.json';
+import { common as commonKu } from '../shared/localization/ku/common';
 import navigationKu from '../localization/ku/navigation.json';
 import dashboardKu from '../localization/ku/dashboard.json';
 import customsKu from '../localization/ku/customs.json';
