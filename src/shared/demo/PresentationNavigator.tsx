@@ -147,12 +147,12 @@ export const PresentationNavigator: React.FC<PresentationNavigatorProps> = ({
           <div>
             <div className="flex items-start justify-between border-b border-slate-900 pb-3 mb-4">
               <div>
-                <span className="text-[9px] font-mono font-bold bg-[#E0A96D]/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">
-                  STEP {activeStepIndex + 1} OF {steps.length} • {currentStep.keyName.toUpperCase()}
-                </span>
                 <h3 className="text-sm font-bold text-slate-100 mt-1.5 font-sans">
                   {getLabel(currentStep.titleEn, currentStep.titleAr, currentStep.titleKu)}
                 </h3>
+                <span className="block w-fit text-left mt-2 mr-auto text-[9px] font-mono font-bold bg-[#E0A96D]/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20" dir="ltr">
+                  STEP {activeStepIndex + 1} OF {steps.length} • {currentStep.keyName.toUpperCase()}
+                </span>
               </div>
               <div className="text-right flex flex-col items-end gap-1 shrink-0 ml-3">
                 <span className="text-[9px] text-slate-500 font-mono">ACCEPTANCE VERIFIED</span>

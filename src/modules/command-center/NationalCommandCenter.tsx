@@ -26,6 +26,7 @@ import { AssetIsolationAudit } from '../../services/assets/AssetIsolationAudit';
 import { SharedBoundaryAudit } from '../../shared/security/SharedBoundaryAudit';
 import { SovereignIsolationAuditReport } from '../../shared/security/SovereignIsolationAuditReport';
 import { PresentationControlPanel } from '../../shared/demo/PresentationControlPanel';
+import { AcquisitionReadinessPanel } from '../../shared/acquisition/AcquisitionReadinessPanel';
 
 // Executive Desks for Federated Governance Layer
 import { FederalPrimeMinisterDesk } from '../../app/components/FederalPrimeMinisterDesk';
@@ -267,6 +268,9 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
           <div className="space-y-6">
             {/* PRESENTATION CONTROL PANEL */}
             <PresentationControlPanel lang={lang} />
+
+            {/* GOVERNMENT ACQUISITION PACKAGE PANEL (PHASE 5.1) */}
+            <AcquisitionReadinessPanel lang={lang} />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
