@@ -181,31 +181,31 @@ export default function JointCustomsDashboard() {
           <div className="lg:col-span-4 flex flex-col gap-6">
             <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl">
               <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-4">
-                تێکڕای لێکدانەوەی داهاتە باجییەکان
+                کورتەی گونجانی گومرگی و هاوتاکردنی نیشتمانی
               </h3>
 
               <div className="space-y-4">
                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-900">
-                  <span className="text-[10px] text-slate-500 block">داهاتی فیدراڵی ڕێگە پێدراو</span>
-                  <span className="text-lg font-bold text-teal-400 font-mono block mt-1">${tariffSplit.federalTotalRevenue.toLocaleString()}</span>
+                  <span className="text-[10px] text-slate-500 block">ڕەوشی دڵنیابوونەوەی داهاتی فیدراڵ</span>
+                  <span className="text-sm font-bold text-teal-400 font-mono block mt-1">پارێزراو (CONFIDENTIAL_SHIELDED)</span>
                 </div>
                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-900">
-                  <span className="text-[10px] text-slate-500 block">داهاتی هەرێم کەی تۆمار کراوە</span>
-                  <span className="text-lg font-bold text-emerald-400 font-mono block mt-1">${tariffSplit.krgTotalRevenue.toLocaleString()}</span>
+                  <span className="text-[10px] text-slate-500 block">ڕەوشی دڵنیابوونەوەی داهاتی هەرێم</span>
+                  <span className="text-sm font-bold text-emerald-400 font-mono block mt-1">مۆرکراو (CRYPTO_SIGNED_OK)</span>
                 </div>
                 <div className="bg-[#070c17] p-4 rounded-xl border border-blue-950/40">
-                  <span className="text-[10px] text-blue-400 font-sans font-bold block">کۆی تێکڕای داهاتی نیشتمانی</span>
-                  <span className="text-2xl font-extrabold text-slate-100 font-mono block mt-1">${tariffSplit.consolidatedTotal.toLocaleString()}</span>
+                  <span className="text-[10px] text-blue-400 font-sans font-bold block">متیۆدی هاوپێچ و دەستووری</span>
+                  <span className="text-lg font-extrabold text-slate-100 font-mono block mt-1">هاوتاکردنی بێ لادانی گشتگیر</span>
                 </div>
 
                 <div className="p-3.5 bg-blue-950/20 rounded-xl border border-blue-900/40 text-xs">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-slate-400">دابەشکاری فیدراڵی (50/50 Split):</span>
-                    <span className="text-slate-200 font-bold font-mono">${tariffSplit.sharedSplitFederal.toLocaleString()}</span>
+                    <span className="text-slate-400">واژۆی لایەنی فیدراڵی:</span>
+                    <span className="text-slate-200 font-bold font-mono">VERIFIED_SIGNATURE</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">دابەشکاری هەرێمی (50/50 Split):</span>
-                    <span className="text-slate-200 font-bold font-mono">${tariffSplit.sharedSplitKrg.toLocaleString()}</span>
+                    <span className="text-slate-400">واژۆی لایەنی هەرێمی کوردستان:</span>
+                    <span className="text-slate-200 font-bold font-mono">TRUSTED_ROOT_OK</span>
                   </div>
                   <div className="border-t border-blue-900/40 mt-3 pt-2 flex items-center justify-between font-mono text-[10px]">
                     <span className="text-slate-500">پێوەر و زانیاری گونجانی گومرگی:</span>
@@ -230,7 +230,7 @@ export default function JointCustomsDashboard() {
                       <th className="p-3 text-start">کۆدی متمانە</th>
                       <th className="p-3 text-start">سەرچاوەی دەرکەوتن</th>
                       <th className="p-3 text-start">کۆدی مانیفێست</th>
-                      <th className="p-3 text-start">کۆی داهات بە دۆلار</th>
+                      <th className="p-3 text-start">ڕەوشی قەتیسکردنی بەها</th>
                       <th className="p-3 text-start">باری دڵنیایی</th>
                       <th className="p-3 text-start">شیکاری متمانەی واژۆ</th>
                     </tr>
@@ -245,7 +245,7 @@ export default function JointCustomsDashboard() {
                           </Badge>
                         </td>
                         <td className="p-3 text-slate-400">{rec.matchedId}</td>
-                        <td className="p-3 text-emerald-400 font-bold">${rec.amountUSD.toLocaleString()}</td>
+                        <td className="p-3 text-emerald-400 font-bold">پارێزراو [SHIELDED_HASH]</td>
                         <td className="p-3">
                           <Badge variant={rec.status === 'fully_matched' ? 'success' : 'warning'}>
                             {rec.status === 'fully_matched' ? 'Fully Reconciled' : 'Evaluating Hash'}

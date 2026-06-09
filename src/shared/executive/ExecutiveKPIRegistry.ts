@@ -137,9 +137,9 @@ export const JOINT_KPI_REGISTRY: DomainKPISet[] = [
     domainNameEn: 'Shared Revenue Control',
     domainNameKu: 'پشکی داهاتی هاوبەش',
     kpis: [
-      { id: 'jnt-rev-saved', nameEn: 'Disputed Tariffs Mitigated', nameKu: 'کێشەی تاریفە گومرگییە چارەسەرکراوەکان', value: '$2.1M', trend: 'up', changeRate: '+14.5%', status: 'optimal' },
-      { id: 'jnt-rev-split', nameEn: 'Revenue Split Protocol', nameKu: 'پرۆتۆکۆڵی دابەشکردنی داهات', value: '50/50 فیدراڵی-هەرێم', trend: 'stable', status: 'optimal' },
-      { id: 'jnt-rev-proc', nameEn: 'Split Receipts Processed', nameKu: 'پسوولە دابەشکراوە مامەڵە پێکراوەکان', value: '$184.2M', trend: 'up', changeRate: '+8.3%', status: 'optimal' }
+      { id: 'jnt-rev-saved', nameEn: 'Disputed Tariffs Mitigated Rate', nameKu: 'ڕێژەی چارەسەری کێشەی تاریفە گومرگییەکان', value: '100%', trend: 'up', changeRate: '+14.5%', status: 'optimal' },
+      { id: 'jnt-rev-split', nameEn: 'Revenue Split Protocol State', nameKu: 'پڕۆتۆکۆڵی دابەشکاریی کریپتۆگرافی', value: 'چالاککراوی دەستووری', trend: 'stable', status: 'optimal' },
+      { id: 'jnt-rev-proc', nameEn: 'Split Receipts Verification Index', nameKu: 'نیشاندەری ڕەسەنایەتی واژۆی پسوولە دابەشکراوەکان', value: '100% متمانەپێکراو', trend: 'up', changeRate: '+8.3%', status: 'optimal' }
     ]
   },
   {

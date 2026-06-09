@@ -5,6 +5,10 @@ import {
 } from 'lucide-react';
 import { Card, Badge, Button } from '../../ui';
 
+// Import useGovernment context and Sovereign policy
+import { useGovernment } from '../../providers/GovernmentProvider';
+import { SovereignRevenueVisibilityPolicy } from '../../shared/revenue/SovereignRevenueVisibilityPolicy';
+
 // Import Federal Revenue Engines
 import { FederalRevenueLedgerEngine } from './core/RevenueLedgerEngine';
 import { FederalCustomsRevenueEngine } from './core/CustomsRevenueEngine';
@@ -14,6 +18,13 @@ import { FederalRevenueLeakageDetectionEngine } from './core/RevenueLeakageDetec
 import { FederalRevenueCollectionEngine } from './core/RevenueCollectionEngine';
 
 export default function FederalRevenueDashboard() {
+  const { activeContext, userRole } = useGovernment();
+
+  const caller = activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL' : 
+                 activeContext === 'KURDISTAN_REGION' ? 'KRG' : 'JOINT';
+
+  const isAuthorized = SovereignRevenueVisibilityPolicy.authorizeAccess(caller, 'FEDERAL');
+
   // Spark state for refresh
   const [ticker, setTicker] = useState(0);
   const handleRefresh = () => setTicker(prev => prev + 1);
@@ -62,6 +73,27 @@ export default function FederalRevenueDashboard() {
       setFeedback({ success: false, msg: res.error });
     }
   };
+
+  if (!isAuthorized) {
+    return (
+      <Card className="border border-red-950 bg-red-950/20 p-8 rounded-xl text-right">
+        <div className="flex items-start gap-4 justify-end">
+          <div className="text-right flex-1">
+            <h3 className="text-lg font-bold text-red-300 font-sans">هاوپێچی ڕێگەپێنەدراو: داتا پارێزراوە لەژێر یاسای سەروەری دارایی نیشتمانی</h3>
+            <p className="text-sm text-red-400/90 mt-2 leading-relaxed font-sans">
+              سیستەمی گشتی یەکگرتوو ڕێگا بە بینینی داهاتی ناوچەی فیدراڵ نادات لە دەرەوەی دەسەڵاتی فەرمی عێراقی فیدراڵ. هەوڵدان بۆ چوونەژوورەوەی جۆری <b>[{caller}]</b> بلۆککراوە.
+            </p>
+            <div className="mt-4 p-3 bg-slate-950/60 rounded border border-red-950/50 text-xs font-mono text-slate-400 text-left">
+              SOVEREIGN_POLICY_REVENUE_ENFORCEMENT: federal_only_allow • SYSTEM_STATE: SECURITY_LOCKED
+            </div>
+          </div>
+          <div className="p-3 bg-red-950 border border-red-905 rounded-lg text-red-400 shrink-0">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">

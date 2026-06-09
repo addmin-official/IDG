@@ -5,6 +5,10 @@ import {
 } from 'lucide-react';
 import { Card, Badge, Button } from '../../ui';
 
+// Import useGovernment context and Sovereign policy
+import { useGovernment } from '../../providers/GovernmentProvider';
+import { SovereignRevenueVisibilityPolicy } from '../../shared/revenue/SovereignRevenueVisibilityPolicy';
+
 // Import KRG Isolated Core Engines
 import { KRGRevenueLedgerEngine } from './core/RevenueLedgerEngine';
 import { KRGCustomsRevenueEngine } from './core/CustomsRevenueEngine';
@@ -14,6 +18,13 @@ import { KRGRevenueLeakageDetectionEngine } from './core/RevenueLeakageDetection
 import { KRGRevenueCollectionEngine } from './core/RevenueCollectionEngine';
 
 export default function KRGRevenueDashboard() {
+  const { activeContext } = useGovernment();
+
+  const caller = activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL' : 
+                 activeContext === 'KURDISTAN_REGION' ? 'KRG' : 'JOINT';
+
+  const isAuthorized = SovereignRevenueVisibilityPolicy.authorizeAccess(caller, 'KRG');
+
   const [ticker, setTicker] = useState(0);
   const handleRefresh = () => setTicker(prev => prev + 1);
 
@@ -61,6 +72,27 @@ export default function KRGRevenueDashboard() {
       setFeedback({ success: false, msg: res.error });
     }
   };
+
+  if (!isAuthorized) {
+    return (
+      <Card className="border border-red-950 bg-red-950/20 p-8 rounded-xl text-right">
+        <div className="flex items-start gap-4 justify-end">
+          <div className="text-right flex-1">
+            <h3 className="text-lg font-bold text-red-300 font-sans">یاسای پاراستنی داهاتی هەرێمی: چوونەژوورەوە بلۆککراوە</h3>
+            <p className="text-sm text-red-400/90 mt-2 leading-relaxed font-sans">
+              یاسای سەروەری گشتی داتا ڕێگا بە هیچ لایەنێکی دەرەکی یان هاوبەش نادات داتا مۆنێتاری تەواوی هەرێمی کوردستان ببینێت. هەوڵدان بۆ چوونەژوورەوەی جۆری <b>[{caller}]</b> ڕەتکرایەوە.
+            </p>
+            <div className="mt-4 p-3 bg-slate-950/60 rounded border border-red-950/50 text-xs font-mono text-slate-400 text-left">
+              SOVEREIGN_POLICY_REVENUE_ENFORCEMENT: krg_only_allow • SYSTEM_STATE: SECURITY_LOCKED
+            </div>
+          </div>
+          <div className="p-3 bg-red-950 border border-red-905 rounded-lg text-red-400 shrink-0">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">

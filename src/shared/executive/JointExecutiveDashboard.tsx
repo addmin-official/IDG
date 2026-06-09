@@ -11,6 +11,7 @@ import JointCustomsDashboard from '../customs/JointCustomsDashboard';
 import JointTradeDashboard from '../../shared/trade/JointTradeDashboard';
 import JointIntegrityDashboard from '../transparency/JointIntegrityDashboard';
 import SovereignGovernanceSection from '../../shared/components/SovereignGovernanceSection';
+import JointNationalSecurityDashboard from '../intelligence/JointNationalSecurityDashboard';
 import { Users } from 'lucide-react';
 
 export default function JointExecutiveDashboard() {
@@ -152,6 +153,17 @@ export default function JointExecutiveDashboard() {
           <Users className="w-3.5 h-3.5 shrink-0 text-amber-400" />
           <span>هێزی کار و دەسەڵاتەکان (Workforce)</span>
         </button>
+        <button
+          onClick={() => setActiveDomainTab('joint-intelligence')}
+          className={`px-3 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
+            activeDomainTab === 'joint-intelligence'
+              ? 'bg-[#1b264f] text-teal-400 border border-teal-500/20 shadow font-bold'
+              : 'text-slate-400 hover:text-white border-transparent'
+          }`}
+        >
+          <ShieldAlert className="w-3.5 h-3.5 shrink-0 text-teal-400" />
+          <span>هەواڵگری و دەروازە نەبیراوەکان (Security)</span>
+        </button>
       </div>
 
       {/* Main Stats Display Grid */}
@@ -170,6 +182,10 @@ export default function JointExecutiveDashboard() {
       ) : activeDomainTab === 'joint-governance' ? (
         <div className="w-full animate-fade-in">
           <SovereignGovernanceSection governingOrg="JOINT_OPERATIONS" />
+        </div>
+      ) : activeDomainTab === 'joint-intelligence' ? (
+        <div className="w-full">
+          <JointNationalSecurityDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

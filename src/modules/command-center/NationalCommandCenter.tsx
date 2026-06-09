@@ -20,6 +20,10 @@ import { KRGPrimeMinisterDesk } from '../../app/components/KRGPrimeMinisterDesk'
 import { JointExecutiveCouncil } from '../../app/components/JointExecutiveCouncil';
 import { FederationOperationsCenter } from '../federation/FederationOperationsCenter';
 import { SovereignGovernanceRouter } from '../../shared/executive/SovereignGovernanceRouter';
+import FederalIntelligenceDashboard from '../../federal/intelligence/FederalIntelligenceDashboard';
+import KRGIntelligenceDashboard from '../../krg/intelligence/KRGIntelligenceDashboard';
+import JointNationalSecurityDashboard from '../../shared/intelligence/JointNationalSecurityDashboard';
+
 
 // Sovereign Procurement Modules
 import NationalTenderCenter from '../../app/components/procurement/NationalTenderCenter';
@@ -381,68 +385,78 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
         {/* TAB 3: SECURITY */}
         {activeCapability === 'security' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h4 className="text-sm font-[700] text-slate-200 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
-                <Shield className="text-rose-500 w-5 h-5 shrink-0" />
-                <span>{getLabel('BORDER INTRUSION & MOVEMENT RADAR CCTV', 'كاميرات المراقبة وأمن ممرات الشحن والحدود', 'ڕادار و کامێراکانی ئاسایشی سنورەکان')}</span>
-              </h4>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(model.thermalSensors)
-                  // Securely partition who can see which border camera sensors!
-                  .filter(([key]) => {
-                    if (activeContext === 'FEDERAL_IRAQ') {
-                      return key.includes('Umm Qasr') || key.includes('Baghdad') || key.includes('Trebil');
-                    }
-                    if (activeContext === 'KURDISTAN_REGION') {
-                      return key.includes('Ibrahim Khalil');
-                    }
-                    return true; // joint sees all
-                  })
-                  .map(([port, temp]) => {
-                    const tempNum = temp as number;
-                    const isHot = tempNum > 40;
-                    return (
-                      <div key={port} className="bg-slate-900/80 p-4 rounded-xl border border-slate-800 overflow-hidden relative group">
-                        <div className="absolute top-0 start-0 w-1.5 h-full bg-red-600 animate-pulse"></div>
-                        <div className="flex justify-between items-center pb-2 border-b border-slate-800/80 mb-2">
-                          <span className="font-bold text-xs uppercase tracking-wider text-slate-200">{port}</span>
-                          <span className="text-[9px] text-[#E0A96D] font-mono uppercase bg-slate-950 px-2 py-0.5 rounded border border-slate-800/80">CCTV LIVE</span>
-                        </div>
-                        <div className="flex items-center justify-between text-xs font-mono">
-                          <div>
-                            <p className="text-slate-400">{getLabel('Laser Scan Temp', 'حرارة الاستشعار', 'پشکنینی گەرمیی لێزەر')}: <span className="text-white font-bold">{tempNum}°C</span></p>
-                            <p className="text-slate-400">{getLabel('Generator Feed', 'تأمين المولدات', 'تەزووی مۆلیدە')}: <span className="text-emerald-400 font-bold">100% SECURE</span></p>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-[10px] text-slate-500 block">JURISDICTION</span>
-                            <span className="text-cyan-400 font-bold capitalize">{activeContext === 'FEDERAL_IRAQ' ? 'Federal' : activeContext === 'KURDISTAN_REGION' ? 'KRG' : 'Joint (HQ)'}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                })}
-              </div>
+          <div className="flex flex-col gap-6">
+            {/* Top-level Unified Sovereign Intelligence Dashboard */}
+            <div className="w-full">
+              {activeContext === 'FEDERAL_IRAQ' && <FederalIntelligenceDashboard />}
+              {activeContext === 'KURDISTAN_REGION' && <KRGIntelligenceDashboard />}
+              {activeContext === 'JOINT_OPERATIONS' && <JointNationalSecurityDashboard />}
             </div>
 
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h4 className="text-sm font-[700] text-slate-200 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
-                {getLabel('CRISIS CONTROLS', 'إدارة الحوادث المتعارضة والمستعجلة', 'کۆنتڕۆڵکردنی کێشە کتوپڕەکان')}
-              </h4>
-              
-              <div className="space-y-3">
-                {model.unresolvedCrisisList.map(crisis => (
-                  <div key={crisis.id} className="bg-slate-950 p-3.5 rounded border border-rose-500/20 hover:border-rose-504 text-xs">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-bold text-slate-200 font-mono text-cyan-400">{crisis.id}</span>
-                      <Badge variant="danger">{crisis.severity}</Badge>
+            {/* Downward secondary panels: CCTV Sensors and Live Crisis controls */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
+                <h4 className="text-sm font-[700] text-slate-200 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3 flex items-center gap-2">
+                  <Shield className="text-rose-500 w-5 h-5 shrink-0" />
+                  <span>{getLabel('BORDER INTRUSION & MOVEMENT RADAR CCTV', 'كاميرات المراقبة وأمن ممرات الشحن والحدود', 'ڕادار و کامێراکانی ئاسایشی سنورەکان')}</span>
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(model.thermalSensors)
+                    // Securely partition who can see which border camera sensors!
+                    .filter(([key]) => {
+                      if (activeContext === 'FEDERAL_IRAQ') {
+                        return key.includes('Umm Qasr') || key.includes('Baghdad') || key.includes('Trebil');
+                      }
+                      if (activeContext === 'KURDISTAN_REGION') {
+                        return key.includes('Ibrahim Khalil');
+                      }
+                      return true; // joint sees all
+                    })
+                    .map(([port, temp]) => {
+                      const tempNum = temp as number;
+                      const isHot = tempNum > 40;
+                      return (
+                        <div key={port} className="bg-slate-900/80 p-4 rounded-xl border border-slate-800 overflow-hidden relative group">
+                          <div className="absolute top-0 start-0 w-1.5 h-full bg-red-600 animate-pulse"></div>
+                          <div className="flex justify-between items-center pb-2 border-b border-slate-800/80 mb-2">
+                            <span className="font-bold text-xs uppercase tracking-wider text-slate-200">{port}</span>
+                            <span className="text-[9px] text-[#E0A96D] font-mono uppercase bg-slate-950 px-2 py-0.5 rounded border border-slate-800/80">CCTV LIVE</span>
+                          </div>
+                          <div className="flex items-center justify-between text-xs font-mono">
+                            <div>
+                              <p className="text-slate-400">{getLabel('Laser Scan Temp', 'حرارة الاستشعار', 'پشکنینی گەرمیی لێزەر')}: <span className="text-white font-bold">{tempNum}°C</span></p>
+                              <p className="text-slate-400">{getLabel('Generator Feed', 'تأمين المولدات', 'تەزووی مۆلیدە')}: <span className="text-emerald-400 font-bold">100% SECURE</span></p>
+                            </div>
+                            <div className="text-right">
+                              <span className="text-[10px] text-slate-500 block">JURISDICTION</span>
+                              <span className="text-cyan-400 font-bold capitalize">{activeContext === 'FEDERAL_IRAQ' ? 'Federal' : activeContext === 'KURDISTAN_REGION' ? 'KRG' : 'Joint (HQ)'}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                  })}
+                </div>
+              </div>
+
+              <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
+                <h4 className="text-sm font-[700] text-slate-200 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
+                  {getLabel('CRISIS CONTROLS', 'إدارة الحوادث المتعارضة والمستعجلة', 'کۆنتڕۆڵکردنی کێشە کتوپڕەکان')}
+                </h4>
+                
+                <div className="space-y-3">
+                  {model.unresolvedCrisisList.map(crisis => (
+                    <div key={crisis.id} className="bg-slate-950 p-3.5 rounded border border-rose-500/20 hover:border-rose-504 text-xs">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-bold text-slate-200 font-mono text-cyan-400">{crisis.id}</span>
+                        <Badge variant="danger">{crisis.severity}</Badge>
+                      </div>
+                      <span className="font-sans block text-rose-400 font-bold">{crisis.type}</span>
+                      <p className="text-slate-400 text-[11px] mt-1">{crisis.desc}</p>
+                      <span className="text-[9px] font-mono text-slate-500 block mt-2">AUTHORITY PATHWAY: {activeContext === 'KURDISTAN_REGION' ? 'AUTH-KRG-CAB' : 'AUTH-FED-CAB'}</span>
                     </div>
-                    <span className="font-sans block text-rose-400 font-bold">{crisis.type}</span>
-                    <p className="text-slate-400 text-[11px] mt-1">{crisis.desc}</p>
-                    <span className="text-[9px] font-mono text-slate-500 block mt-2">AUTHORITY PATHWAY: {activeContext === 'KURDISTAN_REGION' ? 'AUTH-KRG-CAB' : 'AUTH-FED-CAB'}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>

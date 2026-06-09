@@ -11,6 +11,7 @@ import FederalCustomsDashboard from '../customs/FederalCustomsDashboard';
 import FederalTradeDashboard from '../trade/FederalTradeDashboard';
 import FederalTransparencyDashboard from '../transparency/FederalTransparencyDashboard';
 import SovereignGovernanceSection from '../../shared/components/SovereignGovernanceSection';
+import FederalIntelligenceDashboard from '../intelligence/FederalIntelligenceDashboard';
 
 export default function FederalPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -150,6 +151,17 @@ export default function FederalPrimeMinisterDashboard() {
           <Users className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
           <span>هێزی کار و دەسەڵاتەکان (Workforce)</span>
         </button>
+        <button
+          onClick={() => setActiveDomainTab('fed-intelligence')}
+          className={`px-3 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
+            activeDomainTab === 'fed-intelligence'
+              ? 'bg-rose-950/70 text-rose-400 border border-rose-500/20 shadow font-bold'
+              : 'text-slate-400 hover:text-white border-transparent'
+          }`}
+        >
+          <ShieldAlert className="w-3.5 h-3.5 shrink-0 text-rose-400" />
+          <span>هەواڵگری و ئاسایشی نیشتمانی (Security)</span>
+        </button>
       </div>
 
       {/* Main Stats Display Grid */}
@@ -168,6 +180,10 @@ export default function FederalPrimeMinisterDashboard() {
       ) : activeDomainTab === 'fed-governance' ? (
         <div className="w-full animate-fade-in">
           <SovereignGovernanceSection governingOrg="FEDERAL_IRAQ" />
+        </div>
+      ) : activeDomainTab === 'fed-intelligence' ? (
+        <div className="w-full">
+          <FederalIntelligenceDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
