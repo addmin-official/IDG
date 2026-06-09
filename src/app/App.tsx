@@ -178,9 +178,40 @@ function AppContent() {
               <span className="text-[#E0A96D] font-semibold">{userRole}</span>
             </div>
             
-            <div className="flex items-center bg-[#1a2c42]/80 px-3 py-1.5 rounded-lg border border-[#E0A96D]/30 shadow-lg gap-2 text-slate-200 font-sans font-bold text-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>زمان: کوردی (کارپێکراوی سەروەری)</span>
+            <div className="flex items-center bg-[#101b2b] p-1 rounded-xl border border-slate-800 shadow-inner gap-1">
+              <button
+                id="lang-selector-ku"
+                onClick={() => setLang('ku')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all cursor-pointer ${
+                  lang === 'ku'
+                    ? 'bg-gradient-to-r from-emerald-950 to-slate-900 text-emerald-400 border border-emerald-500/30 font-bold shadow'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                کوردی
+              </button>
+              <button
+                id="lang-selector-ar"
+                onClick={() => setLang('ar')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all cursor-pointer ${
+                  lang === 'ar'
+                    ? 'bg-gradient-to-r from-teal-900 to-slate-900 text-teal-300 border border-teal-500/30 font-bold shadow'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                العربية
+              </button>
+              <button
+                id="lang-selector-en"
+                onClick={() => setLang('en')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-[700] transition-all cursor-pointer ${
+                  lang === 'en'
+                    ? 'bg-amber-950 text-[#E0A96D] border border-amber-500/30 font-bold shadow'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                EN
+              </button>
             </div>
           </div>
         </div>

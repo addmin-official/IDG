@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language } from '../types';
+import { LocalizationProvider } from '../shared/localization/LocalizationProvider';
 
 // English imports
 import { common as commonEn } from '../shared/localization/en/common';
@@ -116,37 +117,56 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  // Load initial locale as Kurdish and lock it
-  const [locale, setLocaleState] = useState<Language>('ku');
+  // Load initial locale from localStorage persistence
+  const [locale, setLocaleState] = useState<Language>(() => {
+    const saved = localStorage.getItem('idg_locale');
+    if (saved === 'en' || saved === 'ar' || saved === 'ku') {
+      return saved as Language;
+    }
+    return 'ku'; // Default to Kurdish
+  });
 
-  const direction = 'rtl';
+  const direction = (locale === 'en') ? 'ltr' : 'rtl';
 
   useEffect(() => {
-    localStorage.setItem('idg_locale', 'ku');
+    // Sync the localization providers
+    LocalizationProvider.setLocale(locale);
+
     // Apply layout direction and lang attributes on the HTML root element globally
-    document.documentElement.setAttribute('dir', 'rtl');
-    document.documentElement.setAttribute('lang', 'ku');
+    document.documentElement.setAttribute('dir', direction);
+    document.documentElement.setAttribute('lang', locale);
     
-    // Add RTL class for specialized theme tweaks
-    document.body.classList.add('rtl');
-  }, []);
+    // Add RTL / LTR class for specialized theme tweaks
+    if (direction === 'rtl') {
+      document.body.classList.add('rtl');
+      document.body.classList.remove('ltr');
+    } else {
+      document.body.classList.add('ltr');
+      document.body.classList.remove('rtl');
+    }
+  }, [locale, direction]);
 
   const setLocale = (newLocale: Language) => {
-    // Force Kurdish, ignore other inputs
-    setLocaleState('ku');
+    if (newLocale === 'en' || newLocale === 'ar' || newLocale === 'ku') {
+      setLocaleState(newLocale);
+      localStorage.setItem('idg_locale', newLocale);
+      LocalizationProvider.setLocale(newLocale);
+    }
   };
 
   // Helper function to resolve dot notation paths, supporting t("key") and t(lang, "key")
   const t = (pathOrLang: string, path?: string): string => {
-    let resolvedLocale: Language = 'ku';
+    let resolvedLocale = locale;
     let resolvedPath = pathOrLang;
 
     if (path !== undefined) {
+      resolvedLocale = pathOrLang as Language;
       resolvedPath = path;
     }
 
+    const dict = translations[resolvedLocale] || translations['en'];
     const keys = resolvedPath.split('.');
-    let current: any = translations['ku'];
+    let current: any = dict;
 
     for (const key of keys) {
       if (current && current[key] !== undefined) {
