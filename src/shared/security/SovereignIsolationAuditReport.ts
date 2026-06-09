@@ -8,6 +8,7 @@ import { IntelligenceIsolationAudit } from '../intelligence/IntelligenceIsolatio
 import { SecurityIsolationAudit } from './SecurityIsolationAudit';
 import { AssetIsolationAudit } from '../../services/assets/AssetIsolationAudit';
 import { SharedBoundaryAudit } from './SharedBoundaryAudit';
+import { DemoModeController } from '../demo/DemoModeController';
 
 export interface ComprehensiveAuditMetrics {
   totalModulesAudited: number;
@@ -18,12 +19,13 @@ export interface ComprehensiveAuditMetrics {
   enforcementCoveragePercent: number;
   overallSystemSecure: boolean;
   timestamp: string;
+  acquisitionStatus: 'READY_FOR_ACQUISITION' | 'CONDITIONALLY_READY' | 'NOT_READY';
 }
 
 export class SovereignIsolationAuditReport {
   /**
    * Evaluates and aggregates all regional-federal isolation boundaries.
-   * Compiles the supreme sovereignty audit matrix reporting zero leaks programmatically.
+   * Compiles the supreme sovereignty audit matrix reporting dynamically based on provider configurations.
    */
   public static compileSupremeReport(): ComprehensiveAuditMetrics {
     const execReport = ExecutiveIsolationAudit.runAudit();
@@ -37,11 +39,20 @@ export class SovereignIsolationAuditReport {
     const assetReport = AssetIsolationAudit.runAudit();
     const sharedReport = SharedBoundaryAudit.runAudit();
 
-    // Summing up module coverage
-    const totalModulesAudited = 30; // programmatically tracked boundaries
+    // Dynamically calculate provider audit status
+    const providers = ['checkpoint', 'operational', 'audit', 'ledger', 'workflow'];
+    let unconfiguredCount = 0;
+    providers.forEach(p => {
+      const state = DemoModeController.getProviderState(p);
+      if (state !== 'configured' && state !== 'ready') {
+        unconfiguredCount++;
+      }
+    });
+
+    const totalModulesAudited = 30; // Programmatically tracked boundaries
 
     // Real programmatic scanning
-    let crossJurisdictionLeaks = 0;
+    let crossJurisdictionLeaks = unconfiguredCount; // Map unconfigured providers as potential leaks
     let sharedLayerViolations = 0;
     let criticalViolations = 0;
 
@@ -59,15 +70,24 @@ export class SovereignIsolationAuditReport {
     const totalViolations = criticalViolations + crossJurisdictionLeaks + sharedLayerViolations;
     const overallSystemSecure = totalViolations === 0;
 
+    // Calculate dynamic enforcement coverage percentage
+    const configuredCount = 5 - unconfiguredCount;
+    const enforcementCoveragePercent = Math.round((configuredCount / 5) * 100);
+
+    const acquisitionStatus = unconfiguredCount === 0 
+      ? 'READY_FOR_ACQUISITION' as const 
+      : 'CONDITIONALLY_READY' as const;
+
     return {
       totalModulesAudited,
       totalViolations,
       criticalViolations,
       crossJurisdictionLeaks,
       sharedLayerViolations,
-      enforcementCoveragePercent: 100, // 100% verified isolated coverage
+      enforcementCoveragePercent,
       overallSystemSecure,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      acquisitionStatus
     };
   }
 }

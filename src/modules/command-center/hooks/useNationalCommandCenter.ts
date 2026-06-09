@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Language, Checkpoint } from '../../../types';
-import { CHECKPOINTS } from '../../../mockData';
+import { DemoModeController } from '../../../shared/demo/DemoModeController';
 
 export function useNationalCommandCenter(lang: Language) {
   // Active User Profile Role Selection
   const [activeRole, setActiveRole] = useState<'pmo' | 'ministries' | 'customs' | 'border' | 'economic'>('pmo');
 
   // Selected Gate/Checkpoint for granular analysis
-  const [selectedGate, setSelectedGate] = useState<Checkpoint>(CHECKPOINTS[0]);
+  const [selectedGate, setSelectedGate] = useState<Checkpoint>(DemoModeController.getCheckpoints()[0]);
 
   // Command Desk Live Simulations
   const [thermalSensors, setThermalSensors] = useState<Record<string, number>>({ 
