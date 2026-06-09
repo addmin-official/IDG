@@ -73,13 +73,13 @@ export const AuditLogStreamPanel: React.FC<AuditLogStreamPanelProps> = React.mem
             return (
               <tr 
                 key={log.id} 
-                className={`hover:bg-slate-900/30 font-mono text-[11px] ${
+                className={`hover:bg-slate-900/30 font-sans text-[11px] ${
                   isViolation ? 'bg-red-950/15 text-red-100 border-l border-red-500/50' : ''
                 }`}
               >
-                <td className="px-4 py-3 font-semibold text-[#E0A96D]">{log.id}</td>
-                <td className="px-4 py-3 text-slate-400">{log.timestamp.slice(11, 19)}Z</td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 font-semibold text-[#E0A96D] whitespace-nowrap">{log.id}</td>
+                <td className="px-4 py-3 text-slate-400 whitespace-nowrap">{log.timestamp.slice(11, 19)}Z</td>
+                <td className="px-4 py-3 whitespace-nowrap">
                   <Badge variant={
                     log.eventType === 'SECURITY_VIOLATION' ? 'danger' :
                     log.eventType === 'KEY_ROTATION' ? 'gold' :
@@ -91,24 +91,24 @@ export const AuditLogStreamPanel: React.FC<AuditLogStreamPanelProps> = React.mem
                      log.eventType}
                   </Badge>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 whitespace-normal break-words min-w-[120px]">
                   <strong className="text-white block">{log.subjectUsername}</strong>
                   <span className="text-[10px] text-slate-500 block">
                     {translateRole(lang, log.subjectRole)} {t(lang, 'abac.profile.clearance')}: {translateClearance(lang, log.clearanceLevel)}
                   </span>
                 </td>
-                <td className="px-4 py-3 max-w-sm">
+                <td className="px-4 py-3 max-w-sm whitespace-normal break-words min-w-[200px]">
                   <span className="text-slate-250 block font-sans font-semibold text-xs text-start">
                     {log.actionSummary}
                   </span>
-                  <span className="text-[10px] text-slate-500 block font-mono leading-relaxed mt-1 bg-slate-950/40 p-1.5 border border-slate-900 rounded italic text-start">
+                  <span className="text-[10px] text-slate-400 block font-sans leading-relaxed mt-1 bg-slate-950/40 p-1.5 border border-slate-900 rounded italic text-start">
                     "{log.resourceDetails}"
                   </span>
                 </td>
-                <td className="px-4 py-3 font-mono text-[9px] text-[#E0A96D] tracking-tighter">
+                <td className="px-4 py-3 font-mono text-[9px] text-[#E0A96D] tracking-tighter whitespace-normal break-all min-w-[90px]">
                   {log.integrityChainHash.slice(0, 14)}...
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 whitespace-nowrap">
                   <span className={`font-bold uppercase text-[9px] ${isViolation ? 'text-red-400' : 'text-[#52B788]'}`}>
                     {log.status === 'SUCCESS' ? t(lang, 'audit.state.chained') : t(lang, 'audit.state.blocked')}
                   </span>

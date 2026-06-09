@@ -57,23 +57,23 @@ export const ActiveSocketsPanel: React.FC<ActiveSocketsPanelProps> = React.memo(
             return (
               <tr 
                 key={session.sessionId} 
-                className={`hover:bg-slate-900/30 font-mono text-xs ${
+                className={`hover:bg-slate-900/30 font-sans text-xs ${
                   isLocked ? 'bg-red-950/20 text-red-100 border-l-4 border-red-500' : 
                   isChallenged ? 'bg-amber-950/10 text-amber-100 border-l-4 border-amber-500' : ''
                 }`}
               >
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-normal break-words min-w-[120px]">
                   <strong className="text-white block">{session.username}</strong>
                   <span className="text-[10px] text-slate-500 block">
                     {session.userId} ({translateRole(lang, session.userRole)})
                   </span>
                 </td>
-                <td className="px-4 py-3.5 text-[#E0A96D] font-bold text-xs uppercase">
+                <td className="px-4 py-3.5 text-[#E0A96D] font-bold text-xs uppercase whitespace-normal break-words min-w-[100px]">
                   {session.associatedMinistry 
                     ? translateMinistry(lang, session.associatedMinistry) 
                     : t(lang, 'activeSockets.actions.external')}
                 </td>
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-nowrap">
                   <Badge variant={
                     session.clearanceLevel === 'SOVEREIGN' ? 'gold' :
                     session.clearanceLevel === 'SECRET' ? 'danger' :
@@ -82,25 +82,25 @@ export const ActiveSocketsPanel: React.FC<ActiveSocketsPanelProps> = React.memo(
                     {translateClearance(lang, session.clearanceLevel)}
                   </Badge>
                 </td>
-                <td className="px-4 py-3.5 text-[11px] leading-snug">
-                  <span className="text-slate-300 block">{session.device.osName}</span>
-                  <span className="text-[10px] text-slate-500 block">
+                <td className="px-4 py-3.5 text-[11px] leading-snug whitespace-normal break-words min-w-[130px]">
+                  <span className="text-slate-300 block font-sans">{session.device.osName}</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">
                     {session.device.cpuArchitecture} Enclave:{' '}
                     {session.device.secureEnclavePresent 
                       ? t(lang, 'activeSockets.actions.yes') 
                       : t(lang, 'activeSockets.actions.no')}
                   </span>
                 </td>
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-normal break-words min-w-[120px]">
                   <span className="text-slate-300 block">{session.location.ipAddress}</span>
                   <span className="text-[10px] text-cyan-400 font-bold block">{session.location.geographicRegion}</span>
                 </td>
-                <td className="px-4 py-3.5">
+                <td className="px-4 py-3.5 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <span className={`text-[13px] font-extrabold ${isLocked ? 'text-red-500' : isChallenged ? 'text-amber-500' : 'text-emerald-400'}`}>
                       {session.riskScore}%
                     </span>
-                    <span className="text-[9px] text-slate-500">
+                    <span className="text-[10px] text-slate-400 font-semibold block whitespace-nowrap">
                       ({isLocked 
                         ? t(lang, 'activeSockets.actions.lock') 
                         : isChallenged 
@@ -109,7 +109,7 @@ export const ActiveSocketsPanel: React.FC<ActiveSocketsPanelProps> = React.memo(
                     </span>
                   </div>
                 </td>
-                <td className="px-4 py-3.5 text-center">
+                <td className="px-4 py-3.5 text-center whitespace-nowrap">
                   <Button
                     size="sm"
                     variant={isLocked ? 'danger' : 'outline'}

@@ -178,10 +178,9 @@ function AppContent() {
               <span className="text-[#E0A96D] font-semibold">{userRole}</span>
             </div>
             
-            <div className="flex items-center bg-[#1a2c42] p-1 rounded-md border border-slate-700 shadow-lg" dir="ltr">
-              <button id="lang-btn-en" onClick={() => setLang('en')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'en' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.en')}</button>
-              <button id="lang-btn-ar" onClick={() => setLang('ar')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'ar' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.ar')}</button>
-              <button id="lang-btn-ku" onClick={() => setLang('ku')} className={`cursor-pointer px-2.5 py-1 rounded text-xs font-[700] hover:text-white transition-colors duration-200 ${lang === 'ku' ? 'bg-[#E0A96D] text-[#0D1B2A]' : 'text-slate-300'}`}>{t(lang, 'languages.ku')}</button>
+            <div className="flex items-center bg-[#1a2c42]/80 px-3 py-1.5 rounded-lg border border-[#E0A96D]/30 shadow-lg gap-2 text-slate-200 font-sans font-bold text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>زمان: کوردی (کارپێکراوی سەروەری)</span>
             </div>
           </div>
         </div>
@@ -222,23 +221,34 @@ function AppContent() {
       </nav>
 
       <section id="idg-metrics-ticker" className="bg-[#0b1420] border-b border-slate-800/60 py-2 px-4 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-4 items-center justify-between">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-between">
           <div className="flex flex-wrap gap-3 items-center">
-            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
+            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px] whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-slate-400 font-mono">CONTEXT: <b className="text-emerald-400">{activeContext}</b></span>
+              <span className="text-slate-400 font-mono">
+                {lang === 'en' ? 'CONTEXT' : lang === 'ar' ? 'السياق' : 'بوار'}: <b className="text-emerald-400">{activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'FEDERAL' : lang === 'ar' ? 'اتحادي' : 'فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG' : lang === 'ar' ? 'الإقليم' : 'هەرێم') : (lang === 'en' ? 'JOINT' : lang === 'ar' ? 'مشترك' : 'هاوبەش')}</b>
+              </span>
             </span>
-            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
+            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px] whitespace-nowrap">
               <Database className="w-3 h-3 text-[#E0A96D]" />
-              <span className="text-slate-400 font-mono">STORAGE: <b className="text-slate-200">{activeContext === 'FEDERAL_IRAQ' ? 'BAGHDAD_SECURE_NODE_1' : activeContext === 'KURDISTAN_REGION' ? 'ERBIL_CLUSTER_DB_7' : 'FEDERATED_REPLICATED_RING'}</b></span>
+              <span className="text-slate-400 font-mono">
+                {lang === 'en' ? 'STORAGE' : lang === 'ar' ? 'التخزين' : 'کۆگا'}: <b className="text-slate-200">{activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'BAGHDAD_SECURE_NODE' : 'عقدة_بغداد_الآمنة') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'ERBIL_CLUSTER_DB' : 'عنقود_أربيل_لقواعد_البيانات') : (lang === 'en' ? 'FEDERATED_REPLICATED_RING' : 'الحلقة_الاتحادية_المكررة')}</b>
+              </span>
             </span>
-            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px]">
+            <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px] whitespace-nowrap">
               <Shield className="w-3 h-3 text-slate-400" />
-              <span className="text-slate-400 font-mono">UPTIME: <b className="text-[#E0A96D]">{uptime}%</b></span>
+              <span className="text-slate-400 font-mono">
+                {lang === 'en' ? 'UPTIME' : lang === 'ar' ? 'وقت التشغيل' : 'کاتی کارکردن'}: <b className="text-[#E0A96D]">{uptime}%</b>
+              </span>
             </span>
           </div>
-          <span className="text-[#E0A96D] font-bold text-[11px] uppercase font-mono">
-            {activeContext === 'FEDERAL_IRAQ' ? 'FEDERAL SOVEREIGN SECURED' : activeContext === 'KURDISTAN_REGION' ? 'KRG REGIONAL AUTHORITY INTEGRAL' : 'INTER-FEDERATED INTEROPERABILITY NODE ACTIVE'}
+          <span className="text-[#E0A96D] font-bold text-[11px] uppercase font-mono text-center sm:text-end whitespace-nowrap">
+            {activeContext === 'FEDERAL_IRAQ' 
+              ? (lang === 'en' ? 'FEDERAL SOVEREIGN SECURED' : lang === 'ar' ? 'الأمن السيادي الاتحادي مؤمن' : 'دەسەڵاتی سەروەریی فیدراڵ پارێزراوە') 
+              : activeContext === 'KURDISTAN_REGION' 
+                ? (lang === 'en' ? 'KRG REGIONAL AUTHORITY INTEGRAL' : lang === 'ar' ? 'سلطة إقليم كوردستان كاملة الأهلية' : 'بارودۆخی دەسەڵاتی هەرێم تەواوە') 
+                : (lang === 'en' ? 'INTER-FEDERATED INTEROPERABILITY NODE ACTIVE' : lang === 'ar' ? 'منفذ التشغيل البيني الفيدرالي نشط' : 'گرێی هاوبەشی فیدراڵی چالاکە')
+            }
           </span>
         </div>
       </section>
@@ -278,21 +288,21 @@ function AppContent() {
         {activeTab === 'state-assets' && <NationalAssetAuthorityDashboard lang={lang} />}
       </main>
 
-      <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start">
+      <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start w-full">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-[#cca553]" />
-            <div>
-              <p className="text-slate-300 font-semibold font-mono uppercase">
-                IRAQ DIGITAL GATEWAY (IDG) • DUAL-ENGINE SOVEREIGN ADMINISTRATION
+            <Shield className="w-4 h-4 text-[#cca553] shrink-0" />
+            <div className="min-w-0">
+              <p className="text-slate-300 font-semibold font-mono uppercase text-xs break-words">
+                {lang === 'en' ? 'IRAQ DIGITAL GATEWAY (IDG) • DUAL-ENGINE SOVEREIGN ADMINISTRATION' : lang === 'ar' ? 'البوابة الرقمية العراقية (IDG) • الإدارة السيادية ثنائية المحرك' : 'دەروازەی دیجیتاڵیی عێراق (IDG) • کارگێڕیی سەروەریی دوو بزوێنەر'}
               </p>
-              <p className="text-[10px] text-slate-500">
-                Council of Ministers Unified Custom Interoperability Infrastructure & Kurdistan Regional Government Executive Office Handshake
+              <p className="text-[10px] text-slate-500 break-words mt-0.5 whitespace-normal">
+                {lang === 'en' ? 'Council of Ministers Unified Custom Interoperability Infrastructure & Kurdistan Regional Government Executive Office Handshake' : lang === 'ar' ? 'البنية التحتية الجمركية الموحدة لمجلس الوزراء ومصادقة المكتب التنفيذي لحكومة إقليم كوردستان' : 'ژێرخانی جیاوازی یەکگرتووی ئەنجومەنی وەزیران و هەماهەنگیی نووسینگەی جێبەجێکاری حکومەتی هەرێمی کوردستان'}
               </p>
             </div>
           </div>
-          <div className="flex gap-4 text-slate-500 font-mono text-[10px]">
-            <span>Baghdad Central • Erbil Regional • Umm Qasr Route</span>
+          <div className="flex gap-4 text-slate-500 font-mono text-[10px] shrink-0">
+            <span>{lang === 'en' ? 'Baghdad Central • Erbil Regional • Umm Qasr Route' : lang === 'ar' ? 'بغداد المركزية • أربيل الإقليمية • مسار أم قصر' : 'بەغدادی ناوەندی • هەولێری هەرێمی • ڕێڕەوی ئوم قەسر'}</span>
           </div>
         </div>
       </footer>

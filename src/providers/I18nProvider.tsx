@@ -116,44 +116,37 @@ interface I18nContextType {
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  // Load initial locale from localStorage or default to Kurdish/Arabic/English based on preference
-  const [locale, setLocaleState] = useState<Language>(() => {
-    const saved = localStorage.getItem('idg_locale');
-    return (saved as Language) || 'ku'; // Default to Kurdish as first, or Arabic/English
-  });
+  // Load initial locale as Kurdish and lock it
+  const [locale, setLocaleState] = useState<Language>('ku');
 
-  const direction = locale === 'en' ? 'ltr' : 'rtl';
+  const direction = 'rtl';
 
   useEffect(() => {
-    localStorage.setItem('idg_locale', locale);
+    localStorage.setItem('idg_locale', 'ku');
     // Apply layout direction and lang attributes on the HTML root element globally
-    document.documentElement.setAttribute('dir', direction);
-    document.documentElement.setAttribute('lang', locale);
+    document.documentElement.setAttribute('dir', 'rtl');
+    document.documentElement.setAttribute('lang', 'ku');
     
     // Add RTL class for specialized theme tweaks
-    if (direction === 'rtl') {
-      document.body.classList.add('rtl');
-    } else {
-      document.body.classList.remove('rtl');
-    }
-  }, [locale, direction]);
+    document.body.classList.add('rtl');
+  }, []);
 
   const setLocale = (newLocale: Language) => {
-    setLocaleState(newLocale);
+    // Force Kurdish, ignore other inputs
+    setLocaleState('ku');
   };
 
   // Helper function to resolve dot notation paths, supporting t("key") and t(lang, "key")
   const t = (pathOrLang: string, path?: string): string => {
-    let resolvedLocale = locale;
+    let resolvedLocale: Language = 'ku';
     let resolvedPath = pathOrLang;
 
     if (path !== undefined) {
-      resolvedLocale = pathOrLang as Language;
       resolvedPath = path;
     }
 
     const keys = resolvedPath.split('.');
-    let current: any = translations[resolvedLocale] || translations['ku'];
+    let current: any = translations['ku'];
 
     for (const key of keys) {
       if (current && current[key] !== undefined) {

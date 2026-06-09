@@ -23,7 +23,7 @@ export const ComplianceChecklistPanel: React.FC<ComplianceChecklistPanelProps> =
         </span>
       </h3>
 
-      <div className="flex flex-col gap-3 font-mono text-xs">
+      <div className="flex flex-col gap-3 font-sans text-xs">
         {complianceChecklist.map((c) => (
           <div 
             key={c.code}

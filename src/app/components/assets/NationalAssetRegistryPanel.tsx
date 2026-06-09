@@ -42,6 +42,24 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
     return en;
   };
 
+  const getCatLabel = (cat: string) => {
+    switch (cat) {
+      case 'all': return getLabel('ALL', 'الكل', 'هەموو');
+      case 'ENERGY': return getLabel('ENERGY', 'طاقة', 'وزە');
+      case 'INFRASTRUCTURE': return getLabel('INFRASTRUCTURE', 'بنية تحتية', 'ژێرخان');
+      case 'WATER': return getLabel('WATER', 'مياه', 'ئاو');
+      case 'TRANSPORT': return getLabel('TRANSPORT', 'نقل', 'گواستنەوە');
+      case 'AIRPORT': return getLabel('AIRPORT', 'مطار', 'فڕۆکەخانە');
+      case 'SEAPORT': return getLabel('SEAPORT', 'ميناء', 'بەندەر');
+      case 'BORDER_GATE': return getLabel('BORDER GATE', 'منفذ حدودي', 'دەروازەی سنووری');
+      case 'MILITARY': return getLabel('MILITARY', 'عسكري', 'سەربازی');
+      case 'DIGITAL': return getLabel('DIGITAL', 'رقمي', 'دیجیتاڵی');
+      case 'TELECOM': return getLabel('TELECOM', 'اتصالات', 'گەیاندن');
+      case 'STRATEGIC': return getLabel('STRATEGIC', 'إستراتيجي', 'ستراتیژی');
+      default: return cat;
+    }
+  };
+
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !valuation || !revenue) {
@@ -202,8 +220,8 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                   required
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="e.g. Kirkuk Water Treatment Station"
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none focus:border-[#cca553]"
+                  placeholder={getLabel('e.g. Kirkuk Water Treatment Station', 'مثل: محطة تصفية المياه في كركوك', 'بۆ نموونە: وێستگەی پاڵاوتنی ئاوی کەرکووک')}
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none focus:border-[#cca553]"
                 />
               </div>
 
@@ -214,19 +232,19 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                 <select
                   value={category}
                   onChange={e => setCategory(e.target.value as AssetCategory)}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 >
-                  <option value="ENERGY">ENERGY</option>
-                  <option value="INFRASTRUCTURE">INFRASTRUCTURE</option>
-                  <option value="WATER">WATER</option>
-                  <option value="TRANSPORT">TRANSPORT</option>
-                  <option value="AIRPORT">AIRPORT</option>
-                  <option value="SEAPORT">SEAPORT</option>
-                  <option value="BORDER_GATE">BORDER_GATE</option>
-                  <option value="MILITARY">MILITARY</option>
-                  <option value="DIGITAL">DIGITAL</option>
-                  <option value="TELECOM">TELECOM</option>
-                  <option value="STRATEGIC">STRATEGIC</option>
+                  <option value="ENERGY">{getLabel('ENERGY', 'طاقة', 'وزە')}</option>
+                  <option value="INFRASTRUCTURE">{getLabel('INFRASTRUCTURE', 'بنية تحتية', 'ژێرخان')}</option>
+                  <option value="WATER">{getLabel('WATER', 'مياه', 'ئاو')}</option>
+                  <option value="TRANSPORT">{getLabel('TRANSPORT', 'نقل', 'گواستنەوە')}</option>
+                  <option value="AIRPORT">{getLabel('AIRPORT', 'مطار', 'فڕۆکەخانە')}</option>
+                  <option value="SEAPORT">{getLabel('SEAPORT', 'ميناء بحري', 'بەندەر')}</option>
+                  <option value="BORDER_GATE">{getLabel('BORDER GATE', 'منفذ حدودي', 'دەروازەی سنووری')}</option>
+                  <option value="MILITARY">{getLabel('MILITARY', 'عسكري', 'سەربازی')}</option>
+                  <option value="DIGITAL">{getLabel('DIGITAL', 'رقمي', 'دیجیتاڵی')}</option>
+                  <option value="TELECOM">{getLabel('TELECOM', 'اتصالات', 'گەیاندن')}</option>
+                  <option value="STRATEGIC">{getLabel('STRATEGIC', 'إستراتيجي', 'ستراتیژی')}</option>
                 </select>
               </div>
 
@@ -237,13 +255,13 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                 <select
                   value={ownership}
                   onChange={e => setOwnership(e.target.value as OwnershipModel)}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 >
-                  <option value="FEDERAL_IRAQ">FEDERAL IRAQ</option>
-                  <option value="KRG">KURDISTAN REGION (KRG)</option>
-                  <option value="JOINT">JOINT COUNCIL</option>
-                  <option value="MINISTRY">MINISTRY LEVEL</option>
-                  <option value="STATE_ENTERPRISE">STATE OWNED ENTERPRISE</option>
+                  <option value="FEDERAL_IRAQ">{getLabel('FEDERAL IRAQ', 'العراق الاتحادي', 'عێراقی فیدراڵ')}</option>
+                  <option value="KRG">{getLabel('KURDISTAN REGION (KRG)', 'إقليم كوردستان', 'هەرێمی کوردستان')}</option>
+                  <option value="JOINT">{getLabel('JOINT COUNCIL', 'مجلس مشترك', 'ئەنجومەنی هاوبەش')}</option>
+                  <option value="MINISTRY">{getLabel('MINISTRY LEVEL', 'مستوى الوزارة', 'ئاستی وەزارەت')}</option>
+                  <option value="STATE_ENTERPRISE">{getLabel('STATE OWNED ENTERPRISE', 'شركة تابعة للدولة', 'کۆمپانیای سەر بە دەوڵەت')}</option>
                 </select>
               </div>
             </div>
@@ -256,11 +274,11 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                 <select
                   value={jurisdiction}
                   onChange={e => setJurisdiction(e.target.value as 'federal' | 'krg' | 'joint')}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 >
-                  <option value="federal">FEDERAL</option>
-                  <option value="krg">KRG</option>
-                  <option value="joint">JOINT BOUNDARY</option>
+                  <option value="federal">{getLabel('FEDERAL', 'اتحادي', 'فیدراڵ')}</option>
+                  <option value="krg">{getLabel('KRG', 'إقليم كوردستان', 'هەرێمی کوردستان')}</option>
+                  <option value="joint">{getLabel('JOINT BOUNDARY', 'حدود مشتركة', 'سنووری هاوبەش')}</option>
                 </select>
               </div>
 
@@ -274,7 +292,7 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                   required
                   value={valuation}
                   onChange={e => setValuation(e.target.value)}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 />
               </div>
 
@@ -288,7 +306,7 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                   required
                   value={revenue}
                   onChange={e => setRevenue(e.target.value)}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 />
               </div>
 
@@ -302,7 +320,7 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                   required
                   value={depreciation}
                   onChange={e => setDepreciation(e.target.value)}
-                  className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
+                  className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white focus:outline-none"
                 />
               </div>
             </div>
@@ -314,8 +332,8 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
               <textarea
                 value={desc}
                 onChange={e => setDesc(e.target.value)}
-                placeholder="Constitutional coordinates, parcel codes..."
-                className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white h-16 focus:outline-none"
+                placeholder={getLabel('Constitutional coordinates, parcel codes...', 'الرموز والإحداثيات الجغرافية...', 'کۆئۆردینیتی دەستووری، کۆدەکانی پارچە زەوی...')}
+                className="w-full max-w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs p-2 text-white h-16 focus:outline-none whitespace-normal break-words"
               />
             </div>
 
@@ -329,15 +347,15 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
         )}
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 bg-slate-950 p-2 rounded-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-slate-950 p-2 rounded-xl w-full">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
+            <Search className={`w-4 h-4 absolute ${lang !== 'en' ? 'right-3' : 'left-3'} top-2.5 text-slate-400`} />
             <input
               type="text"
               placeholder={getLabel('Search assets by name or ledger ID', 'البحث في سجل الأصول السيادية', 'گەڕان بەدوای سامان یان پڕۆژە نیشتمانییەکان')}
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs pl-9 pr-3 py-2 text-white focus:outline-none"
+              className={`w-full bg-[#111e2f] border border-[#233d5a] rounded-lg text-xs ${lang !== 'en' ? 'pr-9 pl-3' : 'pl-9 pr-3'} py-2 text-white focus:outline-none`}
             />
           </div>
 
@@ -352,14 +370,14 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                     : 'border-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                {cat}
+                {getCatLabel(cat)}
               </button>
             ))}
           </div>
         </div>
 
         {/* Table Render */}
-        <div className="overflow-x-auto rounded-xl border border-slate-900">
+        <div className="overflow-x-auto rounded-xl border border-slate-900 w-full">
           <table className="w-full text-start border-collapse text-xs">
             <thead>
               <tr className="bg-slate-950 text-slate-400 font-mono text-[10px] uppercase border-b border-slate-900">
@@ -383,37 +401,52 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
                   <tr key={asset.id} className="hover:bg-slate-900/50 transition-all font-sans">
                     <td className="p-3 space-y-1">
                       <div className="flex items-center gap-1.5 font-bold text-slate-200">
-                        <MapPin className="w-3.5 h-3.5 text-[#cca553]/70" />
-                        {asset.name}
+                        <MapPin className="w-3.5 h-3.5 text-[#cca553]/70 shrink-0" />
+                        <span className="break-words white-space-normal">{asset.name}</span>
                       </div>
                       <span className="text-[10px] font-mono text-slate-500 block">{asset.id}</span>
                     </td>
                     <td className="p-3">
-                      <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-[#111e2f] border border-[#233d5a] text-[#cca553]">
-                        {asset.category}
+                      <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-[#111e2f] border border-[#233d5a] text-[#cca553] whitespace-nowrap">
+                        {getCatLabel(asset.category)}
                       </span>
-                      <span className="block text-[10px] text-slate-400 mt-1">{asset.ownership}</span>
+                      <span className="block text-[10px] text-slate-400 mt-1 whitespace-nowrap">
+                        {asset.ownership === 'FEDERAL_IRAQ' ? getLabel('Federal Iraq', 'العراق الاتحادي', 'عێراقی فیدراڵ') :
+                         asset.ownership === 'KRG' ? getLabel('Kurdistan Region (KRG)', 'إقليم كوردستان', 'هەرێمی کوردستان') :
+                         asset.ownership === 'JOINT' ? getLabel('Joint Council', 'مجلس مشترك', 'ئەنجومەنی هاوبەش') :
+                         asset.ownership === 'MINISTRY' ? getLabel('Ministry Level', 'مستوى الوزارة', 'ئاستی وەزارەت') :
+                         asset.ownership === 'STATE_ENTERPRISE' ? getLabel('State Owned Enterprise', 'شركة تابعة للدولة', 'کۆمپانیای سەر بە دەوڵەت') :
+                         asset.ownership}
+                      </span>
                     </td>
                     <td className="p-3 space-y-1">
                       <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
                         asset.lifecycle === 'ACTIVE' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-900/40' : 
                         asset.lifecycle === 'VERIFIED' ? 'bg-blue-950/60 text-blue-400 border border-blue-900/40' : 'bg-slate-900 text-slate-400 border-transparent'
                       }`}>
-                        {asset.lifecycle}
+                        {asset.lifecycle === 'ACTIVE' ? getLabel('ACTIVE', 'نشط', 'چالاک') :
+                         asset.lifecycle === 'VERIFIED' ? getLabel('VERIFIED', 'مؤكد', 'پەسەندکراو') :
+                         asset.lifecycle === 'REGISTERED' ? getLabel('REGISTERED', 'مسجل', 'تۆمارکراو') :
+                         asset.lifecycle}
                       </span>
-                      <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider">{asset.jurisdiction} JURISDICTION</span>
+                      <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                        {asset.jurisdiction === 'federal' ? getLabel('FEDERAL', 'اتحادي', 'فیدراڵ') :
+                         asset.jurisdiction === 'krg' ? getLabel('KRG', 'إقليم كوردستان', 'هەرێمی کوردستان') :
+                         asset.jurisdiction === 'joint' ? getLabel('JOINT BOUNDARY', 'حدود مشتركة', 'سنووری هاوبەش') :
+                         asset.jurisdiction}
+                      </span>
                     </td>
-                    <td className="p-3 text-end font-mono font-bold text-[#cca553]">
+                    <td className="p-3 text-end font-mono font-bold text-[#cca553] whitespace-nowrap">
                       ${asset.valuationUSD.toLocaleString()}M
                     </td>
-                    <td className="p-3 text-end font-mono text-slate-300">
+                    <td className="p-3 text-end font-mono text-slate-300 whitespace-nowrap">
                       ${asset.annualRevenueYieldUSD.toLocaleString()}M
                       <span className="block text-[10px] text-slate-500 font-mono">{(asset.annualRevenueYieldUSD / asset.valuationUSD * 100).toFixed(1)}% yield</span>
                     </td>
-                    <td className="p-3 font-mono space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-slate-400">Compliance: <b className="text-emerald-400">{asset.complianceScore}%</b></span>
-                        <span className="text-[10px] text-slate-400">Risk: <b className="text-red-400">{asset.riskScore}%</b></span>
+                    <td className="p-3 font-mono space-y-1 min-w-[150px]">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[10px] text-slate-400">{getLabel('Compliance', 'الامتثال', 'پابەندبوون')}: <b className="text-emerald-400">{asset.complianceScore}%</b></span>
+                        <span className="text-[10px] text-slate-400">{getLabel('Risk', 'المخاطر', 'مەترسی')}: <b className="text-red-400">{asset.riskScore}%</b></span>
                       </div>
                       <div className="text-[9px] text-slate-500 text-ellipsis overflow-hidden whitespace-nowrap max-w-[170px]" title={asset.auditHash}>
                         {asset.auditHash}
