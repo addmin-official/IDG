@@ -281,8 +281,8 @@ export default function JointCustomsDashboard() {
                     onChange={(e) => setSimHsCode(e.target.value)}
                     className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                   >
-                    {Object.values(HS_CODE_REGISTRY).map(code => (
-                      <option key={code.code} value={code.code}>{code.code} - {code.descriptionEn.substring(0, 45)}...</option>
+                    {Object.values(HSCodeRegistry).map(code => (
+                      <option key={(code as any).code} value={(code as any).code}>{(code as any).code} - {(code as any).descriptionEn.substring(0, 45)}...</option>
                     ))}
                   </select>
                 </div>

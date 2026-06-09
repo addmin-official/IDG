@@ -34,6 +34,11 @@ import { NationalEnergyRegistryComponent } from './NationalEnergyRegistry';
 import { NationalProjectsRegistryPanel } from './NationalProjectsRegistryPanel';
 import { RevenueSharingPanel } from './RevenueSharingPanel';
 
+// Import newly created Sovereign Revenue Dashboards
+import FederalRevenueDashboard from '../../../federal/revenue/FederalRevenueDashboard';
+import KRGRevenueDashboard from '../../../krg/revenue/KRGRevenueDashboard';
+import JointRevenueDashboard from '../../../shared/revenue/JointRevenueDashboard';
+
 // Sovereign Procurement
 import NationalTenderCenter from '../procurement/NationalTenderCenter';
 import ContractLifecyclePanel from '../procurement/ContractLifecyclePanel';
@@ -47,7 +52,7 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
   const isRtl = lang !== 'en';
 
   const [activeCabinetTab, setActiveCabinetTab] = useState<
-    'federal-treasury' | 'krg-treasury' | 'fiscal-ledger' | 'revenue-recon' | 'debt-registry' | 'asset-registry' | 'settlement-ops'
+    'federal-treasury' | 'krg-treasury' | 'fiscal-ledger' | 'revenue-recon' | 'debt-registry' | 'asset-registry' | 'settlement-ops' | 'federal-revenue' | 'krg-revenue' | 'joint-revenue'
   >('federal-treasury');
 
   const [masterHub, setMasterHub] = useState<'fiscal-os' | 'resource-os'>('fiscal-os');
@@ -371,7 +376,10 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
               { id: 'federal-treasury', label: getLabel('Federal Treasury Core', 'الخزينة الاتحادية', 'خزێنەی فیدراڵ'), icon: Landmark },
               { id: 'krg-treasury', label: getLabel('KRG Treasury Core', 'خزينة الإقليم KRG', 'خزێنەی هەرێم KRG'), icon: Layers },
               { id: 'fiscal-ledger', label: getLabel('Emerald Fiscal Ledger', 'سجل الزمرد الوطني السيادي', 'دەفتەری مۆری نیشتمانی'), icon: History },
-              { id: 'revenue-recon', label: getLabel('Revenue Reconciliation Engine', 'محرك المطابقة المالية', 'بەرامبەرکردنی داهات'), icon: Scale },
+              { id: 'federal-revenue', label: getLabel('Federal Revenue isolated', 'الإيرادات فیدراڵ المعزولة', 'داهاتی فیدراڵ عێراق'), icon: Coins },
+              { id: 'krg-revenue', label: getLabel('KRG Revenue isolated', 'الإيرادات الإقليم المعزولة', 'داهاتی کوردستان KRG'), icon: Cpu },
+              { id: 'revenue-recon', label: getLabel('Budget Law Variance', 'محرك الموازنة المشتركة', 'بەرامبەرکردنی داهاتی هاوبەش'), icon: Scale },
+              { id: 'joint-revenue', label: getLabel('Joint Revenue Audit', 'مطابقة الإيرادات السيادية', 'وردبینی داهاتی فیدراڵ-KRG'), icon: Shield },
               { id: 'debt-registry', label: getLabel('National Debt Registry', 'سجل الدين السيادي', 'تۆماري قەرزی نیشتمانی'), icon: Shield },
               { id: 'asset-registry', label: getLabel('Sovereign Asset Registry', 'سجل الأصول والشركات العامة', 'تۆماری دارایی غەیرە منقول'), icon: Database },
               { id: 'settlement-ops', label: getLabel('Intergovernmental Settlements', 'المقاصات والتحويلات المشتركة', 'بەرامبەربوونی دارایی هاوبەش'), icon: Network },
@@ -1209,6 +1217,24 @@ export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ la
               </form>
             </div>
 
+          </div>
+        )}
+
+        {activeCabinetTab === 'federal-revenue' && (
+          <div className="animate-fade-in">
+            <FederalRevenueDashboard />
+          </div>
+        )}
+
+        {activeCabinetTab === 'krg-revenue' && (
+          <div className="animate-fade-in">
+            <KRGRevenueDashboard />
+          </div>
+        )}
+
+        {activeCabinetTab === 'joint-revenue' && (
+          <div className="animate-fade-in">
+            <JointRevenueDashboard />
           </div>
         )}
 
