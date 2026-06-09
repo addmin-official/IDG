@@ -73,105 +73,105 @@ export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }
                 {/* CORE IDG GATEWAY SYSTEM */}
                 <g transform="translate(300, 150)">
                   <rect x="0" y="0" width="200" height="100" rx="6" fill="#111e2e" stroke="#cca553" strokeWidth="2" />
-                  <text x="100" y="35" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="12">IDG DIGITAL GATEWAY</text>
-                  <text x="100" y="55" textAnchor="middle" fill="#94a3b8" fontSize="9">Iraq Core Sovereign Core</text>
-                  <text x="100" y="75" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold">● ACTIVE & SECURED</text>
+                  <text x="100" y="35" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="11">{lang === 'en' ? 'IDG DIGITAL GATEWAY' : lang === 'ar' ? 'البوابة الرقمية IDG' : 'دەروازەی دیجیتاڵیی نیشتمانی'}</text>
+                  <text x="100" y="55" textAnchor="middle" fill="#94a3b8" fontSize="8.5">{lang === 'en' ? 'Iraq Core Sovereign Core' : lang === 'ar' ? 'النواة السيادية الوطنية' : 'ناوەندی سەروەریی نیشتمانی'}</text>
+                  <text x="100" y="75" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold">{lang === 'en' ? '● ACTIVE & SECURED' : lang === 'ar' ? '● نشط ومؤمن' : '● چالاک و پارێزراو'}</text>
                 </g>
 
                 {/* EXTERNAL Actor 1: Importer Systems */}
                 <g transform="translate(40, 60)">
                   <rect x="0" y="0" width="160" height="50" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="1"/>
-                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium">Importers & Carrier Fleets</text>
-                  <text x="80" y="38" textAnchor="middle" fill="#64748b">Digital Manifest submission</text>
+                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium" fontSize="9.5">{lang === 'en' ? 'Importers & Carrier Fleets' : lang === 'ar' ? 'المستوردون وأساطيل النقل' : 'هاوردەکاران و هێڵی گواستنەوە'}</text>
+                  <text x="80" y="38" textAnchor="middle" fill="#64748b" fontSize="8.5">{lang === 'en' ? 'Digital Manifest submission' : lang === 'ar' ? 'تقديم المانيفست الرقمي' : 'ناردنی تێپەڕنامەی دیجیتاڵی'}</text>
                 </g>
 
                 {/* EXTERNAL Actor 2: CBI */}
                 <g transform="translate(600, 60)">
                   <rect x="0" y="0" width="160" height="50" rx="4" fill="#1e293b" stroke="#eab308" strokeWidth="1"/>
-                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium">Central Bank of Iraq (CBI)</text>
-                  <text x="80" y="38" textAnchor="middle" fill="#eab308">Wire compliance verification</text>
+                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium" fontSize="9.5">{lang === 'en' ? 'Central Bank of Iraq (CBI)' : lang === 'ar' ? 'البنك المركزي العراقي' : 'بانکی ناوەندیی عێراق'}</text>
+                  <text x="80" y="38" textAnchor="middle" fill="#eab308" fontSize="8.5">{lang === 'en' ? 'Wire compliance verification' : lang === 'ar' ? 'التحقق من الحوالات' : 'پشکنینی هاوتاییی دارایی'}</text>
                 </g>
 
                 {/* EXTERNAL Actor 3: KRG & Baghdad Min of Finance */}
                 <g transform="translate(600, 290)">
                   <rect x="0" y="0" width="160" height="50" rx="4" fill="#1e293b" stroke="#cca553" strokeWidth="1"/>
-                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium">Federal Ministry of Finance</text>
-                  <text x="80" y="38" textAnchor="middle" fill="#cca553">Erbil-Baghdad unified sync</text>
+                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium" fontSize="9.5">{lang === 'en' ? 'Federal Ministry of Finance' : lang === 'ar' ? 'وزارة المالية الاتحادية' : 'وەزارەتی داراییی فیدراڵ'}</text>
+                  <text x="80" y="38" textAnchor="middle" fill="#cca553" fontSize="8.5">{lang === 'en' ? 'Erbil-Baghdad unified sync' : lang === 'ar' ? 'المزامنة الموحدة للتعرفة' : 'هاوسەنگیی هەولێر-بەغدا'}</text>
                 </g>
 
                 {/* EXTERNAL Actor 4: Physical Ports Checkpoint Nodes */}
                 <g transform="translate(40, 290)">
                   <rect x="0" y="0" width="160" height="50" rx="4" fill="#1e293b" stroke="#10b981" strokeWidth="1"/>
-                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium">Custom Checkpoints</text>
-                  <text x="80" y="38" textAnchor="middle" fill="#10b981">Thermal Scanners & Gateways</text>
+                  <text x="80" y="22" textAnchor="middle" fill="#f8fafc" fontWeight="medium" fontSize="9.5">{lang === 'en' ? 'Custom Checkpoints' : lang === 'ar' ? 'النقاط الجمركية' : 'خاڵەکانی پشکنینی گومرگ'}</text>
+                  <text x="80" y="38" textAnchor="middle" fill="#10b981" fontSize="8.5">{lang === 'en' ? 'Thermal Scanners & Gateways' : lang === 'ar' ? 'الماسحات الحرارية والمنافذ' : 'سکانی گەرمیی دەروازەکان'}</text>
                 </g>
 
                 {/* CONNECTIONS & LINES */}
                 <path d="M 200 85 L 250 85 L 250 170 L 300 170" fill="none" stroke="#64748b" strokeWidth="1.5" strokeDasharray="4"/>
                 <circle cx="300" cy="170" r="3" fill="#64748b"/>
-                <text x="235" y="115" fill="#94a3b8" fontSize="8">Secure REST API</text>
+                <text x="250" y="115" textAnchor="middle" fill="#94a3b8" fontSize="8">{lang === 'en' ? 'Secure REST API' : lang === 'ar' ? 'واجهة التطبيق الآمنة' : 'کۆدی REST API پارێزراو'}</text>
 
                 {/* IDG Core -> CBI */}
                 <path d="M 500 180 L 550 180 L 550 85 L 600 85" fill="none" stroke="#eab308" strokeWidth="1.5"/>
                 <circle cx="600" cy="85" r="3" fill="#eab308"/>
-                <text x="540" y="145" fill="#eab308" fontSize="8">AML Check</text>
+                <text x="550" y="145" textAnchor="middle" fill="#eab308" fontSize="8">{lang === 'en' ? 'AML Check' : lang === 'ar' ? 'مكافحة غسيل الأموال' : 'پشکنینی پارەسپیکردنەوە'}</text>
 
                 {/* IDG Core -> Federal Ministry */}
                 <path d="M 500 220 L 550 220 L 550 315 L 600 315" fill="none" stroke="#cca553" strokeWidth="1.5"/>
                 <circle cx="600" cy="315" r="3" fill="#cca553"/>
-                <text x="540" y="270" fill="#cca553" fontSize="8">Tariff sync</text>
+                <text x="550" y="270" textAnchor="middle" fill="#cca553" fontSize="8">{lang === 'en' ? 'Tariff sync' : lang === 'ar' ? 'مزامنة التعرفة' : 'هاوکاتکردنی باج'}</text>
 
                 {/* Checkpoint Nodes <-> IDG Core */}
                 <path d="M 200 315 L 250 315 L 250 220 L 300 220" fill="none" stroke="#10b981" strokeWidth="1.5" strokeDasharray="4"/>
                 <circle cx="300" cy="220" r="3" fill="#10b981"/>
-                <text x="215" y="270" fill="#10b981" fontSize="8">gRPC stream</text>
+                <text x="250" y="270" textAnchor="middle" fill="#10b981" fontSize="8">{lang === 'en' ? 'gRPC stream' : lang === 'ar' ? 'بث gRPC فوري' : 'ڕەوتی داتای gRPC'}</text>
               </svg>
             )}
 
             {activeBlueprintId === 'business-capabilities' && (
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[650px] font-sans">
-                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30">
-                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553]">
-                    <Shield className="w-4 h-4 text-[#cca553]" /> Customs Clearance Layer
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 max-w-[650px] font-sans text-start">
+                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30 text-start flex flex-col justify-start">
+                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553] text-start">
+                    <Shield className="w-4 h-4 text-[#cca553]" /> {lang === 'en' ? 'Customs Clearance Layer' : lang === 'ar' ? 'طبقة التخليص الجمركي' : 'بەشی مۆڵەتپێدان و گومرگ'}
                   </h4>
-                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono">
-                    <li>• Unified Tariff Computation (Decree 1984)</li>
-                    <li>• Digitized Manifest Registry Management</li>
-                    <li>• 8-digit HS Code Auto-Matching engine</li>
-                    <li>• Instant Dual-Use licensing checks</li>
+                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono text-start">
+                    <li>{lang === 'en' ? '• Unified Tariff Computation (Decree 1984)' : lang === 'ar' ? '• حوسبة التعرفة الموحدة (مرسوم ١٩٨٤)' : '• حیسابکردنی باجی یەکگرتوو (بڕیاری ١٩٨٤)'}</li>
+                    <li>{lang === 'en' ? '• Digitized Manifest Registry Management' : lang === 'ar' ? '• إدارة سجل المانيفست الرقمي' : '• بەڕێوەبردنی دیجیتاڵیی تۆماری مانیفێست'}</li>
+                    <li>{lang === 'en' ? '• 8-digit HS Code Auto-Matching engine' : lang === 'ar' ? '• محرك مطابقة رمز تنسيق النظام الجمركي (HS)' : '• بزوێنەری خۆکاری هاوتاییی کۆدی HS ی ٨ خانەیی'}</li>
+                    <li>{lang === 'en' ? '• Instant Dual-Use licensing checks' : lang === 'ar' ? '• الفحص الفوري لتراخيص الاستخدام المزدوج' : '• پشکنینی ڕاستەوخۆی مۆڵەتە دوولایەنە نیشتمانییەکان'}</li>
                   </ul>
                 </div>
-                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30">
-                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553]">
-                    <Activity className="w-4 h-4 text-[#cca553]" /> Legal Harmonization Portal
+                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30 text-start flex flex-col justify-start">
+                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553] text-start">
+                    <Activity className="w-4 h-4 text-[#cca553]" /> {lang === 'en' ? 'Legal Harmonization Portal' : lang === 'ar' ? 'بوابة المواءمة القانونية' : 'پۆرتاڵی یاسایی و هاوئاهەنگی'}
                   </h4>
-                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono">
-                    <li>• Erbil-Baghdad dynamic treaty compliance</li>
-                    <li>• Central Sovereign Revenue Integration</li>
-                    <li>• Customs Clearance mutual recognition</li>
-                    <li>• Inter-provincial bypass auditing</li>
+                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono text-start">
+                    <li>{lang === 'en' ? '• Erbil-Baghdad dynamic treaty compliance' : lang === 'ar' ? '• الامتثال الديناميكي لمعاهدة بغداد-أربيل' : '• هاوتاییی کارای ڕێککەوتنامەی نێوان هەولێر و بەغدا'}</li>
+                    <li>{lang === 'en' ? '• Central Sovereign Revenue Integration' : lang === 'ar' ? '• تكامل الإيرادات السيادية المركزية' : '• یەکگرتنی گشتیی داهاتە فیدراڵییە سەروەرییەکان'}</li>
+                    <li>{lang === 'en' ? '• Customs Clearance mutual recognition' : lang === 'ar' ? '• الاعتراف المتبادل بالتخليص الجمركي' : '• قبوڵکردنی دوولایەنەی ڕێکارەکانی بەڕێکردنی گومرگی'}</li>
+                    <li>{lang === 'en' ? '• Inter-provincial bypass auditing' : lang === 'ar' ? '• التدقيق لمكافحة التجاوزات بين المحافظات' : '• پێداچوونەوە و ڕێگری لە خۆدزینەوە لە باجی سەر سنورەکان'}</li>
                   </ul>
                 </div>
-                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30">
-                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553]">
-                    <Database className="w-4 h-4 text-[#cca553]" /> Anti-Fraud & Compliance (AML)
+                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30 text-start flex flex-col justify-start">
+                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553] text-start">
+                    <Database className="w-4 h-4 text-[#cca553]" /> {lang === 'en' ? 'Anti-Fraud & Compliance (AML)' : lang === 'ar' ? 'مكافحة الاحتيال والامتثال (AML)' : 'پشکنینی ساختەکاری و پابەندبوون (AML)'}
                   </h4>
-                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono">
-                    <li>• Central Bank of Iraq trade wire validation</li>
-                    <li>• Unit valuation comparison (fraud check)</li>
-                    <li>• High-risk carrier & importer matching</li>
-                    <li>• Anomaly alarm triggers</li>
+                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono text-start">
+                    <li>{lang === 'en' ? '• Central Bank of Iraq trade wire validation' : lang === 'ar' ? '• تدقيق التحويلات المالية للبنك المركزي العراقي' : '• هاوتاییی پشکنینی داراییی بانکی ناوەندیی عێراق'}</li>
+                    <li>{lang === 'en' ? '• Unit valuation comparison (fraud check)' : lang === 'ar' ? '• مقارنة تقييم الوحدات للرصد الاحتيالي' : '• بەراوردکردنی نرخی کاڵاکان بۆ دۆزینەوەی ساختەکاری'}</li>
+                    <li>{lang === 'en' ? '• High-risk carrier & importer matching' : lang === 'ar' ? '• مطابقة النواقل والمستوردين عالي المخاطر' : '• پشکنینی بارهەڵگرەکان و هاوردەکارانی گوماناوی'}</li>
+                    <li>{lang === 'en' ? '• Anomaly alarm triggers' : lang === 'ar' ? '• إشعارات وإنذارات الانحرافات والشكاوى' : '• مەرج و زەنگی ئاگادارکەرەوە کاتی ناڕێکیی باج'}</li>
                   </ul>
                 </div>
-                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30">
-                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553]">
-                    <Cpu className="w-4 h-4 text-[#cca553]" /> Forecasting & Economic Intelligence
+                <div className="bg-[#112235] p-4 rounded-lg border border-[#cca553]/30 text-start flex flex-col justify-start">
+                  <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 text-xs mb-2 text-[#cca553] text-start">
+                    <Cpu className="w-4 h-4 text-[#cca553]" /> {lang === 'en' ? 'Forecasting & Economic Intelligence' : lang === 'ar' ? 'التنبؤ والاستخبارات الاقتصادية' : 'شیکاری و پێشبینیی ئابووری'}
                   </h4>
-                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono">
-                    <li>• Strategic transit corridor modeling</li>
-                    <li>• Dynamic tax revenue projections</li>
-                    <li>• Trade volume forecasting with Gemini</li>
-                    <li>• Regional logistics corridor telemetry</li>
+                  <ul className="text-xs text-slate-300 flex flex-col gap-1.5 font-mono text-start">
+                    <li>{lang === 'en' ? '• Strategic transit corridor modeling' : lang === 'ar' ? '• نمذجة ممرات النقل الاستراتيجية' : '• مۆدێلکردنی ڕێڕەوە بازرگانییە ستراتیژییەکان'}</li>
+                    <li>{lang === 'en' ? '• Dynamic tax revenue projections' : lang === 'ar' ? '• الإسقاطات الديناميكية لإيرادات الضرائب' : '• خەمڵاندنی خۆکارانەی کۆی بڕی باجی وەرگیراو'}</li>
+                    <li>{lang === 'en' ? '• Trade volume forecasting with Gemini' : lang === 'ar' ? '• التنبؤ بحجم التجارة باستخدام جيميناي' : '• شیکردنەوەی چڕیی بازرگانی بە بەکارهێنانی Gemini'}</li>
+                    <li>{lang === 'en' ? '• Regional logistics corridor telemetry' : lang === 'ar' ? '• قياس الممرات اللوجستية الإقليمية عن بعد' : '• تەلەمەتری و بینینی قەبارەی ڕێگە لۆجستییەکان'}</li>
                   </ul>
                 </div>
               </div>
@@ -182,38 +182,38 @@ export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }
                 <rect width="800" height="400" fill="none" stroke="rgba(207, 168, 94, 0.04)" strokeWidth="1" rx="8"/>
                 
                 {/* Bounded Context 1: Core Manifest Evaluation */}
-                <g transform="translate(50, 60)">
-                  <rect width="320" height="135" rx="6" fill="#131e2d" stroke="#1d4ed8" strokeWidth="2.5" strokeDasharray="3 3"/>
-                  <rect width="180" height="25" rx="4" fill="#1d4ed8" x="10" y="-12"/>
-                  <text x="100" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="10">Core Manifest Context</text>
-                  <text x="20" y="40" fill="#94a3b8">• Manifest aggregation entity</text>
-                  <text x="20" y="65" fill="#94a3b8">• Validates cargo descriptions</text>
-                  <text x="20" y="90" fill="#94a3b8">• Formulates digital customs clearance files</text>
+                <g transform="translate(40, 60)">
+                  <rect width="330" height="135" rx="6" fill="#131e2d" stroke="#1d4ed8" strokeWidth="2.5" strokeDasharray="3 3"/>
+                  <rect width="210" height="25" rx="4" fill="#1d4ed8" x="10" y="-12"/>
+                  <text x="115" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="9">{lang === 'en' ? 'Core Manifest Context' : lang === 'ar' ? 'سياق المانيفست الأساسي' : 'مەودای مانیفێستی سەرەکی'}</text>
+                  <text x="15" y="40" fill="#94a3b8" fontSize="8.5">{lang === 'en' ? '• Manifest aggregation entity' : lang === 'ar' ? '• كينونة تجميع بيانات الشحن' : '• قەوارەی کۆکردنەوەی مانیفێست'}</text>
+                  <text x="15" y="65" fill="#94a3b8" fontSize="8.5">{lang === 'en' ? '• Validates cargo descriptions' : lang === 'ar' ? '• تدقيق وتأكيد وصف البضائع' : '• سەلماندنی پێناسەی بارەکان'}</text>
+                  <text x="15" y="90" fill="#94a3b8" fontSize="8.5">{lang === 'en' ? '• Formulates digital customs files' : lang === 'ar' ? '• صياغة ملفات التخليص الجمركي' : '• ئامادەکردنی بەیانی دیجیتاڵی'}</text>
                 </g>
 
                 {/* Bounded Context 2: Financial Integrity Core */}
-                <g transform="translate(420, 60)">
-                  <rect width="320" height="135" rx="6" fill="#131e2d" stroke="#b45309" strokeWidth="2.5"/>
-                  <rect width="180" height="25" rx="4" fill="#b45309" x="10" y="-12"/>
-                  <text x="100" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="10">Financial Settlement Sync</text>
-                  <text x="20" y="40" fill="#f59e0b">• Central Bank wire validation value checks</text>
-                  <text x="20" y="65" fill="#f59e0b">• Dynamic tariff calculation rules</text>
-                  <text x="20" y="90" fill="#f59e0b">• Anti-money laundering tracking records</text>
+                <g transform="translate(430, 60)">
+                  <rect width="330" height="135" rx="6" fill="#131e2d" stroke="#b45309" strokeWidth="2.5"/>
+                  <rect width="210" height="25" rx="4" fill="#b45309" x="10" y="-12"/>
+                  <text x="115" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="9">{lang === 'en' ? 'Financial Settlement Sync' : lang === 'ar' ? 'مزامنة التسويات المالية' : 'هاوسەنگیی تەسوییەی دارایی'}</text>
+                  <text x="15" y="40" fill="#f59e0b" fontSize="8.5">{lang === 'en' ? '• Central Bank wire validation value' : lang === 'ar' ? '• مطابقة حوالات البنك المركزي' : '• هاوتاییی حەواڵە لە بانکی ناوەندی'}</text>
+                  <text x="15" y="65" fill="#f59e0b" fontSize="8.5">{lang === 'en' ? '• Dynamic tariff calculation rules' : lang === 'ar' ? '• حوسبة قواعد التعرفة الديناميكية' : '• حیسابکردنی خۆکارانەی ڕێژەی باج'}</text>
+                  <text x="15" y="90" fill="#f59e0b" fontSize="8.5">{lang === 'en' ? '• Anti-money laundering records' : lang === 'ar' ? '• سجلات مكافحة غسيل الأموال' : '• تۆماری ڕێگری لە سپیکردنەوەی پارە'}</text>
                 </g>
 
                 {/* Bounded Context 3: Risk Intelligence & Ledgers */}
                 <g transform="translate(230, 230)">
                   <rect width="340" height="130" rx="6" fill="#131e2d" stroke="#10b981" strokeWidth="2.5"/>
-                  <rect width="190" height="25" rx="4" fill="#10b981" x="10" y="-12"/>
-                  <text x="105" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="10">Risk Intelligence & Ledger</text>
-                  <text x="20" y="40" fill="#a7f3d0">• Gemini-3.5 cognitive analysis and risks scores</text>
-                  <text x="20" y="65" fill="#a7f3d0">• Iraqi Sovereign Ledger (Decentralized logs)</text>
-                  <text x="20" y="90" fill="#a7f3d0">• Operational checkpoint route command hub</text>
+                  <rect width="210" height="25" rx="4" fill="#10b981" x="10" y="-12"/>
+                  <text x="115" y="5" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="9">{lang === 'en' ? 'Risk Intelligence & Ledger' : lang === 'ar' ? 'استخبارات المخاطر والتدقيق' : 'زانیاریی مەترسی و تۆماری فەرمی'}</text>
+                  <text x="15" y="40" fill="#a7f3d0" fontSize="8.5">{lang === 'en' ? '• Gemini cognitive risk analysis' : lang === 'ar' ? '• تحليل المخاطر بذكاء جيميناي' : '• شیکردنەوەی مەترسییەکان بە Gemini'}</text>
+                  <text x="15" y="65" fill="#a7f3d0" fontSize="8.5">{lang === 'en' ? '• Iraqi Sovereign Ledger logs' : lang === 'ar' ? '• سجل المعاملات السيادية اللامركزي' : '• تۆمارەکانی دەفتەری نیشتمانیی عێراق'}</text>
+                  <text x="15" y="90" fill="#a7f3d0" fontSize="8.5">{lang === 'en' ? '• Checkpoint route command hub' : lang === 'ar' ? '• مركز توجيه وإدارة نقاط التفتيش' : '• ناوەندی ئۆپەراسیۆنی خاڵە دەرەکییەکان'}</text>
                 </g>
 
                 {/* Inter-domain Shared kernel bridge */}
-                <path d="M 370 120 L 420 120" stroke="#cca553" strokeWidth="2"/>
-                <text x="395" y="110" textAnchor="middle" fill="#cca553" fontSize="8" fontWeight="bold">Shared SDK</text>
+                <path d="M 370 120 L 430 120" stroke="#cca553" strokeWidth="2"/>
+                <text x="400" y="110" textAnchor="middle" fill="#cca553" fontSize="8" fontWeight="bold">{lang === 'en' ? 'Shared SDK' : lang === 'ar' ? 'حزمة مشتركة' : 'پشکی هاوبەش'}</text>
               </svg>
             )}
 
@@ -223,44 +223,44 @@ export const SovereignAtlasPanel: React.FC<SovereignAtlasPanelProps> = ({ lang }
                 
                 {/* Event Bus center stream */}
                 <rect x="50" y="180" width="700" height="40" rx="4" fill="#111e2e" stroke="#cca553" strokeWidth="2" />
-                <text x="400" y="205" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="11" letterSpacing="0.2em">
-                  APACHE KAFKA SOVEREIGN EVENT CONGO • MULTI-REGION HIGHWAY
+                <text x="400" y="205" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="9.5" letterSpacing="0.05em">
+                  {lang === 'en' ? 'APACHE KAFKA SOVEREIGN EVENT CONGO • MULTI-REGION HIGHWAY' : lang === 'ar' ? 'مجرى الأحداث السيادي الوطني كافكا • ممر متعدد المناطق' : 'ڕێڕەوی داتای فەرمیی نیشتمانی ئەپاچی کافكا • هێڵی هاوبەشی ناوچەکان'}
                 </text>
 
                 {/* Event Producers/Publishers */}
                 <g transform="translate(80, 50)">
                   <rect width="180" height="60" rx="4" fill="#1e293b" stroke="#3b82f6" strokeWidth="1"/>
-                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold">Manifest Portal</text>
-                  <text x="90" y="42" textAnchor="middle" fill="#3b82f6">Publishes: ManifestSubmitted</text>
+                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold" fontSize="9">{lang === 'en' ? 'Manifest Portal' : lang === 'ar' ? 'بوابة المانيفست' : 'پۆرتاڵی مانیفێست'}</text>
+                  <text x="90" y="42" textAnchor="middle" fill="#3b82f6" fontSize="8">{lang === 'en' ? 'Publishes: ManifestSubmitted' : lang === 'ar' ? 'يرسل: تم_تقديم_المانيفست' : 'بڵاوکردنەوە: ManifestSubmitted'}</text>
                   <path d="M 90 60 L 90 130" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="3 3"/>
                 </g>
 
                 <g transform="translate(310, 50)">
                   <rect width="180" height="60" rx="4" fill="#1e293b" stroke="#eab308" strokeWidth="1"/>
-                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold">CBI Gateway Portal</text>
-                  <text x="90" y="42" textAnchor="middle" fill="#eab308">Publishes: CBTWireVerified</text>
+                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold" fontSize="9">{lang === 'en' ? 'CBI Gateway Portal' : lang === 'ar' ? 'بوابة البنك المركزي' : 'دەروازەی بانکی ناوەندی'}</text>
+                  <text x="90" y="42" textAnchor="middle" fill="#eab308" fontSize="8">{lang === 'en' ? 'Publishes: CBTWireVerified' : lang === 'ar' ? 'يرسل: تم_تأكيد_الحوالة' : 'بڵاوکردنەوە: CBTWireVerified'}</text>
                   <path d="M 90 60 L 90 130" stroke="#eab308" strokeWidth="1.5" strokeDasharray="3 3"/>
                 </g>
 
                 <g transform="translate(540, 50)">
                   <rect width="180" height="60" rx="4" fill="#1e293b" stroke="#10b981" strokeWidth="1"/>
-                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold">Gemini Risk Engine</text>
-                  <text x="90" y="42" textAnchor="middle" fill="#10b981">Publishes: RiskAudited</text>
+                  <text x="90" y="22" textAnchor="middle" fill="#ffffff" fontWeight="semibold" fontSize="9">{lang === 'en' ? 'Gemini Risk Engine' : lang === 'ar' ? 'محرك مخاطر جيميناي' : 'سیستەمی مەترسیی Gemini'}</text>
+                  <text x="90" y="42" textAnchor="middle" fill="#10b981" fontSize="8">{lang === 'en' ? 'Publishes: RiskAudited' : lang === 'ar' ? 'يرسل: تم_تدقيق_المخاطر' : 'بڵاوکردنەوە: RiskAudited'}</text>
                   <path d="M 90 60 L 90 130" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3 3"/>
                 </g>
 
                 {/* Consumers */}
                 <g transform="translate(200, 290)">
                   <rect width="180" height="60" rx="4" fill="#0f172a" stroke="#cca553" strokeWidth="1"/>
-                  <text x="90" y="25" textAnchor="middle" fill="#cca553" fontWeight="bold">Sovereign Ledger Worker</text>
-                  <text x="90" y="43" textAnchor="middle" fill="#94a3b8">Writes block log to Spanner</text>
+                  <text x="90" y="25" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="9">{lang === 'en' ? 'Sovereign Ledger Worker' : lang === 'ar' ? 'معالج السجل السيادي' : 'تۆمارکاری دەفتەری نیشتمانی'}</text>
+                  <text x="90" y="43" textAnchor="middle" fill="#94a3b8" fontSize="8">{lang === 'en' ? 'Writes logs to Spanner' : lang === 'ar' ? 'يكتب السجلات في Spanner' : 'پاشەکەوتکردن لە d3/Spanner'}</text>
                   <path d="M 90 0 L 90 -70" stroke="#cca553" strokeWidth="1.5"/>
                 </g>
 
                 <g transform="translate(440, 290)">
                   <rect width="180" height="60" rx="4" fill="#0f172a" stroke="#cca553" strokeWidth="1"/>
-                  <text x="90" y="25" textAnchor="middle" fill="#cca553" fontWeight="bold">Notification System</text>
-                  <text x="90" y="43" textAnchor="middle" fill="#94a3b8">Issues gateway release pass</text>
+                  <text x="90" y="25" textAnchor="middle" fill="#cca553" fontWeight="bold" fontSize="9">{lang === 'en' ? 'Notification System' : lang === 'ar' ? 'نظام الإشعارات الموحد' : 'سیستەمی ئاگادارکەرەوە'}</text>
+                  <text x="90" y="43" textAnchor="middle" fill="#94a3b8" fontSize="8">{lang === 'en' ? 'Issues gateway release pass' : lang === 'ar' ? 'يصدر تصاريح المرور' : 'دەرکردنی مۆڵەتی تێپەڕین'}</text>
                   <path d="M 90 0 L 90 -70" stroke="#cca553" strokeWidth="1.5"/>
                 </g>
               </svg>

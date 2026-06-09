@@ -70,22 +70,22 @@ export default function FederalRevenueDashboard() {
         <div className="text-right">
           <div className="flex items-center gap-2 justify-end">
             <Badge variant="teal">پارێزراوی فیدراڵی عێراق</Badge>
-            <span className="text-[10px] uppercase font-mono text-slate-500 font-bold block">FEDERAL JURISDICTION SECURE ENCLAVE</span>
+            <span className="text-[10px] uppercase font-mono text-slate-500 font-bold block">ناوچەی فیدراڵی پارێزراوی داهات (SECURE ENCLAVE)</span>
           </div>
           <h2 className="text-2xl font-bold text-white mt-1">سەنتەری بەڕێوبەرایەتی داهاتی نیشتمانی فیدراڵ</h2>
-          <p className="text-xs text-slate-400 mt-1">چاودێریکردنی ڕاستەوخۆی دەروازە گشتییەکان، گومرگ و باجەکان لە سەرانسەری عێراقی فیدراڵدا</p>
+          <p className="text-xs text-slate-400 mt-1">چاودێریکردنی ڕاستەوخۆ دەستکارینەکراوی دەروازە گشتییەکان، گومرگ و باجەکان لە سەرانسەری عێراقی فیدراڵدا</p>
         </div>
         <div className="flex items-center gap-3 justify-end">
           <Button variant="outline" size="sm" onClick={handleRefresh} className="border-slate-800 hover:bg-slate-900 text-slate-300">
             <RefreshCw className="w-4 h-4 mr-2" />
             تازەکردنەوەی داتا
           </Button>
-          <div className="bg-[#1e293b] py-2 px-4 rounded-xl border border-slate-800 text-center">
-            <span className="text-[10px] text-slate-500 block uppercase font-mono">Ledger Integrity</span>
+          <div className="bg-[#1e293b] py-2 px-4 rounded-xl border border-slate-800 text-center select-none">
+            <span className="text-[10px] text-slate-500 block uppercase font-mono">تەواوێتی دەفتەری فەرمی</span>
             {ledgerIntegrity.isValid ? (
-              <span className="text-emerald-400 text-xs font-bold font-mono">✓ Cryptographically Secured</span>
+              <span className="text-emerald-400 text-xs font-bold font-mono">✓ بە کریپتۆگرافی پارێزراوە</span>
             ) : (
-              <span className="text-red-400 text-xs font-bold font-mono">⚠️ Broken Integrity Chain</span>
+              <span className="text-red-400 text-xs font-bold font-mono">⚠️ زنجیرەی تەواوێتی پچڕاوە</span>
             )}
           </div>
         </div>
@@ -151,20 +151,26 @@ export default function FederalRevenueDashboard() {
                 <div className="text-center py-6 text-xs text-slate-500">هیچ سەرپێچییەک یان جیاوازییەکی داهات نەدۆزراوەتەوە.</div>
               ) : (
                 leakageAlerts.map(alert => (
-                  <div key={alert.id} className="bg-slate-950/60 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between text-right">
+                  <div key={alert.id} className="bg-slate-950/60 border border-slate-800/80 p-4 rounded-xl flex items-center justify-between text-right gap-4">
                     <div className="flex items-center gap-3">
                       <Badge variant={alert.severity === 'CRITICAL' ? 'destructive' : alert.severity === 'HIGH' ? 'orange' : 'teal'}>
-                        {alert.severity}
+                        {alert.severity === 'CRITICAL' ? 'زۆر مەترسیدار' : alert.severity === 'HIGH' ? 'مەترسیدار' : 'کەم/ناوەنجی'}
                       </Badge>
                       <span className="text-[10px] font-mono text-slate-500">{new Date(alert.timestamp).toLocaleTimeString()}</span>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1 min-w-0 flex-1">
                       <div className="flex items-center gap-2 justify-end">
-                        <span className="text-xs font-bold text-white">{alert.sourceName}</span>
-                        <span className="text-[10px] font-mono text-teal-400">[{alert.sourceEntityId}]</span>
+                        <span className="text-xs font-bold text-white truncate max-w-[150px]">{alert.sourceName}</span>
+                        <span className="text-[10px] font-mono text-teal-400 truncate">[{alert.sourceEntityId}]</span>
                       </div>
-                      <div className="text-xs text-slate-400">
-                        جۆری کێشە: <span className="text-slate-200">{alert.anomalyType}</span> | بڕی بەهەدەرچوو:{' '}
+                      <div className="text-xs text-slate-400 break-words line-clamp-2">
+                        کێشە:{' '}
+                        <span className="text-slate-200">
+                          {alert.anomalyType === 'TARIFF_MISAPPLY' ? 'کەمکردنەوەی ناڕەوای تاریفە' :
+                           alert.anomalyType === 'UNDERVALUATION' ? 'کەمتر پیشاندانی بەهای گشتی' :
+                           alert.anomalyType === 'FEE_EVASION' ? 'خۆدزینەوە لە ڕسوومات' :
+                           alert.anomalyType === 'DELINQUENT_TAX' ? 'باجی دواکەوتووی نافەرمی' : alert.anomalyType}
+                        </span> | بڕی بەهەدەرچوو:{' '}
                         <span className="text-red-400 font-bold font-mono">${alert.leakageUSD.toLocaleString()}</span>
                       </div>
                     </div>
@@ -175,21 +181,21 @@ export default function FederalRevenueDashboard() {
           </Card>
 
           {/* Secure Raw Ledger Trails */}
-          <Card className="bg-[#0b1329]/90 border-slate-800 p-6 rounded-2xl">
+          <Card className="bg-[#0b1329]/90 border-slate-800 p-6 rounded-2xl overflow-hidden">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3 mb-4 justify-end">
-              <h3 className="text-sm font-bold text-slate-100">تۆماری گشتی نەگۆڕی سزادراو (Immutable Ledger Chain)</h3>
+              <h3 className="text-sm font-bold text-slate-100">دەفتەری گشتی نەگۆڕی سزادراو (Immutable Ledger Chain)</h3>
               <Lock className="w-4 h-4 text-teal-400" />
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-slate-300">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-xs text-slate-300 table-fixed min-w-[600px]">
                 <thead className="bg-slate-950 text-slate-500 uppercase font-mono text-[9px] border-b border-slate-800">
                   <tr>
-                    <th className="p-3 text-start">ID & Hash زنجیرە</th>
-                    <th className="p-3 text-right">جۆری سەرچاوە</th>
-                    <th className="p-3 text-right">هاوردەکار/باجدەر</th>
-                    <th className="p-3 text-right">واژۆکار</th>
-                    <th className="p-3 text-center">کۆی گشت بڕ</th>
+                    <th className="p-3 text-start w-[220px]">کۆد و هاشی بلۆک</th>
+                    <th className="p-3 text-right w-[100px]">جۆری گواستنەوە</th>
+                    <th className="p-3 text-right w-[140px]">کۆمپانیا/باجدەر</th>
+                    <th className="p-3 text-right w-[140px]">بەڕێوەبەری واژۆکار</th>
+                    <th className="p-3 text-center w-[120px]">کۆی گشتی بڕ</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/40 font-mono">
@@ -197,15 +203,17 @@ export default function FederalRevenueDashboard() {
                     const parsedPayload = JSON.parse(entry.payload);
                     return (
                       <tr key={entry.id} className="hover:bg-slate-900/10">
-                        <td className="p-3 text-start text-slate-500">
-                          <span className="text-teal-400 font-bold block">{entry.id}</span>
-                          <span className="text-[9px] text-slate-600 block truncate w-32 font-mono">{entry.hash}</span>
+                        <td className="p-3 text-start text-slate-500 overflow-hidden">
+                          <span className="text-teal-400 font-bold block truncate">{entry.id}</span>
+                          <span className="text-[9px] text-slate-600 block truncate font-mono select-all" title={entry.hash}>{entry.hash}</span>
                         </td>
                         <td className="p-3 text-right">
-                          <Badge variant="teal">{entry.streamType}</Badge>
+                          <Badge variant="teal">{entry.streamType === 'CUSTOMS' ? 'گومرگ' : entry.streamType === 'BORDER_FEE' ? 'رسوماتی سنوور' : entry.streamType === 'TARIFF' ? 'تاریفە' : 'باج'}</Badge>
                         </td>
-                        <td className="p-3 text-right text-slate-300 font-sans">{parsedPayload.payer || 'مۆڵەتی دەرەکی'}</td>
-                        <td className="p-3 text-right text-slate-400">{entry.signatory}</td>
+                        <td className="p-3 text-right text-slate-300 font-sans truncate" title={parsedPayload.payer || 'مۆڵەتی دەرەکی'}>
+                          {parsedPayload.payer || 'مۆڵەتی دەرەکی'}
+                        </td>
+                        <td className="p-3 text-right text-slate-400 truncate" title={entry.signatory}>{entry.signatory === 'Senior Federal Collector Al-Hashimi' ? 'کۆکەرەوەی باڵای فیدراڵی ئەلهاشمی' : entry.signatory}</td>
                         <td className="p-3 text-center text-white font-bold">${entry.amountUSD.toLocaleString()}</td>
                       </tr>
                     );

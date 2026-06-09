@@ -39,19 +39,19 @@ export default function JointRevenueDashboard() {
             <RefreshCw className="w-4 h-4 mr-2 animate-spin-hover" />
             جێبەجێکردنی هاوتاکردن و چاودێری
           </Button>
-          <div className="bg-slate-950 px-4 py-2 rounded-xl text-center border border-slate-800">
-            <span className="text-[10px] text-slate-500 block uppercase font-mono">Proof Hash</span>
+          <div className="bg-slate-950 px-4 py-2 rounded-xl text-center border border-slate-800 select-none">
+            <span className="text-[10px] text-slate-500 block uppercase font-mono">هاشی بەڵگەنامە (Proof Hash)</span>
             <span className="text-amber-400 text-xs font-bold font-mono">{reconReport.reconciliationProofHash.substring(0, 16)}...</span>
           </div>
         </div>
         <div className="text-right md:order-1">
           <div className="flex items-center gap-2 justify-end">
             <Badge variant="gold">لێژنەی هەماهەنگی هاوبەشی داهات</Badge>
-            <span className="text-[10px] uppercase font-mono text-amber-500 font-bold block">JOINT RECONCILIATION LAYER ONLY (RESTRICTED)</span>
+            <span className="text-[10px] uppercase font-mono text-amber-500 font-bold block">تەنها بۆ چینی هاوڕێکی هاوبەش (JOINT RECONCILIATION LAYER ONLY)</span>
           </div>
           <h2 className="text-2xl font-bold text-white mt-1">سەنتەری یەکگرتنەوە و هاوڕێکی داهاتە نیشتمانییەکان</h2>
           <p className="text-xs text-slate-400 mt-1">
-            لێکۆڵینەوە لە هاوتاکردنی داهاتی عێراقی فیدراڵ و هەرێمی کوردستان تەنها لە ڕێگەی کلیلە دیجیتاڵییە هاکراوەکانەوە (بی دۆشینی داتای خاو)
+            لێکۆڵینەوە لە هاوتاکردنی داهاتی عێراقی فیدراڵ و هەرێمی کوردستان تەنها لە ڕێگەی کلیلە دیجیتاڵییە فەرمییەکانەوە
           </p>
         </div>
       </div>
@@ -142,16 +142,26 @@ export default function JointRevenueDashboard() {
               <div className="space-y-2">
                 <span className="text-[10px] text-slate-500 font-mono font-bold uppercase block">لیستی وریاکردنەوەکانی وردبینی گواستنەوە (Audit Flags)</span>
                 {reconReport.discrepancies.auditFlags.length === 0 ? (
-                  <div className="bg-slate-950/30 p-3 rounded-lg text-emerald-400 text-xs border border-emerald-950 text-center">
+                   <div className="bg-slate-950/30 p-3 rounded-lg text-emerald-400 text-xs border border-emerald-950 text-center">
                     هیچ جیاوازییەکی کێشەدار نەدۆزرایەوە لەنێوان تۆمارە فەرمییەکاندا.
                   </div>
                 ) : (
-                  reconReport.discrepancies.auditFlags.map((flag, idx) => (
-                    <div key={idx} className="bg-slate-950/50 border border-amber-950/60 p-3 rounded-xl flex items-start gap-2 justify-end">
-                      <span className="text-xs text-slate-300 leading-relaxed">{flag}</span>
-                      <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                    </div>
-                  ))
+                  reconReport.discrepancies.auditFlags.map((flag, idx) => {
+                    let localizedFlag = flag;
+                    if (flag.includes('ALERT-CUSTOMS-RATIO-UNDER-LIMIT')) {
+                      localizedFlag = 'ئاگاداری (گومرگ): کۆکراوەی داهاتی گومرکی هەرێمی کوردستان بەڕێژەیەکی بەرچاو متمانەپێکراو نییە و کەمە بەرامبەر بە فیدراڵ.';
+                    } else if (flag.includes('WARNING-ZERO-BORDER-REVENUE')) {
+                      localizedFlag = 'وریاکردنەوە (دەروازە): جیاوازی یان تۆمار نەکردنی داتا لە دەروازە سنوورییە گرنگەکاندا هەیە.';
+                    } else if (flag.includes('RECON-SHARING-GAP')) {
+                      localizedFlag = 'هاوتاکردنی گشتی: پشکی تەقینەوەی بودجە و گواستنەوە داراییەکان لەگەڵ مۆدێلی دەستووری ناگونجێت.';
+                    }
+                    return (
+                      <div key={idx} className="bg-slate-950/50 border border-amber-950/60 p-3 rounded-xl flex items-start gap-2 justify-end">
+                        <span className="text-xs text-slate-300 leading-relaxed text-right">{localizedFlag}</span>
+                        <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>
@@ -161,10 +171,10 @@ export default function JointRevenueDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Federal isolated payload representation */}
-            <Card className="bg-[#0b1329]/95 border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+            <Card className="bg-[#0b1329]/95 border-slate-800 p-5 rounded-2xl flex flex-col justify-between overflow-hidden">
               <div>
                 <div className="flex items-center justify-between border-b border-slate-850 pb-2 mb-3">
-                  <Badge variant="teal">FEDERAL CRYPTO_RECON</Badge>
+                  <Badge variant="teal">هاوڕێکی فیدراڵی فەرمی</Badge>
                   <span className="text-[11px] font-bold text-white">کورتەی ڕاپۆرتی فیدراڵی عێراق</span>
                 </div>
                 <div className="space-y-2 text-xs font-mono">
@@ -186,17 +196,17 @@ export default function JointRevenueDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-900 text-left">
-                <span className="text-[9px] text-slate-500 uppercase block font-mono">Verification Validation Checksum</span>
-                <span className="text-teal-400 text-[10px] font-mono block truncate">{fedReport.reportVerificationHash}</span>
+              <div className="mt-4 pt-3 border-t border-slate-900 text-left min-w-0">
+                <span className="text-[9px] text-slate-500 uppercase block font-mono">هاشی چاودێری فیدراڵی</span>
+                <span className="text-teal-400 text-[10px] font-mono block truncate select-all" title={fedReport.reportVerificationHash}>{fedReport.reportVerificationHash}</span>
               </div>
             </Card>
 
             {/* KRG isolated payload representation */}
-            <Card className="bg-[#0b1329]/95 border-slate-800 p-5 rounded-2xl flex flex-col justify-between">
+            <Card className="bg-[#0b1329]/95 border-slate-800 p-5 rounded-2xl flex flex-col justify-between overflow-hidden">
               <div>
                 <div className="flex items-center justify-between border-b border-slate-850 pb-2 mb-3">
-                  <Badge variant="blue">KRG CRYPTO_RECON</Badge>
+                  <Badge variant="blue">هاوڕێکی هەرێمی فەرمی</Badge>
                   <span className="text-[11px] font-bold text-white">کورتەی ڕاپۆرتی هەرێمی کوردستان</span>
                 </div>
                 <div className="space-y-2 text-xs font-mono">
@@ -218,9 +228,9 @@ export default function JointRevenueDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-900 text-left">
-                <span className="text-[9px] text-slate-500 uppercase block font-mono">Verification Validation Checksum</span>
-                <span className="text-blue-400 text-[10px] font-mono block truncate">{krgReport.reportVerificationHash}</span>
+              <div className="mt-4 pt-3 border-t border-slate-900 text-left min-w-0">
+                <span className="text-[9px] text-slate-500 uppercase block font-mono">هاشی چاودێری کوردستان</span>
+                <span className="text-blue-400 text-[10px] font-mono block truncate select-all" title={krgReport.reportVerificationHash}>{krgReport.reportVerificationHash}</span>
               </div>
             </Card>
 
