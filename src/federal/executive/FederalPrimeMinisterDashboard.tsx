@@ -5,11 +5,12 @@ import { FEDERAL_KPI_REGISTRY } from '../../shared/executive/ExecutiveKPIRegistr
 import { Card, Badge, Button } from '../../ui';
 import { 
   Landmark, Shield, ShieldAlert, Cpu, Coins, TrendingUp, AlertTriangle, 
-  CheckCircle2, FileText, Lock, RefreshCw, Send, Database 
+  CheckCircle2, FileText, Lock, RefreshCw, Send, Database, Users 
 } from 'lucide-react';
 import FederalCustomsDashboard from '../customs/FederalCustomsDashboard';
 import FederalTradeDashboard from '../trade/FederalTradeDashboard';
 import FederalTransparencyDashboard from '../transparency/FederalTransparencyDashboard';
+import SovereignGovernanceSection from '../../shared/components/SovereignGovernanceSection';
 
 export default function FederalPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -138,6 +139,17 @@ export default function FederalPrimeMinisterDashboard() {
             </button>
           );
         })}
+        <button
+          onClick={() => setActiveDomainTab('fed-governance')}
+          className={`px-3 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
+            activeDomainTab === 'fed-governance'
+              ? 'bg-emerald-950/70 text-emerald-400 border border-emerald-500/20 shadow font-bold'
+              : 'text-slate-400 hover:text-white border-transparent'
+          }`}
+        >
+          <Users className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+          <span>هێزی کار و دەسەڵاتەکان (Workforce)</span>
+        </button>
       </div>
 
       {/* Main Stats Display Grid */}
@@ -152,6 +164,10 @@ export default function FederalPrimeMinisterDashboard() {
       ) : activeDomainTab === 'fed-audit' ? (
         <div className="w-full">
           <FederalTransparencyDashboard />
+        </div>
+      ) : activeDomainTab === 'fed-governance' ? (
+        <div className="w-full animate-fade-in">
+          <SovereignGovernanceSection governingOrg="FEDERAL_IRAQ" />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

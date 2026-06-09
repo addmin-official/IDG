@@ -11,6 +11,8 @@ import { Card, Badge, PageHeader, Button } from '../../ui';
 // Core hook & contextual governance
 import { useNationalCommandCenter } from './hooks/useNationalCommandCenter';
 import { useGovernment, JurisdictionType } from '../../providers/GovernmentProvider';
+import { IdentityRegistry } from '../../shared/identity/IdentityRegistry';
+import { CertificationEngine } from '../../shared/workforce/CertificationEngine';
 
 // Executive Desks for Federated Governance Layer
 import { FederalPrimeMinisterDesk } from '../../app/components/FederalPrimeMinisterDesk';
@@ -61,6 +63,7 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
   >('brief');
 
   const [activeProcurementSubTab, setActiveProcurementSubTab] = useState<'tenders' | 'bids' | 'contracts' | 'vendors' | 'risk' | 'audit'>('tenders');
+  const [selectedStaffDivision, setSelectedStaffDivision] = useState<'all' | 'border' | 'customs' | 'revenue' | 'trade' | 'investigation'>('all');
 
   // Multi-government titles & translation mapping
   const titleMap = {
@@ -522,6 +525,195 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
                   </div>
                 </div>
 
+              </div>
+
+              {/* National Workforce & Staffing Status Divisions */}
+              <div className="mt-8">
+                <span className="text-[10px] text-[#E0A96D] font-mono block mb-3 font-bold uppercase tracking-widest">
+                  {getLabel('NATIONAL WORKFORCE & DIVISIONAL STAFFING HUB', 'ناوەندی نیشتمانی بۆ چاودێری و هێزی کار', 'ناوەندی نیشتمانی بۆ هێزی کار و بەشەکانی کارمەندان')}
+                </span>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4 text-start">
+                  {/* Card 1: National Workforce Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('all')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'all'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">گشتی (Workforce)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">{IdentityRegistry.getAll().length} ئەندام</span>
+                    </div>
+                    <span className="text-[10px] text-emerald-400/80 font-mono mt-2 flex items-center gap-1">
+                      ● Active Roster
+                    </span>
+                  </div>
+
+                  {/* Card 2: Border Staffing Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('border')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'border'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">سنوورەکان (Border)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">
+                        {IdentityRegistry.getAll().filter(s => s.role?.toLowerCase().includes('border') || s.role?.toLowerCase().includes('guard') || s.directorate?.toLowerCase().includes('border')).length} ئەندام
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-teal-400 font-mono mt-2">دەروازە باڵاکان</span>
+                  </div>
+
+                  {/* Card 3: Customs Staffing Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('customs')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'customs'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">گومرگ (Customs)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">
+                        {IdentityRegistry.getAll().filter(s => s.role?.toLowerCase().includes('customs')).length} ئەندام
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-teal-400 font-mono mt-2">مایکرۆ-ڕێکخستن</span>
+                  </div>
+
+                  {/* Card 4: Revenue Staffing Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('revenue')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'revenue'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">داهات (Revenue)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">
+                        {IdentityRegistry.getAll().filter(s => s.role?.toLowerCase().includes('revenue') || s.role?.toLowerCase().includes('tax') || s.role?.toLowerCase().includes('finance') || s.role?.toLowerCase().includes('audit')).length} ئەندام
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-rose-400 font-mono mt-2">دیاریکردنی دزەکردن</span>
+                  </div>
+
+                  {/* Card 5: Trade Staffing Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('trade')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'trade'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">بازرگانی (Trade)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">
+                        {IdentityRegistry.getAll().filter(s => s.role?.toLowerCase().includes('trade') || s.role?.toLowerCase().includes('license')).length} ئەندام
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-blue-400 font-mono mt-2">دەروازەی مۆڵەتەکان</span>
+                  </div>
+
+                  {/* Card 6: Investigation Staffing Status */}
+                  <div
+                    onClick={() => setSelectedStaffDivision('investigation')}
+                    className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                      selectedStaffDivision === 'investigation'
+                        ? 'bg-amber-950/40 border-[#E0A96D]/60 text-amber-300'
+                        : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <span className="text-[9px] uppercase font-mono block text-slate-500">نزاهەت (Oversight)</span>
+                      <span className="text-sm font-bold text-slate-100 block mt-1">
+                        {IdentityRegistry.getAll().filter(s => s.role?.toLowerCase().includes('investig') || s.role?.toLowerCase().includes('inspect') || s.role?.toLowerCase().includes('transparency') || s.role?.toLowerCase().includes('integrity')).length} ئەندام
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-amber-400 font-mono mt-2">پشکنەرانی باڵا</span>
+                  </div>
+                </div>
+
+                {/* Expanded division's Roster Table */}
+                <div className="bg-slate-900/40 p-4 rounded-xl border border-slate-800/80 mb-6 text-start">
+                  <h5 className="text-xs font-bold text-slate-200 mb-3 uppercase tracking-wider flex items-center justify-between">
+                    <span>
+                      {selectedStaffDivision === 'all' && 'تۆماری گشتی هێزی کار (Combined National Roster)'}
+                      {selectedStaffDivision === 'border' && 'هێزی سنوورەکان (Sovereign Border Guard staffing)'}
+                      {selectedStaffDivision === 'customs' && 'ئەفسەرانی گومرگ (Sovereign Customs Command staffing)'}
+                      {selectedStaffDivision === 'revenue' && 'بەرپرسانی باج و داهات (Federal Revenue Control staffing)'}
+                      {selectedStaffDivision === 'trade' && 'لیژنەی تاقیکردنەوەی مۆڵەتی بازرگانی (Trade Licensing staffing)'}
+                      {selectedStaffDivision === 'investigation' && 'فەرمانبەرانی چاودێری و نزاهەت (Anti-Corruption Oversight staffing)'}
+                    </span>
+                    <Badge variant="teal">ڕاستەقینە - باوەڕپێکراو</Badge>
+                  </h5>
+
+                  <div className="overflow-x-auto max-h-64 overflow-y-auto">
+                    <table className="w-full text-xs text-start">
+                      <thead>
+                        <tr className="border-b border-slate-850 text-slate-500 font-mono text-[10px]">
+                          <th className="py-2 text-start">STAFF ID</th>
+                          <th className="py-2 text-start">FULL NAME</th>
+                          <th className="py-2 text-start">SOVEREIGN ROLE</th>
+                          <th className="py-2 text-start">ORGANIZATION</th>
+                          <th className="py-2 text-center">BIOMETRICS</th>
+                          <th className="py-2 text-center">TRUST DEVICE</th>
+                          <th className="py-2 text-center">CLEARANCE</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/20 font-mono">
+                        {IdentityRegistry.getAll()
+                          .filter(s => {
+                            if (selectedStaffDivision === 'all') return true;
+                            if (selectedStaffDivision === 'border') {
+                              return s.role?.toLowerCase().includes('border') || s.role?.toLowerCase().includes('guard') || s.directorate?.toLowerCase().includes('border');
+                            }
+                            if (selectedStaffDivision === 'customs') {
+                              return s.role?.toLowerCase().includes('customs');
+                            }
+                            if (selectedStaffDivision === 'revenue') {
+                              return s.role?.toLowerCase().includes('revenue') || s.role?.toLowerCase().includes('tax') || s.role?.toLowerCase().includes('audit') || s.role?.toLowerCase().includes('finance');
+                            }
+                            if (selectedStaffDivision === 'trade') {
+                              return s.role?.toLowerCase().includes('trade') || s.role?.toLowerCase().includes('license');
+                            }
+                            if (selectedStaffDivision === 'investigation') {
+                              return s.role?.toLowerCase().includes('investig') || s.role?.toLowerCase().includes('inspect') || s.role?.toLowerCase().includes('transparency') || s.role?.toLowerCase().includes('integrity');
+                            }
+                            return true;
+                          })
+                          .map(staff => (
+                            <tr key={staff.id} className="hover:bg-slate-950/40 text-[11px] text-slate-300">
+                              <td className="py-2 text-slate-500">{staff.id}</td>
+                              <td className="py-2 font-sans font-bold text-slate-200">{staff.fullName}</td>
+                              <td className="py-2 text-amber-300 font-bold">{staff.role}</td>
+                              <td className="py-2"><Badge variant="teal">{staff.organization}</Badge></td>
+                              <td className="py-2 text-center">
+                                <Badge variant={staff.biometricStatus === 'verified' ? 'teal' : 'amber'}>
+                                  {staff.biometricStatus === 'verified' ? 'VERIFIED' : 'PENDING'}
+                                </Badge>
+                              </td>
+                              <td className="py-2 text-center">
+                                <Badge variant={staff.deviceTrusted ? 'success' : 'rose'}>
+                                  {staff.deviceTrusted ? 'TRUSTED' : 'UNTRUSTED'}
+                                </Badge>
+                              </td>
+                              <td className="py-2 text-center capitalize text-teal-400 font-bold">{staff.clearanceLevel}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-6">

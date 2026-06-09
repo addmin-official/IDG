@@ -10,6 +10,8 @@ import {
 import KRGCustomsDashboard from '../customs/KRGCustomsDashboard';
 import KRGTradeDashboard from '../trade/KRGTradeDashboard';
 import KRGTransparencyDashboard from '../transparency/KRGTransparencyDashboard';
+import SovereignGovernanceSection from '../../shared/components/SovereignGovernanceSection';
+import { Users } from 'lucide-react';
 
 export default function KRGPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -139,6 +141,17 @@ export default function KRGPrimeMinisterDashboard() {
             </button>
           );
         })}
+        <button
+          onClick={() => setActiveDomainTab('krg-governance')}
+          className={`px-3 py-2 rounded-lg text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
+            activeDomainTab === 'krg-governance'
+              ? 'bg-emerald-950/70 text-emerald-400 border border-emerald-500/20 shadow font-bold'
+              : 'text-slate-400 hover:text-white border-transparent'
+          }`}
+        >
+          <Users className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+          <span>هێزی کار و دەسەڵاتەکان (Workforce)</span>
+        </button>
       </div>
 
       {/* Main Stats Display Grid */}
@@ -153,6 +166,10 @@ export default function KRGPrimeMinisterDashboard() {
       ) : activeDomainTab === 'krg-audit' ? (
         <div className="w-full">
           <KRGTransparencyDashboard />
+        </div>
+      ) : activeDomainTab === 'krg-governance' ? (
+        <div className="w-full animate-fade-in">
+          <SovereignGovernanceSection governingOrg="KRG" />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
