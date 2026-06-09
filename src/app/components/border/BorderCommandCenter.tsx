@@ -8,15 +8,15 @@ import { PageHeader, Badge, Button, Card } from '../../../ui';
 import { useGovernment } from '../../../providers/GovernmentProvider';
 
 // Import Domain Services
-import { BorderGateRegistry } from '../../../services/border/BorderGateRegistry';
-import { BorderTrafficEngine } from '../../../services/border/BorderTrafficEngine';
-import { BorderInspectionEngine } from '../../../services/border/BorderInspectionEngine';
-import { BorderRiskEngine } from '../../../services/border/BorderRiskEngine';
-import { BorderTelemetryEngine } from '../../../services/border/BorderTelemetryEngine';
-import { BorderPolicyEngine } from '../../../services/border/BorderPolicyEngine';
-import { BorderOperationsEngine } from '../../../services/border/BorderOperationsEngine';
-import { BorderAuditEngine } from '../../../services/border/BorderAuditEngine';
-import { BorderGate, BorderTrafficRecord, BorderInspectionRecord, BorderGateStatus, BorderGateType } from '../../../services/border/BorderTypes';
+import { BorderGateRegistry } from '../../../shared/border/BorderGateRegistry';
+import { BorderTrafficEngine } from '../../../shared/border/BorderTrafficEngine';
+import { BorderInspectionEngine } from '../../../shared/border/BorderInspectionEngine';
+import { BorderRiskEngine } from '../../../shared/border/BorderRiskEngine';
+import { BorderTelemetryEngine } from '../../../shared/border/BorderTelemetryEngine';
+import { BorderPolicyEngine } from '../../../shared/border/BorderPolicyEngine';
+import { BorderOperationsEngine } from '../../../shared/border/BorderOperationsEngine';
+import { BorderAuditEngine } from '../../../shared/border/BorderAuditEngine';
+import { BorderGate, BorderTrafficRecord, BorderInspectionRecord, BorderGateStatus, BorderGateType } from '../../../shared/border/BorderTypes';
 
 interface BorderCommandCenterProps {
   lang: Language;
