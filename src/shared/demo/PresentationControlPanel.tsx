@@ -260,43 +260,78 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
           {/* COMPACT TYPOGRAPHY READABILITY STATUS */}
           {(() => {
             const auditResult = TypographyReadabilityAudit.runAudit();
+            const exceptions = auditResult.components.filter(c => c.status === 'EXCEPTION');
             return (
-              <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/60 mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-start">
-                <div className="flex items-start gap-2">
-                  <Globe className="w-4 h-4 text-[#E0A96D] mt-0.5 shrink-0" />
+              <div className="bg-slate-950/75 p-4 rounded-xl border border-slate-800 mt-2 flex flex-col gap-3 text-start">
+                <div className="flex items-start gap-2.5">
+                  <Globe className="w-4.5 h-4.5 text-[#E0A96D] mt-0.5 shrink-0" />
                   <div>
-                    <span className="font-bold text-slate-200 text-xs block font-sans">
-                      {getLabel('TRILINGUAL READABILITY OVERHAUL (PHASE 5.2B)', 'مؤشر سلامة الخطوط واللغات المعتمدة', 'ڕاپۆرتی خوێندنەوەی زمانەکان (قۆناغی ٥.٢ب)')}
+                    <span className="font-bold text-slate-200 text-sm block font-sans">
+                      {getLabel('TRILINGUAL READABILITY OVERHAUL (PHASE 5.2C)', 'مؤشر سلامة الخطوط واللغات المعتمدة', 'ڕاپۆرتی خوێندنەوەی زمانەکان (قۆناغی ٥.٢س)')}
                     </span>
-                    <p className="text-[10.5px] text-slate-400 mt-0.5 font-sans leading-relaxed">
+                    <p className="text-xs text-slate-400 mt-1 font-sans leading-relaxed">
                       {getLabel(
-                        'Kurdish & Arabic connected scripts verified with zero-mono, zero-uppercase, zero-tracking overrides, and font-size >= 13px.',
-                        'تم تطبيق معايير منع تقطيع الحروف الكوردية والعربية وضمان أحجام مريحة تزيد عن ١٣ بكسل في كل المنصات.',
-                        'هەموو تێکستە کوردییەکان نوێنەرایەتی کراون بە پیتە بەستراوەکان و پاراستنی قەبارەی گونجاو لە سەرووی ١٣ بێکسڵ.'
+                        'Direct component sweeps applied on 25 critical UI files. Forced CSS override engine blocks non-compliant glyph rendering.',
+                        'تم تدقيق ٢٥ ملف واجهة مستخدم وتطبيق مصفوفة تجاوز الأنماط لمنع الخطوط الشاذة أو تقطيع الحروف العربية.',
+                        'پشکنینی ٢٥ ڕووکاری جیاواز ئەنجامدراوە بۆ جێگیرکردنی قەبارە و جۆری پیتە کوردی و عەرەبییەکان.'
                       )}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 text-start shrink-0 font-mono text-[10px]">
-                  <div className="text-left">
-                    <span className="text-slate-500 text-[8px] uppercase block">Violations</span>
-                    <span className="text-emerald-400 font-bold block">
-                      {auditResult.kurdishViolations + auditResult.arabicViolations}
+
+                {/* Audit Checklist & Violation Metrics */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Files Audited</span>
+                    <span className="text-sm font-bold text-slate-200 font-mono block">
+                      {auditResult.components.length} Components
                     </span>
                   </div>
-                  <div className="text-left">
-                    <span className="text-slate-500 text-[8px] uppercase block">Fixed Files</span>
-                    <span className="text-teal-400 font-bold block">
-                      {auditResult.fixedFilesCount}
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Tiny Text</span>
+                    <span className={auditResult.tinyTextViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
+                      {auditResult.tinyTextViolations} Violations
                     </span>
                   </div>
-                  <div className="text-left">
-                    <span className="text-slate-500 text-[8px] uppercase block">Compliance</span>
-                    <span className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9.5px] font-bold block mt-0.5">
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Mono Font</span>
+                    <span className={auditResult.monoFontViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
+                      {auditResult.monoFontViolations} Violations
+                    </span>
+                  </div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Tracking</span>
+                    <span className={auditResult.trackingViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
+                      {auditResult.trackingViolations} Violations
+                    </span>
+                  </div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Clipping Risks</span>
+                    <span className={auditResult.tableTextClippingRiskViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
+                      {auditResult.tableTextClippingRiskViolations} Risks
+                    </span>
+                  </div>
+                  <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Compliance</span>
+                    <span className="text-sm font-bold text-[#E0A96D] font-mono block">
                       {auditResult.overallScore}% PASS
                     </span>
                   </div>
                 </div>
+
+                {/* Remaining Exceptions */}
+                {exceptions.length > 0 && (
+                  <div className="border-t border-slate-800/80 pt-2 mt-1">
+                    <span className="text-[9.5px] uppercase font-mono text-[#E0A96D] block mb-1">
+                      Remaining Justified Exceptions:
+                    </span>
+                    {exceptions.map((exc, index) => (
+                      <div key={index} className="text-[11px] text-slate-400 leading-relaxed font-sans bg-slate-900/40 p-2 rounded border border-slate-800/40">
+                        <strong className="text-slate-300">{exc.name} ({exc.path}):</strong> {exc.exceptionReason}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })()}
