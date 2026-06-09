@@ -8,6 +8,8 @@ import { PresentationScenarioRegistry, PresentationScenario } from './Presentati
 import { AcceptanceChecklistEngine, AcceptanceChecklistItem } from './AcceptanceChecklistEngine';
 import { AcceptanceReadinessSummary } from './AcceptanceReadinessSummary';
 import { PresentationNavigator } from './PresentationNavigator';
+import { TypographyReadabilityAudit } from '../../design-system/typography/TypographyReadabilityAudit';
+
 
 interface PresentationControlPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -254,6 +256,50 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
               </div>
             </div>
           )}
+
+          {/* COMPACT TYPOGRAPHY READABILITY STATUS */}
+          {(() => {
+            const auditResult = TypographyReadabilityAudit.runAudit();
+            return (
+              <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/60 mt-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-start">
+                <div className="flex items-start gap-2">
+                  <Globe className="w-4 h-4 text-[#E0A96D] mt-0.5 shrink-0" />
+                  <div>
+                    <span className="font-bold text-slate-200 text-xs block font-sans">
+                      {getLabel('TRILINGUAL READABILITY OVERHAUL (PHASE 5.2B)', 'مؤشر سلامة الخطوط واللغات المعتمدة', 'ڕاپۆرتی خوێندنەوەی زمانەکان (قۆناغی ٥.٢ب)')}
+                    </span>
+                    <p className="text-[10.5px] text-slate-400 mt-0.5 font-sans leading-relaxed">
+                      {getLabel(
+                        'Kurdish & Arabic connected scripts verified with zero-mono, zero-uppercase, zero-tracking overrides, and font-size >= 13px.',
+                        'تم تطبيق معايير منع تقطيع الحروف الكوردية والعربية وضمان أحجام مريحة تزيد عن ١٣ بكسل في كل المنصات.',
+                        'هەموو تێکستە کوردییەکان نوێنەرایەتی کراون بە پیتە بەستراوەکان و پاراستنی قەبارەی گونجاو لە سەرووی ١٣ بێکسڵ.'
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 text-start shrink-0 font-mono text-[10px]">
+                  <div className="text-left">
+                    <span className="text-slate-500 text-[8px] uppercase block">Violations</span>
+                    <span className="text-emerald-400 font-bold block">
+                      {auditResult.kurdishViolations + auditResult.arabicViolations}
+                    </span>
+                  </div>
+                  <div className="text-left">
+                    <span className="text-slate-500 text-[8px] uppercase block">Fixed Files</span>
+                    <span className="text-teal-400 font-bold block">
+                      {auditResult.fixedFilesCount}
+                    </span>
+                  </div>
+                  <div className="text-left">
+                    <span className="text-slate-500 text-[8px] uppercase block">Compliance</span>
+                    <span className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded text-[9.5px] font-bold block mt-0.5">
+                      {auditResult.overallScore}% PASS
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
 

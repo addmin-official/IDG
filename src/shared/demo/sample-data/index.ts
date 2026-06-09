@@ -306,7 +306,7 @@ export const CARGO_PRESETS: CargoManifest[] = [
   },
 ];
 
-export const MOCK_LEDGER_BLOCKS: LedgerBlockDTO[] = [
+export const MOCK_LEDGER_BLOCKS: any[] = [
   { block: 10452, hash: '0000a6e8fa12ffad83b400971b31a540bf9e', action: 'Approved Entry at Umm Qasr - Tariff Code 7208', status: 'Secured' },
   { block: 10451, hash: '0000b218cdbcfe22ad71e840a1b3260cfbc1', action: 'Sovereign ID Verified Biomet - Importer: Al-Ghazal Unified', status: 'Secured' },
   { block: 10450, hash: '0000104ac7eb8614ba811ee82451ab09bcde', action: 'KRG-Baghdad Interop Sync Gate - Synced 1,240 customs declarations', status: 'Secured' },

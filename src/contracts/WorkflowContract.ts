@@ -1,8 +1,11 @@
 export interface WorkflowStepDTO {
   id: string;
+  stepNumber: number;
   title: Record<string, string>;
-  actor: Record<string, string>;
-  detail: Record<string, string>;
+  status: string;
+  durationMinutes: number;
+  isAutomated: boolean;
+  actorRole: string;
 }
 
 export interface WorkflowRepository {
