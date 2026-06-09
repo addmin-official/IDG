@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import KRGCustomsDashboard from '../customs/KRGCustomsDashboard';
 import KRGTradeDashboard from '../trade/KRGTradeDashboard';
+import KRGTransparencyDashboard from '../transparency/KRGTransparencyDashboard';
 
 export default function KRGPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -148,6 +149,10 @@ export default function KRGPrimeMinisterDashboard() {
       ) : activeDomainTab === 'krg-trade' ? (
         <div className="w-full">
           <KRGTradeDashboard />
+        </div>
+      ) : activeDomainTab === 'krg-audit' ? (
+        <div className="w-full">
+          <KRGTransparencyDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

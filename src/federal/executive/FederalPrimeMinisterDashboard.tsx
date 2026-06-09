@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import FederalCustomsDashboard from '../customs/FederalCustomsDashboard';
 import FederalTradeDashboard from '../trade/FederalTradeDashboard';
+import FederalTransparencyDashboard from '../transparency/FederalTransparencyDashboard';
 
 export default function FederalPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -147,6 +148,10 @@ export default function FederalPrimeMinisterDashboard() {
       ) : activeDomainTab === 'fed-trade' ? (
         <div className="w-full">
           <FederalTradeDashboard />
+        </div>
+      ) : activeDomainTab === 'fed-audit' ? (
+        <div className="w-full">
+          <FederalTransparencyDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

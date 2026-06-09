@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import JointCustomsDashboard from '../customs/JointCustomsDashboard';
 import JointTradeDashboard from '../../shared/trade/JointTradeDashboard';
+import JointIntegrityDashboard from '../transparency/JointIntegrityDashboard';
 
 export default function JointExecutiveDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -148,6 +149,10 @@ export default function JointExecutiveDashboard() {
       ) : activeDomainTab === 'joint-trade' ? (
         <div className="w-full">
           <JointTradeDashboard />
+        </div>
+      ) : activeDomainTab === 'joint-audit' ? (
+        <div className="w-full">
+          <JointIntegrityDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
