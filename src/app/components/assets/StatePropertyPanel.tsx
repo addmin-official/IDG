@@ -12,20 +12,20 @@ interface StatePropertyPanelProps {
 }
 
 export default function StatePropertyPanel({ lang, onStateChange }: StatePropertyPanelProps) {
-  const [properties, setProperties] = useState<SovereignPhysicalAsset[]>([]);
-  const [selectedPropId, setSelectedPropId] = useState<string>('');
-  const [selectedParcel, setSelectedParcel] = useState<LandParcel | null>(null);
-  const [ticker, setTicker] = useState(0);
+  const [properties, setProperties] = useState<SovereignPhysicalAsset[]>([]); // | موڵکەکان
+  const [selectedPropId, setSelectedPropId] = useState<string>(''); // | ناسنامەی موڵکی هەڵبژێردراو
+  const [selectedParcel, setSelectedParcel] = useState<LandParcel | null>(null); // | پارچە زەوی هەڵبژێردراو
+  const [ticker, setTicker] = useState(0); // | ژمێریار (بۆ نوێکردنەوەی داتا)
 
-  // Form registration
-  const [showForm, setShowForm] = useState(false);
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState<'LAND' | 'BUILDING' | 'INDUSTRIAL' | 'AGRICULTURE' | 'MINERAL'>('LAND');
-  const [governorate, setGovernorate] = useState('Erbil');
-  const [hectares, setHectares] = useState('45.0');
-  const [cadastral, setCadastral] = useState('CAD-');
-  const [valuationUSD, setValuationUSD] = useState('20');
-  const [description, setDescription] = useState('');
+  // | فۆڕمی تۆمارکردن
+  const [showForm, setShowForm] = useState(false); // | پیشاندانی فۆڕم
+  const [name, setName] = useState(''); // | ناو
+  const [category, setCategory] = useState<'LAND' | 'BUILDING' | 'INDUSTRIAL' | 'AGRICULTURE' | 'MINERAL'>('LAND'); // | پۆلێن
+  const [governorate, setGovernorate] = useState('Erbil'); // | پارێزگا (هەولێر)
+  const [hectares, setHectares] = useState('45.0'); // | ڕووبەر (هێکتار)
+  const [cadastral, setCadastral] = useState('CAD-'); // | کۆدی تاپۆ
+  const [valuationUSD, setValuationUSD] = useState('20'); // | نرخاندن (ملیۆن دۆلار)
+  const [description, setDescription] = useState(''); // | وەسف
 
   const loadData = () => {
     const list = StatePropertyRegistry.getProperties();
@@ -35,7 +35,7 @@ export default function StatePropertyPanel({ lang, onStateChange }: StatePropert
     }
   };
 
-  useEffect(() => {
+ useEffect(() => {
     loadData();
   }, [ticker]);
 
@@ -59,30 +59,29 @@ export default function StatePropertyPanel({ lang, onStateChange }: StatePropert
   const handleRegisterProp = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !cadastral || !hectares) {
-      alert('Please fill requirements');
+      alert('| تکایە زانیارییە پێویستەکان پڕبکەرەوە');
       return;
     }
 
     const reg = StatePropertyRegistry.registerProperty({
       name,
       category,
-      lifecycle: 'REGISTERED',
-      ownership: 'MINISTRY',
+      lifecycle: 'REGISTERED', // | تۆمارکراو
+      ownership: 'MINISTRY', // | وەزارەت
       jurisdiction: governorate.toLowerCase() === 'basra' || governorate.toLowerCase() === 'baghdad' ? 'federal' : governorate.toLowerCase() === 'erbil' || governorate.toLowerCase() === 'sulaymaniyah' || governorate.toLowerCase() === 'duhok' ? 'krg' : 'joint',
       valuationUSD: parseFloat(valuationUSD),
       depreciationRate: 0.02,
       annualRevenueYieldUSD: parseFloat(valuationUSD) * 0.05,
       lastAuditDate: new Date().toISOString().split('T')[0],
-      description: description || 'Constitutional Cadastral registered government land parcel.'
-    }, 'Sovereign Surveyor Office');
-
-    // Register parcel details
+      description: description || '| پارچە زەوییەکی حکومییە و بەپێی دەستوور لە تاپۆ تۆمارکراوە.'
+    }, '| نووسینگەی ڕووپێوی سەروەری');
+   // | تۆمارکردنی وردەکاری پارچە زەوی
     LandRegistryEngine.registerParcel(reg.id, {
       governorate,
       hectares: parseFloat(hectares),
       cadastralCode: cadastral,
       surveyConfirmed: true,
-      geographicZonings: 'Sovereign Restricted Agricultural/Civil boundary'
+      geographicZonings: '| سنووری کشتوکاڵی/شارستانی سنووردارکراوی سەروەری'
     });
 
     setTicker(prev => prev + 1);
@@ -100,12 +99,12 @@ export default function StatePropertyPanel({ lang, onStateChange }: StatePropert
         <div className="space-y-1">
           <h3 className="text-base font-bold font-sans text-slate-100 flex items-center gap-2">
             <Home className="w-5 h-5 text-amber-500" />
-            {getLabel('State Land & Real Property Registry', 'سجل الأراضي والملكيات العقارية للدولة', 'سامانی نیشتمانی و تۆماری زەوی و زار')}
+            {getLabel('State Land & Real Property Registry', 'سجل الأراضي والملكيات العقارية للدولة', '| سامانی نیشتمانی و تۆماری زەوی و زار')}
           </h3>
           <p className="text-xs text-slate-400 font-sans">
             {getLabel('Federal cadastral mapping, agricultural deeds, and metropolitan government building controls.',
                      'المسح العقاري الاتحادي، صكوك الأراضي الحكومية، وتنظيم عقارات الخدمة العامة.',
-                     'ورده‌كاری فه‌رمی نەخشەسازی و ڕووپێوی خاکی نیشتمانی، زەوی کشتوکاڵی، مۆڵکە گشتییەکان.')}
+                     '| ووردەکاری فەرمی نەخشەسازی و ڕووپێوی خاکی نیشتمانی، زەوی کشتوکاڵی، مۆڵکە گشتییەکان.')}
           </p>
         </div>
         <button
@@ -113,7 +112,7 @@ export default function StatePropertyPanel({ lang, onStateChange }: StatePropert
           className="px-3.5 py-1.5 bg-[#182a3d] border border-[#cca553]/30 hover:bg-[#cca553]/10 text-[#cca553] text-[10px] font-mono font-bold rounded-lg cursor-pointer transition-all uppercase flex items-center gap-1.5"
         >
           <FileSignature className="w-3.5 h-3.5" />
-          {getLabel('Register Property', 'تسجيل ملكية', 'تۆمارکردنی مۆڵک')}
+          {getLabel('Register Property', 'تسجيل ملكية', '| تۆمارکردنی مۆڵک')}
         </button>
       </div>
 

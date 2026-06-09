@@ -11,10 +11,10 @@ interface StrategicAssetsPanelProps {
 }
 
 export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicAssetsPanelProps) {
-  const [strategicAssets, setStrategicAssets] = useState<SovereignPhysicalAsset[]>([]);
-  const [selectedAssetId, setSelectedAssetId] = useState<string>('');
-  const [securityStatus, setSecurityStatus] = useState<StrategicSecurityStatus | null>(null);
-  const [ticker, setTicker] = useState(0);
+  const [strategicAssets, setStrategicAssets] = useState<SovereignPhysicalAsset[]>([]); // | سەروەتە ستراتیژییەکان
+  const [selectedAssetId, setSelectedAssetId] = useState<string>(''); // | ناسنامەی سەروەتی هەڵبژێردراو
+  const [securityStatus, setSecurityStatus] = useState<StrategicSecurityStatus | null>(null); // | دۆخی ئەمنی
+  const [ticker, setTicker] = useState(0); // | ژمێریار (بۆ نوێکردنەوە)
 
   const loadData = () => {
     const list = StrategicAssetEngine.getStrategicAssets();
@@ -42,8 +42,8 @@ export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicA
 
   const handleTriggerScan = () => {
     if (selectedAssetId) {
-      // Execute security audit logging and trigger risk revaluation in engine
-      const nextScore = Math.floor(Math.random() * 10) + 90; // mock improvement
+      // | جێبەجێکردنی وردبینی ئەمنی و دەستپێکردنی دووبارە هەڵسەنگاندنی مەترسی لە مەکینەکەدا
+      const nextScore = Math.floor(Math.random() * 10) + 90; // | باشترکردنی خەیاڵی
       setTicker(prev => prev + 1);
       if (onStateChange) onStateChange();
     }
@@ -57,12 +57,12 @@ export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicA
         <div className="space-y-1">
           <h3 className="text-base font-bold font-sans text-slate-100 flex items-center gap-2">
             <Flame className="w-5 h-5 text-amber-500 animate-pulse" />
-            {getLabel('Strategic Asset Defense & Resources', 'مركز حماية الأصول الإستراتيجية والموارد', 'بەرگری و گەشەپێدانی سەرچاوە ستراتیژییەکانی وڵات')}
+            {getLabel('Strategic Asset Defense & Resources', 'مركز حماية الأصول الإستراتيجية والموارد', '| بەرگری و گەشەپێدانی سەرچاوە ستراتیژییەکانی وڵات')}
           </h3>
           <p className="text-xs text-slate-400 font-sans">
             {getLabel('Perimeter protection, real-time security clearances, and resource containment status.',
                      'مراقبة الحماية، ترخيص الدخول الأمني الفوري، وخلاصة الطاقة والوقود والنفايات.',
-                     'کۆنترۆڵکردنی فەرمی پاراستنی فیزیکی، پێدانی ڕێگەپێدانی ئەمنی، کۆگانی سووتەمەنی و سەرچاوە کانزاییەکان.')}
+                     '| کۆنترۆڵکردنی فەرمی پاراستنی فیزیکی، پێدانی ڕێگەپێدانی ئەمنی، کۆگانی سووتەمەنی و سەرچاوە کانزاییەکان.')}
           </p>
         </div>
         <button
@@ -74,7 +74,7 @@ export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicA
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Selector Left */}
+        {/* | دیاریکەری چەپ */}
         <div className="bg-slate-950 p-3 rounded-xl border border-slate-900 divide-y divide-slate-900 overflow-y-auto max-h-[320px]">
           {strategicAssets.map(asset => (
             <button
@@ -89,13 +89,13 @@ export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicA
               <span className="text-xs font-bold text-slate-200 block">{asset.name}</span>
               <div className="flex items-center justify-between w-full">
                 <span className="text-[10px] font-mono text-slate-400">{asset.category} | {asset.jurisdiction.toUpperCase()}</span>
-                <span className="text-[10px] font-mono text-[#cca553] font-bold">${asset.valuationUSD}M</span>
+                <span className="text-[10px] font-mono text-[#cca553] font-bold">${asset.valuationUSD}م</span>
               </div>
             </button>
           ))}
         </div>
 
-        {/* Selected Main Area */}
+        {/* | ناوچەی سەرەکی هەڵبژێردراو */}
         <div className="col-span-2 bg-slate-950/40 p-4 rounded-xl border border-slate-900 space-y-4">
           {selectedAsset ? (
             <>
@@ -108,7 +108,7 @@ export default function StrategicAssetsPanel({ lang, onStateChange }: StrategicA
                   {selectedAsset.lifecycle}
                 </span>
               </div>
-
+              
               {securityStatus ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Security Stats */}

@@ -53,8 +53,8 @@ export default function NationalAssetAuthorityDashboard({ lang, onStateChange }:
         </h2>
         <p className="text-xs text-slate-400 font-sans max-w-2xl mx-auto">
           {getLabel('Authorized under Constitutional Decree Sovereign Protocol v3.6.13. Provides real-time synchronization with central treasury reserves, intergovernmental ledger balance sheets, and security matrices.',
-                   'مرخص بموجب المرسوم الدستوري لتعديل نظام الأصول v3.6.13. یوفر مزامنة فورية مع الاحتياطيات الفيدرالية والإقليمية.',
-                   'پەسەندکراو لە ژێر بڕیاری دەستووری سەرەوە تەکەتولی عێراق و کوردستان v3.6.13. ئەنجامدانی گواستنەوە، نرخاندن، چاودێری و پاراستنی مادی.')}
+                  'مرخص بموجب المرسوم الدستوري لتعديل نظام الأصول v3.6.13. یوفر مزامنة فورية مع الاحتياطيات الفيدرالية والإقليمية.', 
+                  '| پەسەندکراو لە ژێر بڕیاری دەستووری بۆ هەموارکردنەوەی سیستەمی سەروەتەکان v3.6.13. ئەنجامدانی هاوکاتکردنی خێرا لەگەڵ یەدەگە فیدراڵی و هەرێمییەکان.')}
         </p>
       </div>
 
