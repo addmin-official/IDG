@@ -8,6 +8,7 @@ import {
   CheckCircle2, FileText, Lock, RefreshCw, Send, Database, Shield
 } from 'lucide-react';
 import JointCustomsDashboard from '../customs/JointCustomsDashboard';
+import JointTradeDashboard from '../../shared/trade/JointTradeDashboard';
 
 export default function JointExecutiveDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -143,6 +144,10 @@ export default function JointExecutiveDashboard() {
       {activeDomainTab === 'joint-recon' ? (
         <div className="w-full">
           <JointCustomsDashboard />
+        </div>
+      ) : activeDomainTab === 'joint-trade' ? (
+        <div className="w-full">
+          <JointTradeDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

@@ -8,6 +8,7 @@ import {
   CheckCircle2, FileText, Lock, RefreshCw, Send, Database, Shield
 } from 'lucide-react';
 import KRGCustomsDashboard from '../customs/KRGCustomsDashboard';
+import KRGTradeDashboard from '../trade/KRGTradeDashboard';
 
 export default function KRGPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -143,6 +144,10 @@ export default function KRGPrimeMinisterDashboard() {
       {activeDomainTab === 'krg-customs' ? (
         <div className="w-full">
           <KRGCustomsDashboard />
+        </div>
+      ) : activeDomainTab === 'krg-trade' ? (
+        <div className="w-full">
+          <KRGTradeDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

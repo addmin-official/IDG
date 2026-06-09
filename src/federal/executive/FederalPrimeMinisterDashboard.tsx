@@ -8,6 +8,7 @@ import {
   CheckCircle2, FileText, Lock, RefreshCw, Send, Database 
 } from 'lucide-react';
 import FederalCustomsDashboard from '../customs/FederalCustomsDashboard';
+import FederalTradeDashboard from '../trade/FederalTradeDashboard';
 
 export default function FederalPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -142,6 +143,10 @@ export default function FederalPrimeMinisterDashboard() {
       {activeDomainTab === 'fed-customs' ? (
         <div className="w-full">
           <FederalCustomsDashboard />
+        </div>
+      ) : activeDomainTab === 'fed-trade' ? (
+        <div className="w-full">
+          <FederalTradeDashboard />
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
