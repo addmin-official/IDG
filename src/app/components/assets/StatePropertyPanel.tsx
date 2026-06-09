@@ -67,6 +67,7 @@ export default function StatePropertyPanel({ lang, onStateChange }: StatePropert
       name,
       category,
       lifecycle: 'REGISTERED', // | تۆمارکراو
+      lifecycleState: 'REGISTERED',
       ownership: 'MINISTRY', // | وەزارەت
       jurisdiction: governorate.toLowerCase() === 'basra' || governorate.toLowerCase() === 'baghdad' ? 'federal' : governorate.toLowerCase() === 'erbil' || governorate.toLowerCase() === 'sulaymaniyah' || governorate.toLowerCase() === 'duhok' ? 'krg' : 'joint',
       valuationUSD: parseFloat(valuationUSD),

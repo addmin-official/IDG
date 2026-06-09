@@ -55,6 +55,7 @@ export default function NationalAssetRegistryPanel({ lang, onStateChange }: Nati
       name,
       category,
       lifecycle: 'REGISTERED' as AssetLifecycle,
+      lifecycleState: 'REGISTERED' as AssetLifecycle,
       ownership,
       jurisdiction,
       valuationUSD: parseFloat(valuation),

@@ -18,6 +18,7 @@ import PolicyAdvisorPanel from './components/PolicyAdvisorPanel';
 import EconomicCorridorsPanel from './components/EconomicCorridorsPanel';
 import { SovereignFiscalSystem } from './components/ssos/SovereignFiscalSystem';
 import NationalAssetAuthorityDashboard from './components/assets/NationalAssetAuthorityDashboard';
+import BorderCommandCenter from './components/border/BorderCommandCenter';
 
 // Isolated Hooks
 import { useManifestAudit } from '../hooks/useManifestAudit';
@@ -190,6 +191,7 @@ function AppContent() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2">
           {[
             { id: 'command-center', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal PM Command' : lang === 'ar' ? 'قيادة رئيس الوزراء الاتحادي' : 'فەرماندەیی سەرۆک وەزیرانی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG PM Command' : lang === 'ar' ? 'قيادة رئيس وزراء الإقليم' : 'فەرماندەیی سەرۆک وەزیرانی هەرێم') : (lang === 'en' ? 'Joint Command Room' : lang === 'ar' ? 'غرفة القيادة المشتركة' : 'ژووری فەرماندەیی هاوبەش'), icon: Landmark },
+            { id: 'border-ops', label: lang === 'en' ? 'Sovereign Border Hub' : lang === 'ar' ? 'السيطرة على الحدود' : 'دەروازە سنوورییەکان', icon: Shield },
             { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
             { id: 'state-assets', label: lang === 'en' ? 'State Asset Authority' : lang === 'ar' ? 'سلطة ممتلكات الدولة' : 'رێکخراوی سامانی دەوڵەت', icon: Building2 },
             { id: 'sovereign-fiscal', label: lang === 'en' ? 'Sovereign Fiscal Registry' : lang === 'ar' ? 'الخزينة والمالية السيادية' : 'گەنجینە و دارایی نیشتمانی', icon: Coins },
@@ -243,6 +245,7 @@ function AppContent() {
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
         {activeTab === 'command-center' && <NationalCommandCenter lang={lang} />}
+        {activeTab === 'border-ops' && <BorderCommandCenter lang={lang} />}
         {activeTab === 'blueprints' && <SovereignAtlasPanel lang={lang} />}
         {activeTab === 'ai-auditor' && (
           <CargoAuditorPanel

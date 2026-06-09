@@ -73,10 +73,11 @@ export const AssetLifecycleLabels: Record<AssetLifecycle, string> = {
   REGISTERED: '| تۆمارکراو',
   VERIFIED: '| پشتڕاستکراو',
   ACTIVE: '| چالاک',
-  UNDER_AUDIT: '| لە ژێر وردبینیدا',
-  TRANSFER_PENDING: '| چاوەڕوانی گواستنەوە',
-  DECOMMISSIONED: '| لەکارخراو',
-  ARCHIVED: '| ئەرشیفکراو'
+  MAINTENANCE: '| لە چاکسازیدا',
+  SUSPENDED: '| هەڵپەسێردراو',
+  TRANSFER_PENDING: '| لە پرۆسەی گواستنەوەدا',
+  TRANSFERRED: '| گواستراوەتەوە',
+  RETIRED: '| خانەنشینکراو'
 };
 
 export const OwnershipLabels: Record<OwnershipModel, string> = {
@@ -116,6 +117,7 @@ export class NationalAssetRegistry {
       name: '| ژێرخانی کێڵگە نەوتییەکانی باکووری کەرکوک',
       category: 'ENERGY', // | وزە
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'JOINT', // | هاوبەش
       jurisdiction: 'joint', // | هاوبەش
       valuationUSD: 85200, // | نرخاندن (ملیۆن دۆلار)
@@ -125,13 +127,14 @@ export class NationalAssetRegistry {
       lastAuditDate: '2026-05-15', // | ڕێکەوتی کۆتا وردبینی
       auditHash: '8e4f5a31bc994019de82ab7fd20c99a8ea42bf20bce427cdde198f1a8c39abfd', // | مۆرکردنی وردبینی
       complianceScore: 94, // | ئاستی پابەندبوون
-      description: '| سەروەتە ستراتیژییەکانی نەوتی باکوور، لەوانەش ئامێرەکانی پێوانی گواستنەوەی کەرکوک-جەیهان.'
+      description: '| سەروەتە ستراتیژییەکانی نەوتی باکوور, لەوانەش ئامێرەکانی پێوانی گواستنەوەی کەرکوک-جەیهان.'
     },
     {
       id: 'AST-GRANDFAW-PORT',
       name: '| کۆمەڵگەی بەندەری نێودەوڵەتی گەورەی فاو',
       category: 'SEAPORT', // | بەندەر
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'FEDERAL_IRAQ', // | فیدراڵی عێراق
       jurisdiction: 'federal', // | فیدراڵی
       valuationUSD: 32000, // | نرخاندن (ملیۆن دۆلار)
@@ -141,13 +144,14 @@ export class NationalAssetRegistry {
       lastAuditDate: '2026-04-10', // | ڕێکەوتی کۆتا وردبینی
       auditHash: '3bf9dae3d0926e82a901ee2bf8cbd300de109ab7f9bc8d74edfa19293caed0a2', // | مۆرکردنی وردبینی
       complianceScore: 98, // | ئاستی پابەندبوون
-      description: '| بنکەی سەرەکی نێودەوڵەتی گواستنەوەی دەریایی قووڵ، کە عێراق بە ڕێڕەوە دەریاییە جیهانییەکان دەبەستێتەوە.'
+      description: '| بنکەی سەرەکی نێودەوڵەتی گواستنەوەی دەریایی قووڵ, کە عێراق بە ڕێڕەوە دەریاییە جیهانییەکان دەبەستێتەوە.'
     },
     {
       id: 'AST-KHURMALA-DOME',
       name: '| کۆمەڵگەی پاڵاوتنی خورمەڵە و بنکەی بۆرییەکان',
       category: 'ENERGY', // | وزە
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'KRG', // | هەرێمی کوردستان
       jurisdiction: 'krg', // | هەرێمی کوردستان
       valuationUSD: 14500, // | نرخاندن (ملیۆن دۆلار)
@@ -164,6 +168,7 @@ export class NationalAssetRegistry {
       name: '| بەنداوی دووکان و وێستگەی کارەبای ئاوی',
       category: 'WATER', // | ئاو
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'JOINT', // | هاوبەش
       jurisdiction: 'joint', // | هاوبەش
       valuationUSD: 9800, // | نرخاندن (ملیۆن دۆلار)
@@ -180,6 +185,7 @@ export class NationalAssetRegistry {
       name: '| تێرمیناڵی فڕۆکەخانەی نێودەوڵەتی هەولێر',
       category: 'AIRPORT', // | فڕۆکەخانە
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'KRG', // | هەرێمی کوردستان
       jurisdiction: 'krg', // | هەرێمی کوردستان
       valuationUSD: 6500, // | نرخاندن (ملیۆن دۆلار)
@@ -191,11 +197,12 @@ export class NationalAssetRegistry {
       complianceScore: 95, // | ئاستی پابەندبوون
       description: '| سەروەتەکانی ڕێڕەوی فڕینی ناوچەیی و ژێرخانی گومرگی.'
     },
-{
+    {
       id: 'AST-IBRAHIMKHALIL-GATE',
       name: '| دەروازەی سنووری ئیبراهیم خەلیل',
       category: 'BORDER_GATE', // | دەروازەی سنووری
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'JOINT', // | هاوبەش
       jurisdiction: 'joint', // | هاوبەش
       valuationUSD: 4800, // | نرخاندن (ملیۆن دۆلار)
@@ -212,6 +219,7 @@ export class NationalAssetRegistry {
       name: '| کۆمپانیای هێڵی ئاسمانی عێراقی',
       category: 'TRANSPORT', // | گواستنەوە
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'STATE_ENTERPRISE', // | کۆمپانیای دەوڵەت
       jurisdiction: 'federal', // | فیدراڵی
       valuationUSD: 2400, // | نرخاندن (ملیۆن دۆلار)
@@ -228,6 +236,7 @@ export class NationalAssetRegistry {
       name: '| دێڕە سەرەکییەکانی فایبەر ئۆپتیک و ناوەندە دیجیتاڵییە نیشتمانییەکان',
       category: 'DIGITAL', // | دیجیتاڵ
       lifecycle: 'ACTIVE', // | چالاک
+      lifecycleState: 'ACTIVE',
       ownership: 'JOINT', // | هاوبەش
       jurisdiction: 'joint', // | هاوبەش
       valuationUSD: 11200, // | نرخاندن (ملیۆن دۆلار)
