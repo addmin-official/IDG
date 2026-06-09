@@ -7,6 +7,7 @@ import {
   Landmark, Shield, ShieldAlert, Cpu, Coins, TrendingUp, AlertTriangle, 
   CheckCircle2, FileText, Lock, RefreshCw, Send, Database 
 } from 'lucide-react';
+import FederalCustomsDashboard from '../customs/FederalCustomsDashboard';
 
 export default function FederalPrimeMinisterDashboard() {
   const { userRole, logAction, auditTrail } = useGovernment();
@@ -138,137 +139,143 @@ export default function FederalPrimeMinisterDashboard() {
       </div>
 
       {/* Main Stats Display Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* KPIs display column */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
-          <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
-            <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-4 flex items-center gap-2">
-              <Database className="w-4 h-4 text-teal-400" />
-              تۆماری فەرمی نیشاندەرەکانی سەرەکی (KPIs) - بوارەکام: {selectedDomain.domainNameKu}
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {selectedDomain.kpis.map(kpi => (
-                <div key={kpi.id} className="bg-slate-950/70 p-4 rounded-xl border border-slate-800/80 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block font-bold">{kpi.nameKu}</span>
-                    <span className="text-lg font-bold text-white font-mono block mt-1.5">{kpi.value}</span>
-                  </div>
-                  <div className="mt-3 pt-2 border-t border-slate-900/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                    <span className="text-slate-500 uppercase">مەودای دراو</span>
-                    <span className="text-emerald-400">{kpi.changeRate || 'سەقامگیر'}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Federal Recent Signed Actions */}
-          <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
-            <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
-              تۆماری ئۆپەراسیۆنە فەرمییەکان (Audit Trail Log)
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-slate-300">
-                <thead className="bg-[#070c17] text-slate-500 uppercase font-mono text-[9px] border-b border-slate-800">
-                  <tr>
-                    <th className="p-2.5 text-start">ڕێکەوت</th>
-                    <th className="p-2.5 text-start">جێبەجێکار</th>
-                    <th className="p-2.5 text-start">چالاکی</th>
-                    <th className="p-2.5 text-center">پرۆتۆکۆڵ</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/40 font-mono">
-                  {auditTrail
-                    .filter(log => log.jurisdiction === 'federal')
-                    .slice(0, 5)
-                    .map(log => (
-                      <tr key={log.id} className="hover:bg-slate-900/20 text-[11px]">
-                        <td className="p-2.5 text-slate-500">{new Date(log.timestamp).toLocaleTimeString()}</td>
-                        <td className="p-2.5 text-teal-400 font-bold">{log.actor}</td>
-                        <td className="p-2.5 text-slate-300 font-sans">{log.details}</td>
-                        <td className="p-2.5 text-center">
-                          <Badge variant="teal">{log.policyContext}</Badge>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+      {activeDomainTab === 'fed-customs' ? (
+        <div className="w-full">
+          <FederalCustomsDashboard />
         </div>
-
-        {/* Action Sidebar */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Executive Directives Form */}
-          <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
-            <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-4 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-teal-400" />
-              داڕشتنی فەرمانی باڵای جێبەجێکردن
-            </h3>
+          {/* KPIs display column */}
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
+              <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-4 flex items-center gap-2">
+                <Database className="w-4 h-4 text-teal-400" />
+                تۆماری فەرمی نیشاندەرەکانی سەرەکی (KPIs) - بوارەکام: {selectedDomain.domainNameKu}
+              </h3>
 
-            <form onSubmit={handleSendDecree} className="flex flex-col gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase font-mono text-slate-500 font-bold">بڕیاردانی فەرمی</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="بۆ نموونە: تاریفەی غەرامەی گومرگی هۆشەک"
-                  value={decreeTitle}
-                  onChange={(e) => setDecreeTitle(e.target.value)}
-                  className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {selectedDomain.kpis.map(kpi => (
+                  <div key={kpi.id} className="bg-slate-950/70 p-4 rounded-xl border border-slate-800/80 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10px] text-slate-500 uppercase font-mono block font-bold">{kpi.nameKu}</span>
+                      <span className="text-lg font-bold text-white font-mono block mt-1.5">{kpi.value}</span>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-slate-900/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                      <span className="text-slate-500 uppercase">مەودای دراو</span>
+                      <span className="text-emerald-400">{kpi.changeRate || 'سەقامگیر'}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </Card>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase font-mono text-slate-500 font-bold">وەسف و ڕێنماییەکان</label>
-                <textarea
-                  rows={3}
-                  placeholder="ڕێساکانی مۆنیفاست و سەپاندنی ڕێژەی نوێی باج..."
-                  value={decreeContent}
-                  onChange={(e) => setDecreeContent(e.target.value)}
-                  className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                />
+            {/* Federal Recent Signed Actions */}
+            <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
+              <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-3">
+                تۆماری ئۆپەراسیۆنە فەرمییەکان (Audit Trail Log)
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-slate-300">
+                  <thead className="bg-[#070c17] text-slate-500 uppercase font-mono text-[9px] border-b border-slate-800">
+                    <tr>
+                      <th className="p-2.5 text-start">ڕێکەوت</th>
+                      <th className="p-2.5 text-start">جێبەجێکار</th>
+                      <th className="p-2.5 text-start">چالاکی</th>
+                      <th className="p-2.5 text-center">پرۆکۆڵ</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/40 font-mono">
+                    {auditTrail
+                      .filter(log => log.jurisdiction === 'federal')
+                      .slice(0, 5)
+                      .map(log => (
+                        <tr key={log.id} className="hover:bg-slate-900/20 text-[11px]">
+                          <td className="p-2.5 text-slate-500">{new Date(log.timestamp).toLocaleTimeString()}</td>
+                          <td className="p-2.5 text-teal-400 font-bold">{log.actor}</td>
+                          <td className="p-2.5 text-slate-300 font-sans">{log.details}</td>
+                          <td className="p-2.5 text-center">
+                            <Badge variant="teal">{log.policyContext}</Badge>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
+            </Card>
+          </div>
 
-              <button
-                type="submit"
-                className="w-full mt-2 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-slate-900 text-xs font-bold font-sans transition flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Send className="w-3.5 h-3.5" />
-                بڵاوکردنەوەی بڕیاردان
-              </button>
-            </form>
-          </Card>
+          {/* Action Sidebar */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+            
+            {/* Executive Directives Form */}
+            <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
+              <h3 className="text-xs font-mono font-bold text-slate-300 uppercase tracking-widest border-b border-slate-800 pb-2 mb-4 flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-teal-400" />
+                داڕشتنی فەرمانی باڵای جێبەجێکردن
+              </h3>
 
-          {/* Designate Council Authority Info */}
-          <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
-            <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">دەزگا فیدرالییە پەیوەندیدارەکان</h4>
-            <div className="space-y-2 mt-3 text-xs leading-relaxed text-slate-400">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                <span className="text-slate-200">فەرماندەیی گشتی سنوورەکان</span>
+              <form onSubmit={handleSendDecree} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase font-mono text-slate-500 font-bold">بڕیاردانی فەرمی</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="بۆ نموونە: تاریفەی غەرامەی گومرگی هۆشەک"
+                    value={decreeTitle}
+                    onChange={(e) => setDecreeTitle(e.target.value)}
+                    className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase font-mono text-slate-500 font-bold">وەسف و ڕێنماییەکان</label>
+                  <textarea
+                    rows={3}
+                    placeholder="ڕێساکانی مۆنیفاست و سەپاندنی ڕێژەی نوێی باج..."
+                    value={decreeContent}
+                    onChange={(e) => setDecreeContent(e.target.value)}
+                    className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full mt-2 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-slate-900 text-xs font-bold font-sans transition flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  بڵاوکردنەوەی بڕیاردان
+                </button>
+              </form>
+            </Card>
+
+            {/* Designate Council Authority Info */}
+            <Card className="bg-[#0b1329]/90 border-slate-800 p-5 rounded-xl text-start">
+              <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2">دەزگا فیدرالییە پەیوەندیدارەکان</h4>
+              <div className="space-y-2 mt-3 text-xs leading-relaxed text-slate-400">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                  <span className="text-slate-200">فەرماندەیی گشتی سنوورەکان</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                  <span className="text-slate-200">بەڕێوبەرایەتی گومرگی فیدراڵ</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                  <span className="text-slate-200">وەزارەتی دارایی و داهاتە گشتییەکان</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                  <span className="text-slate-200">کونسڵگەری گشتی وەزارەتی بازرگانی</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                <span className="text-slate-200">بەڕێوبەرایەتی گومرگی فیدراڵ</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                <span className="text-slate-200">وەزارەتی دارایی و داهاتە گشتییەکان</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                <span className="text-slate-200">کونسڵگەری گشتی وەزارەتی بازرگانی</span>
-              </div>
-            </div>
-          </Card>
+            </Card>
+
+          </div>
 
         </div>
-
-      </div>
+      )}
 
     </div>
   );
