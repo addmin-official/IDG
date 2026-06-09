@@ -13,13 +13,15 @@ import { RiskAndMitigationBrief, RiskItem } from './RiskAndMitigationBrief';
 import { PilotImplementationPlan, PilotPhase } from './PilotImplementationPlan';
 import { StakeholderAccessMatrix, AccessBoundary } from './StakeholderAccessMatrix';
 import { ReadinessBadge } from '../demo/ReadinessBadge';
+import { ProductionReadinessGate } from '../qa/ProductionReadinessGate';
+import { Globe, Cpu, Key, Radio, GitBranch } from 'lucide-react';
 
 interface AcquisitionReadinessPanelProps {
   lang: 'en' | 'ar' | 'ku';
 }
 
 export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps> = ({ lang }) => {
-  const [activeTab, setActiveTab] = useState<'brief' | 'value_prop' | 'acceptance' | 'roadmap' | 'commercial' | 'risks' | 'pilot' | 'access'>('brief');
+  const [activeTab, setActiveTab] = useState<'brief' | 'value_prop' | 'acceptance' | 'roadmap' | 'commercial' | 'risks' | 'pilot' | 'access' | 'qa_gate'>('brief');
   const [signedOff, setSignedOff] = useState<Record<string, boolean>>({
     no_raw_revenue_exposure: true,
     multilingual_run: true,
@@ -134,7 +136,8 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
           { id: 'commercial', label: getLabel('Commercial Options', 'الشق المالي والعقود', 'تێچوو و گرێبەست'), icon: DollarSign },
           { id: 'risks', label: getLabel('Risk Management', 'إدارة المخاطر والحلول', 'مەترسییەکان'), icon: AlertOctagon },
           { id: 'pilot', label: getLabel('Pilot Setup', 'التنفيذ التجريبي', 'خاڵی ئەزموونی'), icon: FileText },
-          { id: 'access', label: getLabel('Access Matrix', 'مصفوفة الصلاحيات', 'دەسەڵاتی کاربەر'), icon: Users }
+          { id: 'access', label: getLabel('Access Matrix', 'مصفوفة الصلاحيات', 'دەسەڵاتی کاربەر'), icon: Users },
+          { id: 'qa_gate', label: getLabel('Automated QA Gate', 'بوابة جودة الإنتاج الفعالة', 'چاودێری کوالێتی بەرهەم'), icon: Shield }
         ].map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -526,6 +529,105 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
             </div>
           </div>
         )}
+
+        {/* TAB 9: AUTOMATED QA GATE */}
+        {activeTab === 'qa_gate' && (() => {
+          const gateResult = ProductionReadinessGate.executeRuntimeGate();
+          const checks = [
+            { key: 'mock', name: getLabel('Mock Dependency Check', 'فحص الاعتمادية والبيانات الوهمية', 'پشکنینی داتای ساختە'), obj: gateResult.mockDependencyCheck, icon: Cpu },
+            { key: 'sovereign', name: getLabel('Sovereign Boundary Check', 'فحص الحوكمة والحدود السيادية', 'پشکنینی پاراستنی دەسەڵات'), obj: gateResult.sovereignBoundaryCheck, icon: Shield },
+            { key: 'localization', name: getLabel('Localization Coverage Check', 'فحص التغطية الكاملة للغات', 'پشکنینی ڕێژەی زمانەکان'), obj: gateResult.localizationCoverageCheck, icon: Globe },
+            { key: 'typography', name: getLabel('RTL Typography Check', 'فحص الخطوط والقراءة الآمنة', 'پشکنینی جۆری نووسین'), obj: gateResult.rtlTypographyCheck, icon: Key },
+            { key: 'hardcoded', name: getLabel('Hardcoded Success Check', 'فحص البيانات المباشرة المزيفة', 'پشکنینی ڕاپۆرتە ڕاستەقینەکان'), obj: gateResult.hardcodedSuccessCheck, icon: Radio },
+            { key: 'demo', name: getLabel('Demo Isolation Check', 'فحص عزل السيناريوهات الافتراضية', 'پشکنینی جیاکردنەوەی تاقیکاری'), obj: gateResult.demoIsolationCheck, icon: GitBranch },
+            { key: 'build', name: getLabel('Production Build Compliance Check', 'فحص مخرجات الإنتاج السليم', 'پشکنینی پرۆسەی دروستکردن'), obj: gateResult.buildCheck, icon: ShieldCheck }
+          ];
+
+          return (
+            <div id="automated-qa-gate" className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 p-4 rounded-lg border border-slate-800">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-amber-400" />
+                    <span>{getLabel('Automated QA Release Gate', 'بوابة إصدارات الإنتاج الفعالة والمدققة آلياً', 'چاودێری کوالێتی بەرهەم و پاراستن')}</span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    {getLabel(
+                      'Real-time automated compliance static code scanning and runtime environment checks.',
+                      'نظام المسح المباشر التلقائي للملفات ومطابقة الكود الدستوري ومعايير إنفاذ البيانات البرمجية السليمة.',
+                      'سیستەمی سکانکردن و بەدواداچوونی سەرچاوەی کارکردنی بەرنامەکە و کوالێتی کۆدەکە.'
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="text-right">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('Compliance Score', 'معدل المطابقة', 'نمرەی گشتی')}</span>
+                    <span className="text-xl font-bold text-emerald-400 font-mono">{gateResult.overallComplianceScore}% PASS</span>
+                  </div>
+                  <div className="bg-slate-950 px-3 py-1.5 rounded border border-slate-800 text-center min-w-[120px]">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">{getLabel('Decision', 'القرار الفني', 'بڕیاری کۆتایی')}</span>
+                    <span className={`text-xs font-bold font-mono ${
+                      gateResult.readinessDecision === 'ACQUISITION_READY' ? 'text-emerald-400' :
+                      gateResult.readinessDecision === 'PILOT_READY' ? 'text-teal-400' :
+                      gateResult.readinessDecision === 'CONDITIONALLY_READY' ? 'text-amber-400' : 'text-rose-400'
+                    }`}>
+                      {gateResult.readinessDecision}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status checklist grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                {checks.map(check => {
+                  const Icon = check.icon;
+                  return (
+                    <div key={check.key} className="bg-slate-950/80 p-3.5 rounded-lg border border-slate-800 flex items-start gap-3 justify-between">
+                      <div className="flex items-start gap-2.5 flex-1">
+                        <div className="p-2 rounded bg-slate-900 border border-slate-800 text-slate-300 mt-0.5 shrink-0">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <span className="font-bold text-xs text-slate-200 block">
+                            {check.name}
+                          </span>
+                          <span className="text-[11px] text-slate-400 leading-relaxed block mt-1 break-words">
+                            {check.obj.details}
+                          </span>
+                          <span className="text-[9px] font-mono text-slate-500 block mt-1.5">
+                            {getLabel('Latest verification: ', 'آخر فحص: ', 'دوایین پشکنین: ')} {new Date(check.obj.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 text-right ml-2">
+                        {check.obj.status === 'PASS' ? (
+                          <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded uppercase">
+                            PASS
+                          </span>
+                        ) : check.obj.status === 'NOT_CONFIGURED' ? (
+                          <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-500/10 border border-slate-500/20 px-2 py-0.5 rounded uppercase">
+                            N/A
+                          </span>
+                        ) : (
+                          <div>
+                            <span className="text-[10px] font-mono font-bold text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded uppercase block mb-1">
+                              FAIL
+                            </span>
+                            <span className="text-[10px] font-mono text-rose-300 block">
+                              {check.obj.violationsCount > 0 ? `${check.obj.violationsCount} Errors` : 'Error'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Dynamic bottom controls section for voting and PDF Generation */}
         <div className="border-t border-slate-900 pt-4 mt-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">

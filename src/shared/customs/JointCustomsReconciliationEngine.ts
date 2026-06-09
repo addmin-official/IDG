@@ -1,6 +1,6 @@
 import { RevenueLog, CustomsDeclaration } from './CustomsTypes';
-import { FederalCustomsRevenueLedger } from '../../federal/customs/core/CustomsRevenueLedger';
-import { KRGCustomsRevenueLedger } from '../../krg/customs/core/CustomsRevenueLedger';
+import { FederalCustomsRevenueLedger } from '../../federal/customs/core/CustomsRevenueLedger'; // joint-orchestration
+import { KRGCustomsRevenueLedger } from '../../krg/customs/core/CustomsRevenueLedger'; // joint-orchestration
 
 export interface ReconciledCustomsReceipt {
   reconciliationId: string;

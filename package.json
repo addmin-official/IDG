@@ -8,7 +8,14 @@
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.cjs",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "qa:mock": "node scripts/qa/check-mock-dependencies.mjs",
+    "qa:sovereignty": "node scripts/qa/check-sovereign-boundaries.mjs",
+    "qa:localization": "node scripts/qa/check-localization-coverage.mjs",
+    "qa:typography": "node scripts/qa/check-rtl-typography.mjs",
+    "qa:hardcoded-success": "node scripts/qa/check-hardcoded-success.mjs",
+    "qa:demo-isolation": "node scripts/qa/check-demo-isolation.mjs",
+    "qa:production-gate": "node scripts/qa/run-production-gate.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

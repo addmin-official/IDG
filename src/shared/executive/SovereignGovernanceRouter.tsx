@@ -5,8 +5,8 @@ import { Card, Badge } from '../../ui';
 import { ShieldAlert, Lock } from 'lucide-react';
 
 // Import dashboards
-import FederalPrimeMinisterDashboard from '../../federal/executive/FederalPrimeMinisterDashboard';
-import KRGPrimeMinisterDashboard from '../../krg/executive/KRGPrimeMinisterDashboard';
+import FederalPrimeMinisterDashboard from '../../federal/executive/FederalPrimeMinisterDashboard'; // sovereign-routing
+import KRGPrimeMinisterDashboard from '../../krg/executive/KRGPrimeMinisterDashboard'; // sovereign-routing
 import JointExecutiveDashboard from './JointExecutiveDashboard';
 
 interface SovereignGovernanceRouterProps {

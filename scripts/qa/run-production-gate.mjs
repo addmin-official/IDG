@@ -1,0 +1,101 @@
+import { execSync } from 'child_process';
+import realFs from 'fs';
+import realPath from 'path';
+
+const resultsPath = 'src/shared/qa/qa-results.json';
+
+function runScript(scriptPath, name) {
+  const start = new Date();
+  console.log(`[QA] Running ${name} (${scriptPath})...`);
+  try {
+    const output = execSync(`node ${scriptPath}`, { encoding: 'utf8', stdio: 'pipe' });
+    console.log(`[QA] ${name} PASSED.`);
+    return {
+      name,
+      status: 'PASS',
+      violationsCount: 0,
+      details: output.split('\n')[0] || 'Verification successfully completed with 0 violations.',
+      timestamp: new Date().toISOString()
+    };
+  } catch (error) {
+    console.error(`[QA] ${name} FAILED.`);
+    const errorMsg = error.stderr || error.stdout || error.message;
+    
+    // Parse approximate violations
+    let violationsCount = 1;
+    const match = errorMsg.match(/(\d+)\s+violations/i) || errorMsg.match(/(\d+)\s+errors/i);
+    if (match) {
+      violationsCount = parseInt(match[1], 10);
+    }
+
+    return {
+      name,
+      status: 'FAIL',
+      violationsCount,
+      details: errorMsg.split('\n')[0] || `Failing during ${name} check execution.`,
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+function runBuildCommand() {
+  console.log(`[QA] Running Build Check (npm run build)...`);
+  try {
+    const output = execSync(`npm run build`, { encoding: 'utf8', stdio: 'pipe' });
+    return {
+      name: 'Build Check',
+      status: 'PASS',
+      violationsCount: 0,
+      details: 'Production package build compiles cleanly under Vite bundle guidelines.',
+      timestamp: new Date().toISOString()
+    };
+  } catch (error) {
+    const errorMsg = error.stderr || error.stdout || error.message;
+    return {
+      name: 'Build Check',
+      status: 'FAIL',
+      violationsCount: 1,
+      details: errorMsg.split('\n')[0] || 'Build failed with syntax or asset bundling errors.',
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+// Let's execute the main suites
+const mockDependencyCheck = runScript('scripts/qa/check-mock-dependencies.mjs', 'Mock Dependency Check');
+const sovereignBoundaryCheck = runScript('scripts/qa/check-sovereign-boundaries.mjs', 'Sovereign Boundary Check');
+const localizationCoverageCheck = runScript('scripts/qa/check-localization-coverage.mjs', 'Localization Coverage Check');
+const rtlTypographyCheck = runScript('scripts/qa/check-rtl-typography.mjs', 'RTL Typography Check');
+const hardcodedSuccessCheck = runScript('scripts/qa/check-hardcoded-success.mjs', 'Hardcoded Success Check');
+const demoIsolationCheck = runScript('scripts/qa/check-demo-isolation.mjs', 'Demo Isolation Check');
+const buildCheck = runBuildCommand();
+
+const finalReport = {
+  mockDependencyCheck,
+  sovereignBoundaryCheck,
+  localizationCoverageCheck,
+  rtlTypographyCheck,
+  hardcodedSuccessCheck,
+  demoIsolationCheck,
+  buildCheck
+};
+
+// Write results
+try {
+  realFs.writeFileSync(resultsPath, JSON.stringify(finalReport, null, 2), 'utf8');
+  console.log(`[QA] Comprehensive results written successfully to ${resultsPath}.`);
+} catch (err) {
+  console.error('Failed to write QA results to file:', err);
+}
+
+// Exit code indicates absolute gate outcome
+const checks = Object.values(finalReport);
+const hasFailures = checks.some(c => c.status === 'FAIL');
+
+if (hasFailures) {
+  console.error('\n[QA] PRODUCTION QA GATE STATUS: BLOCKED. Fix violations before staging.');
+  process.exit(1);
+} else {
+  console.log('\n[QA] PRODUCTION QA GATE STATUS: PASS. Ready for pilot review.');
+  process.exit(0);
+}
