@@ -17,6 +17,8 @@ export interface ProductionGateResult {
   demoIsolationCheck: QACheckResult;
   apiContractCheck?: QACheckResult;
   openapiContractCheck?: QACheckResult;
+  deploymentReadinessCheck?: QACheckResult;
+  buildOutputSafetyCheck?: QACheckResult;
   buildCheck: QACheckResult;
   readinessDecision: ReadinessStatus;
   overallComplianceScore: number;

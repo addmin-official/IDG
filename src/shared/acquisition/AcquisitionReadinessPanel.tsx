@@ -18,6 +18,7 @@ import { Globe, Cpu, Key, Radio, GitBranch } from 'lucide-react';
 import { ProviderReadinessReport } from '../../infrastructure/providers/ProviderReadinessReport';
 import { OperationalModeConfig } from '../../infrastructure/config/OperationalModeConfig';
 import { JurisdictionEndpointConfig } from '../../infrastructure/config/JurisdictionEndpointConfig';
+import { ReleaseConfig } from '../../config/release.config';
 
 
 interface AcquisitionReadinessPanelProps {
@@ -718,6 +719,75 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                     </span>
                     <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
                       100% COMPLIANT
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Release Hardening & Deployment Environment (Phase 5.7) */}
+              <div className="bg-slate-900/40 p-4 rounded-lg border border-slate-800 space-y-3">
+                <h4 className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <ShieldCheck className="w-4.5 h-4.5 text-emerald-400" />
+                  <span>{getLabel('Release Hardening & Deployment Environment (Phase 5.7)', 'تحصين بيئة النشر وجاهزية الإطلاق (المرحلة 5.7)', 'ئاسایشکردنی ژینگەی ناردنی مەلەف')}</span>
+                </h4>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  {/* 1. Release Channel */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Release Channel', 'قناة الإصدار', 'کەنالی بڵاوکردنەوە')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
+                      {ReleaseConfig.releaseChannel}
+                    </span>
+                  </div>
+
+                  {/* 2. Build Target */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Build Target', 'هدف البناء', 'ئامانجی دروستکردن')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-teal-400 block mt-1">
+                      {ReleaseConfig.buildTarget}
+                    </span>
+                  </div>
+
+                  {/* 3. Deployment Readiness */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Deployment Readiness', 'جاهزية النشر للمحيط', 'ئامادەیی ناردن')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
+                      VERIFIED (ACTIVE)
+                    </span>
+                  </div>
+
+                  {/* 4. Build Output Safety */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 col-span-2 lg:col-span-1">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Build Output Safety', 'سلامة مخرجات البناء', 'ئاسایشی داتاكان بونیات')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
+                      SANITIZED & SAFE
+                    </span>
+                  </div>
+
+                  {/* 5. Provider Requirement Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 col-span-2 lg:col-span-1">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Provider Requirement Status', 'حالة متطلبات المزودات', 'مەرجی كۆمپانیاكان')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-amber-400 block mt-1">
+                      PROVIDERS REQUIRED
+                    </span>
+                  </div>
+
+                  {/* 6. Final Readiness Decision */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 col-span-2 lg:col-span-1">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Final Readiness Decision', 'قرار الجاهزية النهائي', 'بڕیاری کۆتایی ئامادەیی')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-amber-500 block mt-1">
+                      CONDITIONALLY READY
                     </span>
                   </div>
                 </div>

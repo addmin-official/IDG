@@ -17,7 +17,12 @@
     "qa:demo-isolation": "node scripts/qa/check-demo-isolation.mjs",
     "qa:api-contracts": "node scripts/qa/check-api-contracts.mjs",
     "qa:openapi-contracts": "node scripts/qa/check-openapi-contracts.mjs",
-    "qa:production-gate": "node scripts/qa/run-production-gate.mjs"
+    "qa:deployment-readiness": "node scripts/qa/check-deployment-readiness.mjs",
+    "qa:build-output-safety": "node scripts/qa/check-build-output-safety.mjs",
+    "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
+    "backend:build": "npm run --prefix server build",
+    "backend:qa": "npm run --prefix server qa:safety",
+    "backend:dev": "npm run --prefix server dev"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

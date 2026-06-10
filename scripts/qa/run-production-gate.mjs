@@ -70,7 +70,9 @@ const hardcodedSuccessCheck = runScript('scripts/qa/check-hardcoded-success.mjs'
 const demoIsolationCheck = runScript('scripts/qa/check-demo-isolation.mjs', 'Demo Isolation Check');
 const apiContractCheck = runScript('scripts/qa/check-api-contracts.mjs', 'API Contract Compliance Check');
 const openapiContractCheck = runScript('scripts/qa/check-openapi-contracts.mjs', 'OpenAPI Contract Verification Check');
+const deploymentReadinessCheck = runScript('scripts/qa/check-deployment-readiness.mjs', 'Deployment Readiness Check');
 const buildCheck = runBuildCommand();
+const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
 const finalReport = {
   mockDependencyCheck,
@@ -81,6 +83,8 @@ const finalReport = {
   demoIsolationCheck,
   apiContractCheck,
   openapiContractCheck,
+  deploymentReadinessCheck,
+  buildOutputSafetyCheck,
   buildCheck
 };
 

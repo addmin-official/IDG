@@ -26,6 +26,8 @@ export class AcceptanceTestRegistry {
     const demoIsolationCheck = this.registeredResults.demoIsolationCheck || fallbackData?.demoIsolationCheck || defaultCheck('Demo Isolation Check');
     const apiContractCheck = this.registeredResults.apiContractCheck || fallbackData?.apiContractCheck || defaultCheck('API Contract Compliance Check');
     const openapiContractCheck = this.registeredResults.openapiContractCheck || fallbackData?.openapiContractCheck || defaultCheck('OpenAPI Contract Verification Check');
+    const deploymentReadinessCheck = this.registeredResults.deploymentReadinessCheck || fallbackData?.deploymentReadinessCheck || defaultCheck('Deployment Readiness Check');
+    const buildOutputSafetyCheck = this.registeredResults.buildOutputSafetyCheck || fallbackData?.buildOutputSafetyCheck || defaultCheck('Build Output Safety Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -37,6 +39,8 @@ export class AcceptanceTestRegistry {
       demoIsolationCheck,
       apiContractCheck,
       openapiContractCheck,
+      deploymentReadinessCheck,
+      buildOutputSafetyCheck,
       buildCheck,
       readinessDecision: 'PILOT_READY',
       overallComplianceScore: 100,
@@ -53,6 +57,8 @@ export class AcceptanceTestRegistry {
       demoIsolationCheck,
       apiContractCheck,
       openapiContractCheck,
+      deploymentReadinessCheck,
+      buildOutputSafetyCheck,
       buildCheck
     ];
 
