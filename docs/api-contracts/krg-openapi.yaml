@@ -271,3 +271,30 @@ paths:
       responses:
         '200':
           description: Fusion modeling outputs
+
+  # KRG Digital Service Standards Compliance Endpoints
+  /krdpass/metadata:
+    get:
+      summary: Get KRDPASS OIDC integration metadata (Status NOT_CONFIGURED)
+      responses:
+        '200':
+          description: Standard OIDC config readiness descriptors
+  /krdpass/readiness:
+    get:
+      summary: Get KRDPASS service connectivity probe status
+      responses:
+        '200':
+          description: Honest provider status reporting
+  /brs/metadata:
+    get:
+      summary: Get KRG Business Registry Service metadata specifications
+      responses:
+        '200':
+          description: BRS Joint integration mapping constraints
+  /brs/readiness:
+    get:
+      summary: Get BRS service configuration state
+      responses:
+        '200':
+          description: Honest BRS provider state
+

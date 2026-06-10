@@ -1,9 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
+import krdpassRoutes from './krdpassRoutes.js';
+import brsRoutes from './brsRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('KURDISTAN_REGION'));
+
+router.use('/krdpass', krdpassRoutes);
+router.use('/brs', brsRoutes);
 
 const krgPaths = [
   '/health',

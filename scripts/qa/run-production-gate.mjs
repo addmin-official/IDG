@@ -73,6 +73,8 @@ const openapiContractCheck = runScript('scripts/qa/check-openapi-contracts.mjs',
 const deploymentReadinessCheck = runScript('scripts/qa/check-deployment-readiness.mjs', 'Deployment Readiness Check');
 const providerWiringCheck = runScript('scripts/qa/check-provider-wiring.mjs', 'Pilot Backend Wiring Check');
 const uatDryRunCheck = runScript('scripts/qa/check-uat-dry-run.mjs', 'UAT Dry-Run Compliance Check');
+const krgDigitalCompatibilityCheck = runScript('scripts/qa/check-krg-digital-compatibility.mjs', 'KRG Digital Standards Compliance Check');
+const krgOnboardingPackageCheck = runScript('scripts/qa/check-krg-onboarding-package.mjs', 'KRG Onboarding Package Compliance Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -89,6 +91,8 @@ const finalReport = {
   buildOutputSafetyCheck,
   providerWiringCheck,
   uatDryRunCheck,
+  krgDigitalCompatibilityCheck,
+  krgOnboardingPackageCheck,
   buildCheck
 };
 

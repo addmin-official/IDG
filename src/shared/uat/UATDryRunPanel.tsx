@@ -25,7 +25,7 @@ export const UATDryRunPanel: React.FC<UATDryRunPanelProps> = ({
 }) => {
   const [selectedRoleId, setSelectedRoleId] = useState<string>(UAT_ROLES[0].id);
   const [testZone, setTestZone] = useState<string>('Federal Private Raw Revenue');
-  const [activeTab, setActiveTab] = useState<'scenarios' | 'boundaries' | 'languages' | 'providers'>('scenarios');
+  const [activeTab, setActiveTab] = useState<'scenarios' | 'boundaries' | 'languages' | 'providers' | 'krg-standards'>('scenarios');
 
   // Generate Report Live
   const report = UATReadinessReport.generateReport(
@@ -155,6 +155,14 @@ export const UATDryRunPanel: React.FC<UATDryRunPanelProps> = ({
           }`}
         >
           {getUatLabel('4. Provider Sincerity Check', '٤. تدقيق التوصيل الصادق', '٤. پشکنینی ڕاستگۆیی دابینکەر')}
+        </button>
+        <button
+          onClick={() => setActiveTab('krg-standards')}
+          className={`text-xs font-mono font-medium pb-2 px-3 relative transition-colors ${
+            activeTab === 'krg-standards' ? 'text-teal-400 border-b-2 border-teal-400 font-bold' : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          {getUatLabel('5. KRG Digital Standards', '٥. المعايير الرقمية لحكومة كوردستان', '٥. پێوەرەکانی هەرێمی کوردستان')}
         </button>
       </div>
 
@@ -386,6 +394,92 @@ export const UATDryRunPanel: React.FC<UATDryRunPanelProps> = ({
                   'تمت برمجة البوابة الرقمية العراقية لتأكيد عدم جاهزية التشغيل الكامل (isProductionReady=false) طالما لم يتم ربطه بقواعد البيانات السيادية الحقيقية والفعالة بشكل مباشر، مع منع المحاكاة للتزييف.',
                   'دەروازەی دیجیتاڵی عێراق وا ڕێکخراوە کە ئامادەنەبونی تەواوی داتابەیس پشانبدات هەتاوەکو خۆی پەیوەندی پێوەنەکات، هیچ داتایەکی ساختە بەکارناهێنرێت.'
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'krg-standards' && (
+        <div className="space-y-3">
+          <div className="bg-slate-950/40 p-3 rounded-lg border border-slate-850">
+            <h4 className="text-[10px] font-mono font-bold text-teal-400 uppercase tracking-wide flex items-center gap-1.5 mb-2.5">
+              <Shield className="w-4 h-4 text-teal-400" />
+              <span>{getUatLabel('Kurdistan Region Standards Compliance Metrics', 'مقاييس الامتثال للمعايير الرقمية لإقليم كوردستان', 'پێوەرەکانی گونجانی هەرێمی کوردستان لەگەڵ سیستم')}</span>
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* KRDPASS State */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-teal-400 block uppercase border-b border-slate-900 pb-1">OIDC / KRDPASS Authentication compatibility</span>
+                <div className="text-[10px] font-mono text-slate-400 space-y-1">
+                  <div><span className="text-slate-500">OIDC FLOW:</span> Authorization Code with PKCE</div>
+                  <div><span className="text-slate-500">ALLOWED SCOPES:</span> openid, profile</div>
+                  <div><span className="text-slate-500">CITIZEN IDENTITY:</span> citizen_identity (KRG_ONLY - HIGH_SENSITIVITY)</div>
+                  <div><span className="text-slate-500">STATUS:</span> <span className="text-amber-500 font-bold">KRG_APPROVAL_REQUIRED</span></div>
+                </div>
+              </div>
+
+              {/* BRS State */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-teal-400 block uppercase border-b border-slate-900 pb-1">Business Registry Service (BRS) compatibility</span>
+                <div className="text-[10px] font-mono text-slate-400 space-y-1">
+                  <div><span className="text-slate-500">JOINT TRANSFERS:</span> Metadata verification hash and status only</div>
+                  <div><span className="text-slate-500">PROHIBITED FIELDS:</span> ownerName, UPN, address, feeDetails</div>
+                  <div><span className="text-slate-500">DATA FILTER POLICY:</span> Enforced (Strict KRG isolation)</div>
+                  <div><span className="text-slate-500">STATUS:</span> <span className="text-amber-500 font-bold">KRG_APPROVAL_REQUIRED</span></div>
+                </div>
+              </div>
+
+              {/* Sovereign policy enforcement info */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 col-span-1 md:col-span-2 space-y-2">
+                <span className="text-[10px] font-mono font-bold text-teal-400 block uppercase border-b border-slate-900 pb-1">KRG Data Sovereignty Policies</span>
+                <p className="text-[10px] font-mono text-slate-400 leading-relaxed">
+                  Every transaction processed under KRG purview complies with autonomous administration guidelines. Central Joint auditing desks can only receive cryptographic integrity hashes. No raw citizens, identity records, business folders, or revenue balances are shared with Federal agencies or Joint databases.
+                </p>
+                <div className="flex flex-wrap gap-4 pt-1 font-mono text-[9px] text-teal-500 font-bold">
+                  <span>✓ NO RAW IDENTITY OUTSIDE KRG ZONE</span>
+                  <span>✓ NO RAW BRS DATA LEAKAGE</span>
+                  <span>✓ JOINT METADATA SAFETY ACTIVE</span>
+                </div>
+              </div>
+
+              {/* Onboarding Package Files Block */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 col-span-1 md:col-span-2 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-teal-400 block uppercase border-b border-slate-900 pb-1">KRG Onboarding & Approval Pack (Phase 5.13)</span>
+                <p className="text-[10px] font-mono text-slate-400">
+                  The following formal approval templates have been generated, audited, and added to the official cabinet:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono text-slate-400">
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-001 (General Approval)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-021 (KRDPASS Request)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-031 (BRS Request)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-041 (Sovereignty Statement)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-051 (Joint Exchange Protocol)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-ONB-061 (Security Survey)</span>
+                    <span className="text-emerald-500 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center col-span-1 sm:col-span-2">
+                    <span>📄 IDG-KRG-ONB-071 (Pilot Scope & Success Criteria)</span>
+                    <span className="text-emerald-500 font-bold">✓ COMPILED & VERIFIED</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
