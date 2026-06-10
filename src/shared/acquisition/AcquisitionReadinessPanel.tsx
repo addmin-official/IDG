@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Briefcase, ShieldCheck, DollarSign, Milestone, Award, 
   AlertOctagon, Users, Scale, Printer, Download, ChevronRight, 
-  CheckCircle2, AlertTriangle, Shield, Check, Info, FileText
+  CheckCircle2, AlertTriangle, Shield, Check, Info, FileText, GraduationCap
 } from 'lucide-react';
 import { AcquisitionBrief, ProblemItem, SolutionModule } from './AcquisitionBrief';
 import { ExecutiveValueProposition, ValuePoint } from './ExecutiveValueProposition';
@@ -20,6 +20,7 @@ import { OperationalModeConfig } from '../../infrastructure/config/OperationalMo
 import { JurisdictionEndpointConfig } from '../../infrastructure/config/JurisdictionEndpointConfig';
 import { ReleaseConfig } from '../../config/release.config';
 import { UATDryRunPanel } from '../uat/UATDryRunPanel';
+import { TrainingGuidePanel } from '../training/TrainingGuidePanel';
 
 
 interface AcquisitionReadinessPanelProps {
@@ -27,7 +28,7 @@ interface AcquisitionReadinessPanelProps {
 }
 
 export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps> = ({ lang }) => {
-  const [activeTab, setActiveTab] = useState<'brief' | 'value_prop' | 'acceptance' | 'roadmap' | 'commercial' | 'risks' | 'pilot' | 'access' | 'qa_gate'>('brief');
+  const [activeTab, setActiveTab] = useState<'brief' | 'value_prop' | 'acceptance' | 'roadmap' | 'commercial' | 'risks' | 'pilot' | 'access' | 'qa_gate' | 'training'>('brief');
   const [simulatedLang, setSimulatedLang] = useState<string>(lang);
   
   React.useEffect(() => {
@@ -172,7 +173,8 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
           { id: 'risks', label: getLabel('Risk Management', 'إدارة المخاطر والحلول', 'مەترسییەکان'), icon: AlertOctagon },
           { id: 'pilot', label: getLabel('Pilot Setup', 'التنفيذ التجريبي', 'خاڵی ئەزموونی'), icon: FileText },
           { id: 'access', label: getLabel('Access Matrix', 'مصفوفة الصلاحيات', 'دەسەڵاتی کاربەر'), icon: Users },
-          { id: 'qa_gate', label: getLabel('Automated QA Gate', 'بوابة جودة الإنتاج الفعالة', 'چاودێری کوالێتی بەرهەم'), icon: Shield }
+          { id: 'qa_gate', label: getLabel('Automated QA Gate', 'بوابة جودة الإنتاج الفعالة', 'چاودێری کوالێتی بەرهەم'), icon: Shield },
+          { id: 'training', label: getLabel('Training Manual & Maps', 'دليل المعرفة والخرائط', 'ڕێبەری ڕاهێنان و نەخشەكان'), icon: GraduationCap }
         ].map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -1008,6 +1010,10 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
             </div>
           );
         })()}
+
+        {activeTab === 'training' && (
+          <TrainingGuidePanel currentLang={simulatedLang} />
+        )}
 
         {/* Dynamic bottom controls section for voting and PDF Generation */}
         <div className="border-t border-slate-900 pt-4 mt-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">

@@ -34,6 +34,7 @@ export class AcceptanceTestRegistry {
     const krgOnboardingPackageCheck = this.registeredResults.krgOnboardingPackageCheck || fallbackData?.krgOnboardingPackageCheck || defaultCheck('KRG Onboarding Package Compliance Check');
     const krgPitchPackageCheck = this.registeredResults.krgPitchPackageCheck || fallbackData?.krgPitchPackageCheck || defaultCheck('KRG Executive Pitch & Partnership Package Check');
     const krgOutreachPackageCheck = this.registeredResults.krgOutreachPackageCheck || fallbackData?.krgOutreachPackageCheck || defaultCheck('KRG Executive Outreach & Meetings Request Package Check');
+    const krgTrainingPackageCheck = this.registeredResults.krgTrainingPackageCheck || fallbackData?.krgTrainingPackageCheck || defaultCheck('KRG Training & Manual Package Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -53,8 +54,9 @@ export class AcceptanceTestRegistry {
       krgOnboardingPackageCheck,
       krgPitchPackageCheck,
       krgOutreachPackageCheck,
+      krgTrainingPackageCheck,
       buildCheck,
-      readinessDecision: 'CONDITIONALLY_READY — OUTREACH PACKAGE READY, PROVIDERS REQUIRED',
+      readinessDecision: 'CONDITIONALLY_READY — TRAINING PACKAGE READY, PROVIDERS REQUIRED',
       overallComplianceScore: 100,
       timestamp: new Date().toISOString()
     };
@@ -77,6 +79,7 @@ export class AcceptanceTestRegistry {
       krgOnboardingPackageCheck,
       krgPitchPackageCheck,
       krgOutreachPackageCheck,
+      krgTrainingPackageCheck,
       buildCheck
     ].filter(Boolean) as QACheckResult[];
 

@@ -557,6 +557,48 @@ export const UATDryRunPanel: React.FC<UATDryRunPanelProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Training, Dashboard Maps & UX Separation Block (Phase 5.15) */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 col-span-1 md:col-span-2 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-sky-400 block uppercase border-b border-slate-900 pb-1">Training, Dashboard Maps & UX Separation (Phase 5.15)</span>
+                <p className="text-[10px] font-mono text-slate-400">
+                  Comprehensive training manuals, stakeholder walk-through blueprints, and administrative isolation guides compiled and verified:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono text-slate-400">
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-MAN-001 (Training Manual)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-MAP-002 (System Dashboard Map)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-SEP-003 (Access Separation Guide)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-DMG-004 (20-Min Demo Blueprint)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-NAV-005 (RBAC Hierarchy Guide)</span>
+                    <span className="text-sky-400 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-RED-006 (Readiness Explainer)</span>
+                    <span className="text-sky-400 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-STG-007 (Local Dry-run Startup Sheet)</span>
+                    <span className="text-sky-400 font-bold">✓ VERIFIED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-TRN-FND-008 (Sponsor Coaching Playbook)</span>
+                    <span className="text-sky-400 font-bold">✓ MUSTAFA JALAL KHOSHNAW</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

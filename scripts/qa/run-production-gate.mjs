@@ -77,6 +77,7 @@ const krgDigitalCompatibilityCheck = runScript('scripts/qa/check-krg-digital-com
 const krgOnboardingPackageCheck = runScript('scripts/qa/check-krg-onboarding-package.mjs', 'KRG Onboarding Package Compliance Check');
 const krgPitchPackageCheck = runScript('scripts/qa/check-pitch-package.mjs', 'KRG Executive Pitch & Partnership Package Check');
 const krgOutreachPackageCheck = runScript('scripts/qa/check-outreach-package.mjs', 'KRG Executive Outreach & Meetings Request Package Check');
+const krgTrainingPackageCheck = runScript('scripts/qa/check-training-package.mjs', 'KRG Training & Manual Package Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -97,6 +98,7 @@ const finalReport = {
   krgOnboardingPackageCheck,
   krgPitchPackageCheck,
   krgOutreachPackageCheck,
+  krgTrainingPackageCheck,
   buildCheck
 };
 

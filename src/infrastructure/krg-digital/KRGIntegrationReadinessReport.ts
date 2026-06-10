@@ -37,6 +37,15 @@ export interface KRGIntegrationReport {
   founderVerbalScriptReady: boolean;
   stakeholderFaqReady: boolean;
   followUpTemplateReady: boolean;
+  trainingPackageReady: boolean;
+  platformManualReady: boolean;
+  dashboardMapReady: boolean;
+  separationGuideReady: boolean;
+  demoWalkthroughReady: boolean;
+  navigationGuideReady: boolean;
+  readinessExplainerReady: boolean;
+  operatorGuideReady: boolean;
+  founderDemoGuideReady: boolean;
   overallCabinetStatus: 'NOT_CONFIGURED' | 'READY' | 'KRG_APPROVAL_REQUIRED';
 }
 
@@ -85,6 +94,15 @@ export class KRGIntegrationReadinessReport {
       founderVerbalScriptReady: true,
       stakeholderFaqReady: true,
       followUpTemplateReady: true,
+      trainingPackageReady: true,
+      platformManualReady: true,
+      dashboardMapReady: true,
+      separationGuideReady: true,
+      demoWalkthroughReady: true,
+      navigationGuideReady: true,
+      readinessExplainerReady: true,
+      operatorGuideReady: true,
+      founderDemoGuideReady: true,
       overallCabinetStatus: isConnected ? 'READY' : 'KRG_APPROVAL_REQUIRED'
     };
   }
