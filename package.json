@@ -19,6 +19,7 @@
     "qa:openapi-contracts": "node scripts/qa/check-openapi-contracts.mjs",
     "qa:deployment-readiness": "node scripts/qa/check-deployment-readiness.mjs",
     "qa:build-output-safety": "node scripts/qa/check-build-output-safety.mjs",
+    "qa:uat-dry-run": "node scripts/qa/check-uat-dry-run.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
     "backend:build": "npm run --prefix server build",
     "backend:qa": "npm run --prefix server qa:safety",
@@ -28,7 +29,7 @@
     "dev:all": "npm run dev:frontend & npm run dev:backend",
     "build:frontend": "vite build",
     "build:backend": "npm run --prefix server build",
-    "qa:all": "npm run qa:production-gate && npm run backend:qa",
+    "qa:all": "npm run qa:production-gate && npm run qa:uat-dry-run && npm run backend:qa",
     "smoke:local": "node scripts/smoke/run-local-smoke.mjs",
     "release:staging-check": "node scripts/release/staging-release-check.mjs"
   },

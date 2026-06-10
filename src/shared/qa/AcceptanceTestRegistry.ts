@@ -29,6 +29,7 @@ export class AcceptanceTestRegistry {
     const deploymentReadinessCheck = this.registeredResults.deploymentReadinessCheck || fallbackData?.deploymentReadinessCheck || defaultCheck('Deployment Readiness Check');
     const buildOutputSafetyCheck = this.registeredResults.buildOutputSafetyCheck || fallbackData?.buildOutputSafetyCheck || defaultCheck('Build Output Safety Check');
     const providerWiringCheck = this.registeredResults.providerWiringCheck || fallbackData?.providerWiringCheck || defaultCheck('Pilot Backend Wiring Check');
+    const uatDryRunCheck = this.registeredResults.uatDryRunCheck || fallbackData?.uatDryRunCheck || defaultCheck('UAT Dry-Run Compliance Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -43,8 +44,9 @@ export class AcceptanceTestRegistry {
       deploymentReadinessCheck,
       buildOutputSafetyCheck,
       providerWiringCheck,
+      uatDryRunCheck,
       buildCheck,
-      readinessDecision: 'PILOT_READY',
+      readinessDecision: 'CONDITIONALLY_READY — PILOT DRY-RUN READY, PROVIDERS REQUIRED',
       overallComplianceScore: 100,
       timestamp: new Date().toISOString()
     };
@@ -62,8 +64,9 @@ export class AcceptanceTestRegistry {
       deploymentReadinessCheck,
       buildOutputSafetyCheck,
       providerWiringCheck,
+      uatDryRunCheck,
       buildCheck
-    ];
+    ].filter(Boolean) as QACheckResult[];
 
     const passCount = checks.filter(c => c.status === 'PASS').length;
     gateResult.overallComplianceScore = Math.round((passCount / checks.length) * 100);

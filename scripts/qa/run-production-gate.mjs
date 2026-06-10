@@ -72,6 +72,7 @@ const apiContractCheck = runScript('scripts/qa/check-api-contracts.mjs', 'API Co
 const openapiContractCheck = runScript('scripts/qa/check-openapi-contracts.mjs', 'OpenAPI Contract Verification Check');
 const deploymentReadinessCheck = runScript('scripts/qa/check-deployment-readiness.mjs', 'Deployment Readiness Check');
 const providerWiringCheck = runScript('scripts/qa/check-provider-wiring.mjs', 'Pilot Backend Wiring Check');
+const uatDryRunCheck = runScript('scripts/qa/check-uat-dry-run.mjs', 'UAT Dry-Run Compliance Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -87,6 +88,7 @@ const finalReport = {
   deploymentReadinessCheck,
   buildOutputSafetyCheck,
   providerWiringCheck,
+  uatDryRunCheck,
   buildCheck
 };
 

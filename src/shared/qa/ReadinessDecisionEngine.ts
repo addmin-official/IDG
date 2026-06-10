@@ -104,14 +104,14 @@ export class ReadinessDecisionEngine {
 
     const providersNotConfigured = fedState === 'NOT_CONFIGURED' || krgState === 'NOT_CONFIGURED' || jointState === 'NOT_CONFIGURED';
     if (providersNotConfigured) {
-      return 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
+      return 'CONDITIONALLY_READY — PILOT DRY-RUN READY, PROVIDERS REQUIRED';
     }
 
     if (fedState === 'READY' && krgState === 'READY' && jointState === 'READY') {
       return 'PILOT_READY';
     }
 
-    return 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
+    return 'CONDITIONALLY_READY — PILOT DRY-RUN READY, PROVIDERS REQUIRED';
   }
 }
 

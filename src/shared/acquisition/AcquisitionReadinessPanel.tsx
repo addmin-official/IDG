@@ -19,6 +19,7 @@ import { ProviderReadinessReport } from '../../infrastructure/providers/Provider
 import { OperationalModeConfig } from '../../infrastructure/config/OperationalModeConfig';
 import { JurisdictionEndpointConfig } from '../../infrastructure/config/JurisdictionEndpointConfig';
 import { ReleaseConfig } from '../../config/release.config';
+import { UATDryRunPanel } from '../uat/UATDryRunPanel';
 
 
 interface AcquisitionReadinessPanelProps {
@@ -27,6 +28,12 @@ interface AcquisitionReadinessPanelProps {
 
 export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps> = ({ lang }) => {
   const [activeTab, setActiveTab] = useState<'brief' | 'value_prop' | 'acceptance' | 'roadmap' | 'commercial' | 'risks' | 'pilot' | 'access' | 'qa_gate'>('brief');
+  const [simulatedLang, setSimulatedLang] = useState<string>(lang);
+  
+  React.useEffect(() => {
+    setSimulatedLang(lang);
+  }, [lang]);
+
   const [signedOff, setSignedOff] = useState<Record<string, boolean>>({
     no_raw_revenue_exposure: true,
     multilingual_run: true,
@@ -940,6 +947,16 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                   </div>
                 </div>
               </div>
+
+              {/* Phase 5.11 - Pilot Dry-run & Role-based UAT Panel */}
+              <UATDryRunPanel
+                currentLanguage={simulatedLang}
+                onLanguageChange={(newLang) => setSimulatedLang(newLang as any)}
+                federalBackendState={providerReport?.federalState || 'NOT_CONFIGURED'}
+                krgBackendState={providerReport?.krgState || 'NOT_CONFIGURED'}
+                jointBackendState={providerReport?.jointState || 'NOT_CONFIGURED'}
+                isBackendReachable={providerReport?.backendScaffoldReachable || false}
+              />
 
               {/* Status checklist grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">

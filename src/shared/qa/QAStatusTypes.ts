@@ -4,7 +4,8 @@ export type ReadinessStatus =
   | 'PILOT_READY' 
   | 'ACQUISITION_READY'
   | 'CONDITIONALLY_READY — BACKEND UNAVAILABLE'
-  | 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
+  | 'CONDITIONALLY_READY — PROVIDERS REQUIRED'
+  | 'CONDITIONALLY_READY — PILOT DRY-RUN READY, PROVIDERS REQUIRED';
 
 export interface QACheckResult {
   name: string;
@@ -26,6 +27,7 @@ export interface ProductionGateResult {
   deploymentReadinessCheck?: QACheckResult;
   buildOutputSafetyCheck?: QACheckResult;
   providerWiringCheck?: QACheckResult;
+  uatDryRunCheck?: QACheckResult;
   buildCheck: QACheckResult;
   readinessDecision: ReadinessStatus;
   overallComplianceScore: number;
