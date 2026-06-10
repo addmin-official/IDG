@@ -50,7 +50,7 @@ export const TrainingGuidePanel: React.FC<TrainingGuidePanelProps> = ({ currentL
           </div>
           <div>
             <h3 className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider">
-              {getLabel('Knowledge-Base & Training Center (Phase 5.15)', 'دليل التدريب والمعرفة المشترك (المرحلة 5.15)', 'سیستەمی زانیاری و پەروەردەی هاوبەش (قۆناغی 5.15)')}
+              {getLabel('Knowledge-Base & Training Center (Phase 5.16A)', 'دليل التدريب والمعرفة المشترك (المرحلة 5.16A)', 'سیستەمی زانیاری و پەروەردەی هاوبەش (قۆناغی 5.16A)')}
             </h3>
             <p className="text-[10px] text-slate-400 font-sans">
               {getLabel('Instructional walkthroughs, role mappings, sovereignty laws, and administrative separation checks.', 'الأدلة التوجيهية وتصنيف الصلاحيات وقوانين حماية السيادة الإقليمية للبيانات.', 'ڕێنمایی بەکارهێنەر، جیاکاری دەسەڵاتەکان، و یاساکانی پاراستنی زانیاری دەڤەری.')}

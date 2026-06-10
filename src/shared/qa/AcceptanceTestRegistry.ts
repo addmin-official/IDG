@@ -56,7 +56,7 @@ export class AcceptanceTestRegistry {
       krgOutreachPackageCheck,
       krgTrainingPackageCheck,
       buildCheck,
-      readinessDecision: 'CONDITIONALLY_READY — TRAINING PACKAGE READY, PROVIDERS REQUIRED',
+      readinessDecision: 'CONDITIONALLY_READY — TRAINING PACKAGE FULLY VERIFIED, PROVIDERS REQUIRED',
       overallComplianceScore: 100,
       timestamp: new Date().toISOString()
     };

@@ -29,6 +29,7 @@ This document establishes the strict administrative and user experience boundari
 - **Expose Raw Data to Joint Operations:** Joint operations dashboards are metadata-only. Admins cannot alter database queries to bypass SHA-256 hash formatting.
 - **Inject Fake Readiness:** Admins cannot fake QA audits or hardcode `READY` scores. Any override results in an immediate automated QA Gate failure.
 - **Mark PILOT_READY without Providers:** The platform will fail build steps if an operator tries to declare the system fully operational with unconfigured connection endpoints.
+- **Create Fake Government Records:** Admins have no tools or database overrides to seed mock registries, dummy company listings, or fake customs clearances into real operational schemas.
 
 ---
 
@@ -48,3 +49,4 @@ This document establishes the strict administrative and user experience boundari
 - **Onboarding Package Internals:** Regulatory draft templates and executive briefings are hidden from operational border screens.
 - **Cross-Jurisdiction Raw Ledgers:** Standard users are blocked from querying raw corporate indices or raw border clearances from opposing jurisdictions.
 - **Admin Configuration Tables:** Operator interfaces completely exclude system setup components, maintaining clean, clutter-free workspaces.
+- **Readiness Override Controls:** Operators cannot manually alter the staging compliance decision or override the automated `CONDITIONALLY_READY` state.
