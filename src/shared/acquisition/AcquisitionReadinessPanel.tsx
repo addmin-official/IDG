@@ -15,6 +15,10 @@ import { StakeholderAccessMatrix, AccessBoundary } from './StakeholderAccessMatr
 import { ReadinessBadge } from '../demo/ReadinessBadge';
 import { ProductionReadinessGate } from '../qa/ProductionReadinessGate';
 import { Globe, Cpu, Key, Radio, GitBranch } from 'lucide-react';
+import { ProviderReadinessReport } from '../../infrastructure/providers/ProviderReadinessReport';
+import { OperationalModeConfig } from '../../infrastructure/config/OperationalModeConfig';
+import { JurisdictionEndpointConfig } from '../../infrastructure/config/JurisdictionEndpointConfig';
+
 
 interface AcquisitionReadinessPanelProps {
   lang: 'en' | 'ar' | 'ku';
@@ -33,6 +37,29 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
   
   const [legislatorVote, setLegislatorVote] = useState<'UNDECIDED' | 'APPROVED' | 'REJECTED'>('UNDECIDED');
   const [contractGenerated, setContractGenerated] = useState(false);
+
+  // Dynamic Provider Readiness state
+  const [providerReport, setProviderReport] = useState<any>(null);
+  const [isReportLoading, setIsReportLoading] = useState(true);
+
+  React.useEffect(() => {
+    let active = true;
+    ProviderReadinessReport.executeComprehensiveReport()
+      .then(res => {
+        if (active) {
+          setProviderReport(res);
+          setIsReportLoading(false);
+        }
+      })
+      .catch(err => {
+        console.error("Failed to load provider report", err);
+        if (active) setIsReportLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
 
   // Data fetching
   const problems = AcquisitionBrief.getProblems();
@@ -534,13 +561,13 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
         {activeTab === 'qa_gate' && (() => {
           const gateResult = ProductionReadinessGate.executeRuntimeGate();
           const checks = [
-            { key: 'mock', name: getLabel('Mock Dependency Check', 'فحص الاعتمادية والبيانات الوهمية', 'پشکنینی داتای ساختە'), obj: gateResult.mockDependencyCheck, icon: Cpu },
-            { key: 'sovereign', name: getLabel('Sovereign Boundary Check', 'فحص الحوكمة والحدود السيادية', 'پشکنینی پاراستنی دەسەڵات'), obj: gateResult.sovereignBoundaryCheck, icon: Shield },
-            { key: 'localization', name: getLabel('Localization Coverage Check', 'فحص التغطية الكاملة للغات', 'پشکنینی ڕێژەی زمانەکان'), obj: gateResult.localizationCoverageCheck, icon: Globe },
-            { key: 'typography', name: getLabel('RTL Typography Check', 'فحص الخطوط والقراءة الآمنة', 'پشکنینی جۆری نووسین'), obj: gateResult.rtlTypographyCheck, icon: Key },
-            { key: 'hardcoded', name: getLabel('Hardcoded Success Check', 'فحص البيانات المباشرة المزيفة', 'پشکنینی ڕاپۆرتە ڕاستەقینەکان'), obj: gateResult.hardcodedSuccessCheck, icon: Radio },
-            { key: 'demo', name: getLabel('Demo Isolation Check', 'فحص عزل السيناريوهات الافتراضية', 'پشکنینی جیاکردنەوەی تاقیکاری'), obj: gateResult.demoIsolationCheck, icon: GitBranch },
-            { key: 'build', name: getLabel('Production Build Compliance Check', 'فحص مخرجات الإنتاج السليم', 'پشکنینی پرۆسەی دروستکردن'), obj: gateResult.buildCheck, icon: ShieldCheck }
+            {key: 'mock', name: getLabel('Mock Dependency Check', 'فحص الاعتمادية والبيانات الوهمية', 'پشکنینی داتای ساختە'), obj: gateResult.mockDependencyCheck, icon: Cpu},
+            {key: 'sovereign', name: getLabel('Sovereign Boundary Check', 'فحص الحوكمة والحدود السيادية', 'پشکنینی پاراستنی دەسەڵات'), obj: gateResult.sovereignBoundaryCheck, icon: Shield},
+            {key: 'localization', name: getLabel('Localization Coverage Check', 'فحص التغطية الكاملة للغات', 'پشکنینی ڕێژەی زمانەكان'), obj: gateResult.localizationCoverageCheck, icon: Globe},
+            {key: 'typography', name: getLabel('RTL Typography Check', 'فحص الخطوط والقراءة الآمنة', 'پشکنینی جۆري نووسين'), obj: gateResult.rtlTypographyCheck, icon: Key},
+            {key: 'hardcoded', name: getLabel('Hardcoded Success Check', 'فحص البيانات المباشرة المزيفة', 'پشکنینی ڕابۆرتە ڕاستەقینەکان'), obj: gateResult.hardcodedSuccessCheck, icon: Radio},
+            {key: 'demo', name: getLabel('Demo Isolation Check', 'فحص عزل السيناريوهات الافتراضية', 'پشکنینی جیاکردنەوەی تاقیکاري'), obj: gateResult.demoIsolationCheck, icon: GitBranch},
+            {key: 'build', name: getLabel('Production Build Compliance Check', 'فحص مخرجات الإنتاج السليم', 'پشکنینی پرۆسەی دروستکردن'), obj: gateResult.buildCheck, icon: ShieldCheck}
           ];
 
           return (

@@ -1,5 +1,7 @@
 import { ReadinessStatus, ProductionGateResult } from './QAStatusTypes';
 import { DemoModeController } from '../demo/DemoModeController';
+import { ProviderReadinessReport } from '../../infrastructure/providers/ProviderReadinessReport';
+import { ProviderConfigurationValidator } from '../../infrastructure/providers/ProviderConfigurationValidator';
 
 export class ReadinessDecisionEngine {
   /**
@@ -21,58 +23,49 @@ export class ReadinessDecisionEngine {
       return 'BLOCKED';
     }
 
-    // 2. Read provider states from DemoModeController
-    const providers = ['checkpoint', 'operational', 'audit', 'ledger', 'workflow'];
-    const providerStates = providers.map(p => DemoModeController.getProviderState(p));
+    // 2. Read provider configurations from registered domains
+    const providersList = ProviderReadinessReport.getRegisteredProviders();
+    const configStates = providersList.map(p => ProviderConfigurationValidator.validateProvider(p));
+
+    // Check if any registered providers are completely unconfigured:
+    const hasUnconfigured = configStates.some(s => s === 'NOT_CONFIGURED');
     
-    const allConfiguredOrReady = providerStates.every(
-      s => s === 'configured' || s === 'ready'
+    // Check if any registered providers suffer jurisdiction base mismatches:
+    const hasJurisdictionViolation = configStates.some(
+      s => s === 'JURISDICTION_VIOLATION' || s === 'SECURITY_BLOCKED' || s === 'MISCONFIGURED'
     );
 
-    const hasAnyUnavailableOrError = providerStates.some(
-      s => s === 'unavailable' || s === 'error'
+    // 3. Read active demo module states from controller (for simulated health checks / toggles)
+    const demoProviders = ['checkpoint', 'operational', 'audit', 'ledger', 'workflow'];
+    const demoStates = demoProviders.map(p => DemoModeController.getProviderState(p));
+    
+    const hasFailedDemoHealth = demoStates.some(
+      s => s === 'unavailable' || s === 'error' || s === 'UNAVAILABLE'
     );
 
-    // 3. Evaluate criteria
-    if (hasAnyUnavailableOrError) {
-      return 'BLOCKED';
-    }
-
-    // If any provider is 'not_configured', we consider them missing but demo can still look good.
-    const hasNotConfigured = providerStates.some(s => s === 'not_configured');
-
-    if (hasNotConfigured) {
+    // Rule: If QA passes but providers are not configured:
+    // CONDITIONALLY_READY
+    if (hasUnconfigured) {
       return 'CONDITIONALLY_READY';
     }
 
-    // All are ready/configured and all QA checks are PASS.
-    // Let's verify acquisition criteria:
-    const mockRuntimeViolations = gateResult.mockDependencyCheck.violationsCount;
-    const sovereignViolations = gateResult.sovereignBoundaryCheck.violationsCount;
-    const isLocalizationCoveragePerfect = gateResult.localizationCoverageCheck.violationsCount === 0;
-    const rtlViolations = gateResult.rtlTypographyCheck.violationsCount;
-    const hardcodedViolations = gateResult.hardcodedSuccessCheck.violationsCount;
-    const demoIsolationPasses = gateResult.demoIsolationCheck.status === 'PASS';
-    const buildPasses = gateResult.buildCheck.status === 'PASS';
+    // Rule: If providers are configured but health checks fail or have violations:
+    // BLOCKED
+    if (hasJurisdictionViolation || hasFailedDemoHealth) {
+      return 'BLOCKED';
+    }
 
-    const qualifiesForAcquisition = 
-      mockRuntimeViolations === 0 &&
-      sovereignViolations === 0 &&
-      isLocalizationCoveragePerfect &&
-      rtlViolations === 0 &&
-      hardcodedViolations === 0 &&
-      demoIsolationPasses &&
-      buildPasses &&
-      allConfiguredOrReady;
+    // Check if all are fully ready (configured and healthy):
+    const allConfiguredAndReady = configStates.every(s => s === 'READY') && !hasFailedDemoHealth;
 
-    if (qualifiesForAcquisition) {
+    // Rule: If QA passes and provider health passes:
+    // PILOT_READY
+    // Only allow ACQUISITION_READY when provider readiness is fully configured and validated:
+    if (allConfiguredAndReady) {
       return 'ACQUISITION_READY';
     }
 
-    if (allConfiguredOrReady && buildPasses) {
-      return 'PILOT_READY';
-    }
-
-    return 'CONDITIONALLY_READY';
+    return 'PILOT_READY';
   }
 }
+
