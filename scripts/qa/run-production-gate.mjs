@@ -78,6 +78,7 @@ const krgOnboardingPackageCheck = runScript('scripts/qa/check-krg-onboarding-pac
 const krgPitchPackageCheck = runScript('scripts/qa/check-pitch-package.mjs', 'KRG Executive Pitch & Partnership Package Check');
 const krgOutreachPackageCheck = runScript('scripts/qa/check-outreach-package.mjs', 'KRG Executive Outreach & Meetings Request Package Check');
 const krgTrainingPackageCheck = runScript('scripts/qa/check-training-package.mjs', 'KRG Training & Manual Package Check');
+const uiContainmentCheck = runScript('scripts/qa/check-ui-containment.mjs', 'UI Containment & Safety Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -99,6 +100,7 @@ const finalReport = {
   krgPitchPackageCheck,
   krgOutreachPackageCheck,
   krgTrainingPackageCheck,
+  uiContainmentCheck,
   buildCheck
 };
 
@@ -106,10 +108,10 @@ const passCount = Object.values(finalReport).filter(c => c.status === 'PASS').le
 const totalCount = Object.values(finalReport).length;
 const overallComplianceScore = Math.round((passCount / totalCount) * 100);
 
-// Set final decision to CONDITIONALLY_READY — TRAINING PACKAGE FULLY VERIFIED, PROVIDERS REQUIRED
+// Set final decision to CONDITIONALLY_READY — UI CONTAINMENT VERIFIED, PROVIDERS REQUIRED
 const finalReportWithMetadata = {
   ...finalReport,
-  readinessDecision: 'CONDITIONALLY_READY — TRAINING PACKAGE FULLY VERIFIED, PROVIDERS REQUIRED',
+  readinessDecision: 'CONDITIONALLY_READY — UI CONTAINMENT VERIFIED, PROVIDERS REQUIRED',
   overallComplianceScore,
   timestamp: new Date().toISOString()
 };
