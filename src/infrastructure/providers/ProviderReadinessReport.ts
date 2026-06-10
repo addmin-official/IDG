@@ -6,6 +6,7 @@ import { JurisdictionEndpointConfig } from '../config/JurisdictionEndpointConfig
 import { ApiContractRegistry } from '../api-contracts/ApiContractRegistry';
 import { ApiContractValidationEngine } from '../api-contracts/ApiContractValidationEngine';
 import { JurisdictionScope, ApiContractStatus } from '../api-contracts/ApiContractTypes';
+import { ProductionProviderRegistry } from './ProductionProviderRegistry';
 
 export interface DomainProviderReport {
   id: string;
@@ -37,9 +38,22 @@ export interface ComprehensiveReadinessReport {
   schemaCompletenessScore: number; // Percentage of contracts with complete schemas
   jointMetadataCompliance: boolean; // True if all Joint providers are metadata-only compliant
   jurisdictionContractViolationsCount: number;
+  // Pilot Wiring Metrics (Phase 5.9)
+  frontendProviderConfigured: boolean;
+  backendScaffoldReachable: boolean;
+  federalBackendState: ProviderState;
+  krgBackendState: ProviderState;
+  jointBackendState: ProviderState;
+  providerNotConnectedCount: number;
+  jurisdictionMismatchCount: number;
 }
 
 export class ProviderReadinessReport {
+  public static latestFederalBackendState: ProviderState = 'NOT_CONFIGURED';
+  public static latestKrgBackendState: ProviderState = 'NOT_CONFIGURED';
+  public static latestJointBackendState: ProviderState = 'NOT_CONFIGURED';
+  public static latestBackendReachable: boolean = false;
+
   /**
    * Registers metadata and jurisdiction mapping for all 12 platform domains.
    * Rule: No duplicate files, reuse existing structures.
@@ -189,6 +203,37 @@ export class ProviderReadinessReport {
 
     const allPass = reports.every(r => r.state === 'READY') && jurisdictionViolations === 0;
 
+    // Phase 5.9 Backend Query Validation
+    const federalBackendState = await ProductionProviderRegistry.getFederalBackendProvider().getProviderState();
+    const krgBackendState = await ProductionProviderRegistry.getKRGBackendProvider().getProviderState();
+    const jointBackendState = await ProductionProviderRegistry.getJointMetadataBackendProvider().getProviderState();
+
+    this.latestFederalBackendState = federalBackendState;
+    this.latestKrgBackendState = krgBackendState;
+    this.latestJointBackendState = jointBackendState;
+
+    const fedUrl = (import.meta as any).env?.VITE_FEDERAL_API_BASE_URL || '';
+    const krgUrl = (import.meta as any).env?.VITE_KRG_API_BASE_URL || '';
+    const jointUrl = (import.meta as any).env?.VITE_JOINT_API_BASE_URL || '';
+
+    const hasBaseUrls = fedUrl && krgUrl && jointUrl &&
+                         !fedUrl.includes('placeholder') &&
+                         !krgUrl.includes('placeholder') &&
+                         !jointUrl.includes('placeholder');
+
+    const backendScaffoldReachable = hasBaseUrls &&
+                                     federalBackendState !== 'UNAVAILABLE' &&
+                                     krgBackendState !== 'UNAVAILABLE' &&
+                                     jointBackendState !== 'UNAVAILABLE';
+
+    this.latestBackendReachable = backendScaffoldReachable;
+
+    let providerNotConnectedCount = 0;
+    if (federalBackendState === 'NOT_CONFIGURED') providerNotConnectedCount++;
+    if (krgBackendState === 'NOT_CONFIGURED') providerNotConnectedCount++;
+    if (jointBackendState === 'NOT_CONFIGURED') providerNotConnectedCount++;
+    providerNotConnectedCount += unconfiguredCount;
+
     return {
       timestamp: new Date().toISOString(),
       overallScore,
@@ -201,7 +246,15 @@ export class ProviderReadinessReport {
       missingContractCount,
       schemaCompletenessScore,
       jointMetadataCompliance,
-      jurisdictionContractViolationsCount
+      jurisdictionContractViolationsCount,
+      // Pilot Wiring Metrics
+      frontendProviderConfigured: true,
+      backendScaffoldReachable,
+      federalBackendState,
+      krgBackendState,
+      jointBackendState,
+      providerNotConnectedCount,
+      jurisdictionMismatchCount: jurisdictionViolations
     };
   }
 }

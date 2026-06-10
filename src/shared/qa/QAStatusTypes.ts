@@ -1,4 +1,10 @@
-export type ReadinessStatus = 'BLOCKED' | 'CONDITIONALLY_READY' | 'PILOT_READY' | 'ACQUISITION_READY';
+export type ReadinessStatus = 
+  | 'BLOCKED' 
+  | 'CONDITIONALLY_READY' 
+  | 'PILOT_READY' 
+  | 'ACQUISITION_READY'
+  | 'CONDITIONALLY_READY — BACKEND UNAVAILABLE'
+  | 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
 
 export interface QACheckResult {
   name: string;
@@ -19,6 +25,7 @@ export interface ProductionGateResult {
   openapiContractCheck?: QACheckResult;
   deploymentReadinessCheck?: QACheckResult;
   buildOutputSafetyCheck?: QACheckResult;
+  providerWiringCheck?: QACheckResult;
   buildCheck: QACheckResult;
   readinessDecision: ReadinessStatus;
   overallComplianceScore: number;

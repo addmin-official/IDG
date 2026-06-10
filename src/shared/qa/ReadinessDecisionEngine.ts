@@ -92,23 +92,26 @@ export class ReadinessDecisionEngine {
       return 'BLOCKED';
     }
 
-    // Rule: If API contracts pass but real providers are not configured:
-    // CONDITIONALLY_READY
-    if (allContractsPass && hasUnconfigured) {
-      return 'CONDITIONALLY_READY';
+    // Phase 5.9 Decision Matrix
+    const latestReachable = (ProviderReadinessReport as any).latestBackendReachable;
+    const fedState = (ProviderReadinessReport as any).latestFederalBackendState || 'NOT_CONFIGURED';
+    const krgState = (ProviderReadinessReport as any).latestKrgBackendState || 'NOT_CONFIGURED';
+    const jointState = (ProviderReadinessReport as any).latestJointBackendState || 'NOT_CONFIGURED';
+
+    if (!latestReachable) {
+      return 'CONDITIONALLY_READY — BACKEND UNAVAILABLE';
     }
 
-    // Rule: If API contracts pass and provider health passes:
-    // PILOT_READY
-    // Do not mark ACQUISITION_READY unless all production providers are configured and validated.
-    const allConfiguredAndReady = configStates.every(s => s === 'READY') && !hasFailedDemoHealth;
-    if (allContractsPass && allConfiguredAndReady) {
-      // In a real environment if we have real production endpoints, return 'ACQUISITION_READY'
-      // If we are in DEMO or not fully production-approved yet, 'PILOT_READY' is safest.
-      return 'ACQUISITION_READY';
+    const providersNotConfigured = fedState === 'NOT_CONFIGURED' || krgState === 'NOT_CONFIGURED' || jointState === 'NOT_CONFIGURED';
+    if (providersNotConfigured) {
+      return 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
     }
 
-    return 'PILOT_READY';
+    if (fedState === 'READY' && krgState === 'READY' && jointState === 'READY') {
+      return 'PILOT_READY';
+    }
+
+    return 'CONDITIONALLY_READY — PROVIDERS REQUIRED';
   }
 }
 

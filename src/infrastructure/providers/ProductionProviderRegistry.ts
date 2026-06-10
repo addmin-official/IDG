@@ -7,6 +7,10 @@ import { AuditDataProvider } from './AuditDataProvider';
 import { LedgerDataProvider } from './LedgerDataProvider';
 import { WorkflowDataProvider } from './WorkflowDataProvider';
 
+import { FederalBackendProvider } from './FederalBackendProvider';
+import { KRGBackendProvider } from './KRGBackendProvider';
+import { JointMetadataBackendProvider } from './JointMetadataBackendProvider';
+
 import { CheckpointDTO } from '../../contracts/CheckpointContract';
 import { AuditLogDTO } from '../../contracts/AuditContract';
 import { LedgerBlockDTO } from '../../contracts/LedgerContract';
@@ -96,9 +100,17 @@ export class ProductionProviderRegistry {
   private static ledger: LedgerDataProvider = new RealLedgerDataProvider();
   private static workflow: WorkflowDataProvider = new RealWorkflowDataProvider();
 
+  private static federalBackend = new FederalBackendProvider();
+  private static krgBackend = new KRGBackendProvider();
+  private static jointBackend = new JointMetadataBackendProvider();
+
   public static getCheckpointProvider(): CheckpointDataProvider { return this.checkpoint; }
   public static getOperationalProvider(): OperationalDataProvider { return this.operational; }
   public static getAuditProvider(): AuditDataProvider { return this.audit; }
   public static getLedgerProvider(): LedgerDataProvider { return this.ledger; }
   public static getWorkflowProvider(): WorkflowDataProvider { return this.workflow; }
+
+  public static getFederalBackendProvider(): FederalBackendProvider { return this.federalBackend; }
+  public static getKRGBackendProvider(): KRGBackendProvider { return this.krgBackend; }
+  public static getJointMetadataBackendProvider(): JointMetadataBackendProvider { return this.jointBackend; }
 }

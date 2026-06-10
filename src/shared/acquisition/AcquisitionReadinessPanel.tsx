@@ -14,7 +14,7 @@ import { PilotImplementationPlan, PilotPhase } from './PilotImplementationPlan';
 import { StakeholderAccessMatrix, AccessBoundary } from './StakeholderAccessMatrix';
 import { ReadinessBadge } from '../demo/ReadinessBadge';
 import { ProductionReadinessGate } from '../qa/ProductionReadinessGate';
-import { Globe, Cpu, Key, Radio, GitBranch } from 'lucide-react';
+import { Globe, Cpu, Key, Radio, GitBranch, Database } from 'lucide-react';
 import { ProviderReadinessReport } from '../../infrastructure/providers/ProviderReadinessReport';
 import { OperationalModeConfig } from '../../infrastructure/config/OperationalModeConfig';
 import { JurisdictionEndpointConfig } from '../../infrastructure/config/JurisdictionEndpointConfig';
@@ -598,7 +598,7 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                     <span className={`text-xs font-bold font-mono ${
                       gateResult.readinessDecision === 'ACQUISITION_READY' ? 'text-emerald-400' :
                       gateResult.readinessDecision === 'PILOT_READY' ? 'text-teal-400' :
-                      gateResult.readinessDecision === 'CONDITIONALLY_READY' ? 'text-amber-400' : 'text-rose-400'
+                      gateResult.readinessDecision?.startsWith('CONDITIONALLY_READY') ? 'text-amber-400' : 'text-rose-400'
                     }`}>
                       {gateResult.readinessDecision}
                     </span>
@@ -788,6 +788,75 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                     </span>
                     <span className="text-xs font-bold font-mono text-amber-500 block mt-1">
                       CONDITIONALLY READY
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pilot Backend Provider Wiring (Phase 5.9) */}
+              <div className="bg-slate-900/40 p-4 rounded-lg border border-slate-800 space-y-3 mt-4">
+                <h4 className="text-xs font-mono font-bold text-amber-500 uppercase tracking-wider flex items-center gap-1.5">
+                  <Database className="w-4.5 h-4.5 text-amber-500" />
+                  <span>{getLabel('Pilot Backend Provider Wiring (Phase 5.9)', 'توصيل مزودات البيئة التجريبية الخلفية (المرحلة 5.9)', 'تەلی دەروازەی پشتەوەی ئەزموونی')}</span>
+                </h4>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  {/* 1. Backend Wiring Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Backend Wiring Status', 'حالة توصيل النظم الخلفية', 'خاڵی پەیوەندی')}
+                    </span>
+                    <span className={`text-xs font-bold font-mono block mt-1 ${isReportLoading ? 'text-slate-400' : providerReport?.backendScaffoldReachable ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {isReportLoading ? 'CHECKING...' : providerReport?.backendScaffoldReachable ? 'CONNECTED' : 'DISCONNECTED / OFFLINE'}
+                    </span>
+                  </div>
+
+                  {/* 2. Federal Backend State */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Federal Backend State', 'حالة المزود الاتحادي', 'دۆخی فیدراڵ')}
+                    </span>
+                    <span className={`text-xs font-bold font-mono block mt-1 ${isReportLoading ? 'text-slate-400' : providerReport?.federalBackendState === 'READY' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {isReportLoading ? 'PENDING...' : providerReport?.federalBackendState || 'NOT_CONFIGURED'}
+                    </span>
+                  </div>
+
+                  {/* 3. KRG Backend State */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('KRG Backend State', 'حالة المزود الإقليمي', 'دۆخی هەرێم')}
+                    </span>
+                    <span className={`text-xs font-bold font-mono block mt-1 ${isReportLoading ? 'text-slate-400' : providerReport?.krgBackendState === 'READY' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {isReportLoading ? 'PENDING...' : providerReport?.krgBackendState || 'NOT_CONFIGURED'}
+                    </span>
+                  </div>
+
+                  {/* 4. Joint Backend State */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Joint Backend State', 'حالة مزود العمليات المشتركة', 'دۆخی هاوبەش')}
+                    </span>
+                    <span className={`text-xs font-bold font-mono block mt-1 ${isReportLoading ? 'text-slate-400' : providerReport?.jointBackendState === 'READY' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      {isReportLoading ? 'PENDING...' : providerReport?.jointBackendState || 'NOT_CONFIGURED'}
+                    </span>
+                  </div>
+
+                  {/* 5. Provider Not Connected Count */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Unconnected Fallbacks', 'عدد المزودات قيد الربط', 'ژمارەی تەلەفۆن')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-amber-500 block mt-1">
+                      {isReportLoading ? '...' : providerReport?.providerNotConnectedCount ?? 0} Fallbacks Active
+                    </span>
+                  </div>
+
+                  {/* 6. Final Readiness Decision */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Final Readiness Decision', 'قرار الجاهزية النهائي', 'بڕیاری کۆتایی')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-amber-400 block mt-1">
+                      {gateResult.readinessDecision}
                     </span>
                   </div>
                 </div>

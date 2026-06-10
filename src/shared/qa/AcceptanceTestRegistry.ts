@@ -28,6 +28,7 @@ export class AcceptanceTestRegistry {
     const openapiContractCheck = this.registeredResults.openapiContractCheck || fallbackData?.openapiContractCheck || defaultCheck('OpenAPI Contract Verification Check');
     const deploymentReadinessCheck = this.registeredResults.deploymentReadinessCheck || fallbackData?.deploymentReadinessCheck || defaultCheck('Deployment Readiness Check');
     const buildOutputSafetyCheck = this.registeredResults.buildOutputSafetyCheck || fallbackData?.buildOutputSafetyCheck || defaultCheck('Build Output Safety Check');
+    const providerWiringCheck = this.registeredResults.providerWiringCheck || fallbackData?.providerWiringCheck || defaultCheck('Pilot Backend Wiring Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -41,6 +42,7 @@ export class AcceptanceTestRegistry {
       openapiContractCheck,
       deploymentReadinessCheck,
       buildOutputSafetyCheck,
+      providerWiringCheck,
       buildCheck,
       readinessDecision: 'PILOT_READY',
       overallComplianceScore: 100,
@@ -59,6 +61,7 @@ export class AcceptanceTestRegistry {
       openapiContractCheck,
       deploymentReadinessCheck,
       buildOutputSafetyCheck,
+      providerWiringCheck,
       buildCheck
     ];
 
