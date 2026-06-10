@@ -263,7 +263,7 @@ function AppContent() {
             <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px] whitespace-nowrap">
               <Database className="w-3 h-3 text-[#E0A96D]" />
               <span className="text-slate-400 font-mono">
-                {lang === 'en' ? 'STORAGE' : lang === 'ar' ? 'التخزين' : 'کۆگا'}: <b className="text-slate-200">{activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'BAGHDAD_SECURE_NODE' : 'عقدة_بغداد_الآمنة') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'ERBIL_CLUSTER_DB' : 'عنقود_أربيل_لقواعد_البيانات') : (lang === 'en' ? 'FEDERATED_REPLICATED_RING' : 'الحلقة_الاتحادية_المكررة')}</b>
+                {lang === 'en' ? 'STORAGE' : lang === 'ar' ? 'التخزين' : 'کۆگا'}: <b className="text-slate-200">{activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'BAGHDAD_SECURE_NODE' : lang === 'ar' ? 'عقدة_بغداد_الآمنة' : 'گرێی_پارێزراوی_بەغداد') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'ERBIL_CLUSTER_DB' : lang === 'ar' ? 'عنقود_أربيل_لقواعد_البيانات' : 'کۆمەڵە_داتابەیسی_هەولێر') : (lang === 'en' ? 'FEDERATED_REPLICATED_RING' : lang === 'ar' ? 'الحلقة_الاتحادية_المكررة' : 'ئەڵقەی_هاوبەشی_کۆپیکراو')}</b>
               </span>
             </span>
             <span className="flex items-center gap-1.5 bg-[#102235]/40 px-2.5 py-0.5 rounded border border-slate-800 text-[11px] whitespace-nowrap">

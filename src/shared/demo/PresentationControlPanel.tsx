@@ -126,6 +126,11 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
             <div className="grid grid-cols-3 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800/80">
               {(['PRESENTATION_MODE', 'TRAINING_MODE', 'OPERATIONAL_MODE'] as DemoMode[]).map(mode => {
                 const isActive = activeMode === mode;
+                const modeLabel = {
+                  PRESENTATION_MODE: getLabel('Presentation Mode', 'نمط العرض والتمثيل', 'مۆدی نیشاندان'),
+                  TRAINING_MODE: getLabel('Training Mode', 'النمط التجريبي والتدريب', 'مۆدی ڕاهێنان'),
+                  OPERATIONAL_MODE: getLabel('Operational Mode', 'وضع العمل الفعلي', 'مۆدی دەستبەکاربوون')
+                }[mode];
                 return (
                   <button
                     key={mode}
@@ -136,7 +141,7 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
                         : 'bg-transparent text-slate-500 border-transparent hover:text-slate-300 hover:bg-slate-900'
                     }`}
                   >
-                    {mode.replace('_', ' ')}
+                    {modeLabel}
                   </button>
                 );
               })}
@@ -144,7 +149,11 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
             <div className="bg-slate-950/60 p-3 rounded-lg border border-slate-900/60 text-[11px] leading-relaxed text-slate-400">
               <span className="text-[#E0A96D] font-bold font-mono text-[10px] uppercase block mb-1">
                 {activeMode === 'PRESENTATION_MODE' ? '★ ' : activeMode === 'TRAINING_MODE' ? '⚜ ' : '🔒 '}
-                {activeMode.replace('_', ' ')}
+                {{
+                  PRESENTATION_MODE: getLabel('PRESENTATION MODE', 'نمط العرض والتمثيل', 'مۆدی نیشاندان'),
+                  TRAINING_MODE: getLabel('TRAINING MODE', 'النمط التجريبي والتدريب', 'مۆدی ڕاهێنان'),
+                  OPERATIONAL_MODE: getLabel('OPERATIONAL MODE', 'وضع العمل الفعلي', 'مۆدی دەستبەکاربوون')
+                }[activeMode]}
               </span>
               {DemoModeController.getModeDescription(activeMode)}
             </div>
@@ -154,7 +163,7 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
           <div className="space-y-2">
             <label className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block flex justify-between">
               <span>{getLabel('2. Selected Demonstration Scenario', '2. اختيار سيناريو العرض التفاعلي', '٢. دیاریکردنی سیناریۆی نیشاندان')}</span>
-              <span className="text-amber-400 font-bold">{PresentationScenarioRegistry.getScenarios().length} scenarios</span>
+              <span className="text-amber-400 font-bold">{PresentationScenarioRegistry.getScenarios().length} {getLabel('scenarios', 'سيناريوهات', 'سیناریۆ')}</span>
             </label>
             
             <div className="space-y-1.5 max-h-[190px] overflow-y-auto pr-1 bg-slate-950/40 p-2 rounded-xl border border-slate-900 custom-scrollbar">
@@ -207,7 +216,7 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
               <label className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block flex justify-between">
                 <span>{getLabel('3. Readiness Acceptance Checklist', '3. قائمة التحقق للاعتماد الفيدرالي', '٣. مەرجەکانی متمانەپێدانی فیدراڵی')}</span>
                 <span className="text-emerald-400 font-bold">
-                  {checklist.filter(c => c.passed).length}/{checklist.length} Passed
+                  {checklist.filter(c => c.passed).length}/{checklist.length} {getLabel('Passed', 'مكتمل بنجاح', 'پەسەندکراو')}
                 </span>
               </label>
 
@@ -239,7 +248,7 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
             <div className="bg-rose-950/20 border border-rose-900/50 p-2.5 rounded-lg flex items-start gap-2.5">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5 animate-pulse" />
               <div className="text-[10px] text-rose-400 font-mono">
-                <span className="font-bold block text-xs uppercase mb-0.5">Sovereignty Blockers Detected</span>
+                <span className="font-bold block text-xs uppercase mb-0.5">{getLabel('Sovereignty Blockers Detected', 'تم رصد إنذارات سيادية ممانعة', 'هۆشداری تێپەڕاندنی دەسەڵات دۆزرایەوە')}</span>
                 {readiness.criticalIssues[0]}
               </div>
             </div>
@@ -247,10 +256,10 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
             <div className="bg-emerald-950/20 border border-emerald-900/50 p-2.5 rounded-lg flex items-start gap-2.5 text-[10px] text-emerald-400 font-mono">
               <ShieldCheck className="w-4.5 h-4.5 text-emerald-400 shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold block text-xs uppercase mb-0.5">SOVEREIGNTY INTEGRITY ASSURED</span>
+                <span className="font-bold block text-xs uppercase mb-0.5">{getLabel('SOVEREIGNTY INTEGRITY ASSURED', 'ضمان تكامل السيادة التامة', 'پاراستنی تەواوی سەروەریی نیشتمان')}</span>
                 {getLabel(
                   'No leaks detected. Direct database queries across Kurdistan Region and Baghdad remain 100% blocked programs.',
-                  'لا توجد عمليات تسريب للبيانات. يمنع الاستعلام المباشر لقواعد البيانات والأنظمة السيادية منعاً مبرمجاً مطلقاً.',
+                  'لا توجد عمليات تسريب للبيانات. يمنع الاستعلام المباشر لقواعد البيانات والأنظمة السياسية منعاً مبرمجاً مطلقاً.',
                   'هیچ دزەکردنێکی زانیاری نییە. سیستەمی کۆنترۆڵکردن بە تەواوی سەربەخۆیە بە شێوازی فەرمی پڕۆگرامسازی.'
                 )}
               </div>
@@ -282,39 +291,39 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
                 {/* Audit Checklist & Violation Metrics */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Files Audited</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('Files Audited', 'الملفات المدققة', 'سەرجەم فایلەکان')}</span>
                     <span className="text-sm font-bold text-slate-200 font-mono block">
-                      {auditResult.components.length} Components
+                      {auditResult.components.length} {getLabel('Components', 'ملف برمجياً', 'مۆدیول')}
                     </span>
                   </div>
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Tiny Text</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('RTL Tiny Text', 'خطوط اللغات الشاذة', 'قەبارەی تێکست')}</span>
                     <span className={auditResult.tinyTextViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
-                      {auditResult.tinyTextViolations} Violations
+                      {auditResult.tinyTextViolations} {getLabel('Violations', 'ملاحظات', 'جیاوازی')}
                     </span>
                   </div>
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Mono Font</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('RTL Mono Font', 'الخط أحادي المسافة', 'فۆنتی مۆنۆ')}</span>
                     <span className={auditResult.monoFontViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
-                      {auditResult.monoFontViolations} Violations
+                      {auditResult.monoFontViolations} {getLabel('Violations', 'ملاحظات', 'جیاوازی')}
                     </span>
                   </div>
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Tracking</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('RTL Tracking', 'مساحات الحروف والتتبع', 'بۆشایی نێوان پیت')}</span>
                     <span className={auditResult.trackingViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
-                      {auditResult.trackingViolations} Violations
+                      {auditResult.trackingViolations} {getLabel('Violations', 'ملاحظات', 'جیاوازی')}
                     </span>
                   </div>
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">RTL Clipping Risks</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('RTL Clipping Risks', 'مخاطر حجب النصوص', 'مەترسی بڕین')}</span>
                     <span className={auditResult.tableTextClippingRiskViolations > 0 ? "text-sm font-bold text-rose-400 font-mono block" : "text-sm font-bold text-emerald-400 font-mono block"}>
-                      {auditResult.tableTextClippingRiskViolations} Risks
+                      {auditResult.tableTextClippingRiskViolations} {getLabel('Risks', 'مخاطر محتملة', 'مەترسی')}
                     </span>
                   </div>
                   <div className="bg-slate-900/60 p-2 rounded border border-slate-800">
-                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Compliance</span>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">{getLabel('Compliance', 'الامتثال للمواصفات', 'یاسایی بوون')}</span>
                     <span className="text-sm font-bold text-[#E0A96D] font-mono block">
-                      {auditResult.overallScore}% PASS
+                      {auditResult.overallScore}% {getLabel('PASS', 'مطابق للمعيار', 'سەرکەوتوو')}
                     </span>
                   </div>
                 </div>
@@ -323,7 +332,7 @@ export const PresentationControlPanel: React.FC<PresentationControlPanelProps> =
                 {exceptions.length > 0 && (
                   <div className="border-t border-slate-800/80 pt-2 mt-1">
                     <span className="text-[9.5px] uppercase font-mono text-[#E0A96D] block mb-1">
-                      Remaining Justified Exceptions:
+                      {getLabel('Remaining Justified Exceptions:', 'الاستثناءات التقنية المبررة المتبقية:', 'ڕێپێدانە تەکنیکییە بێ زیانەکان:')}
                     </span>
                     {exceptions.map((exc, index) => (
                       <div key={index} className="text-[11px] text-slate-400 leading-relaxed font-sans bg-slate-900/40 p-2 rounded border border-slate-800/40">

@@ -605,6 +605,75 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                 </div>
               </div>
 
+              {/* API Contract Compliance Section (Phase 5.5) */}
+              <div className="bg-slate-900/40 p-4 rounded-lg border border-slate-800 space-y-3">
+                <h4 className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-amber-500" />
+                  <span>{getLabel('Backend API Contracts & Integration Spec (Phase 5.5)', 'مطابقة وسلامة بروتوكولات الربط البرمجي للمنافذ (المرحلة 5.5)', 'پشکنینی ڕێککەوتنی کۆدی API دەروازەکان')}</span>
+                </h4>
+                {isReportLoading ? (
+                  <div className="text-xs text-slate-400 font-mono animate-pulse">
+                    {getLabel('Analyzing API Contract Registries...', 'جاري فحص وتدقيق بروتوكولات الربط للوزارات...', 'خەریکی پشکنینی ڕێککەوتنەکانی API دەروازەکانە...')}
+                  </div>
+                ) : providerReport ? (
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    {/* 1. API Contract Readiness */}
+                    <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                        {getLabel('Contract Readiness', 'جاهزية العقد البرمجي', 'جاهزیەتی ڕێککەوتن')}
+                      </span>
+                      <span className={`text-sm font-bold font-mono ${providerReport.contractReadinessScore === 100 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                        {providerReport.contractReadinessScore}%
+                      </span>
+                    </div>
+
+                    {/* 2. Missing Contract Count */}
+                    <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                        {getLabel('Missing Contracts', 'عقود برمجية مفقودة', 'ڕێککەوتنی بەردەست نییە')}
+                      </span>
+                      <span className={`text-sm font-bold font-mono ${providerReport.missingContractCount === 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {providerReport.missingContractCount}
+                      </span>
+                    </div>
+
+                    {/* 3. Schema Completeness */}
+                    <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                        {getLabel('Schema Completeness', 'اكتمل تخطيط البيانات', 'کوالێتی داڕشتن داتا')}
+                      </span>
+                      <span className="text-sm font-bold font-mono text-teal-400">
+                        {providerReport.schemaCompletenessScore}%
+                      </span>
+                    </div>
+
+                    {/* 4. Joint Metadata Compliance */}
+                    <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                        {getLabel('Joint Metadata Rule', 'امتثال البيانات المشتركة', 'ڕێککەوتنی داتای هاوبەش')}
+                      </span>
+                      <span className={`text-[10px] font-bold font-mono block mt-1 ${providerReport.jointMetadataCompliance ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {providerReport.jointMetadataCompliance ? 'COMPLIANT' : 'NON-COMPLIANT'}
+                      </span>
+                    </div>
+
+                    {/* 5. Jurisdiction Contract Violations */}
+                    <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center col-span-2 md:col-span-1">
+                      <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                        {getLabel('Jurisdiction Violations', 'انتهاكات الاختصاص القضائي', 'پێشێلکاری سنورەکان')}
+                      </span>
+                      <span className={`text-sm font-bold font-mono ${providerReport.jurisdictionContractViolationsCount === 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {providerReport.jurisdictionContractViolationsCount}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-xs text-rose-400 font-mono">
+                    {getLabel('Failed to retrieve comprehensive contract report.', 'فشل فحص بروتوكولات الكود والربط.', 'هەڵەیەک لە پشکنینی پۆرتە دەرەکییەکاندا هەیە.')}
+                  </div>
+                )}
+              </div>
+
               {/* Status checklist grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                 {checks.map(check => {

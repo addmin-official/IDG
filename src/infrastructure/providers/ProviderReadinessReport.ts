@@ -3,6 +3,9 @@ import { ProviderHealthCheckEngine } from './ProviderHealthCheckEngine';
 import { ProviderSecurityPolicy } from './ProviderSecurityPolicy';
 import { ProviderState } from './ProviderState';
 import { JurisdictionEndpointConfig } from '../config/JurisdictionEndpointConfig';
+import { ApiContractRegistry } from '../api-contracts/ApiContractRegistry';
+import { ApiContractValidationEngine } from '../api-contracts/ApiContractValidationEngine';
+import { JurisdictionScope, ApiContractStatus } from '../api-contracts/ApiContractTypes';
 
 export interface DomainProviderReport {
   id: string;
@@ -13,6 +16,12 @@ export interface DomainProviderReport {
   state: ProviderState;
   securityCheckPassed: boolean;
   violationReason?: string;
+  // API Contract Integration
+  apiContractStatus: ApiContractStatus;
+  apiContractErrors: string[];
+  schemaComplete: boolean;
+  securityVerified: boolean;
+  jointCompliant: boolean;
 }
 
 export interface ComprehensiveReadinessReport {
@@ -22,6 +31,12 @@ export interface ComprehensiveReadinessReport {
   jurisdictionViolationsCount: number;
   unconfiguredCount: number;
   providers: DomainProviderReport[];
+  // API Contract Summary Metrics
+  contractReadinessScore: number;
+  missingContractCount: number;
+  schemaCompletenessScore: number; // Percentage of contracts with complete schemas
+  jointMetadataCompliance: boolean; // True if all Joint providers are metadata-only compliant
+  jurisdictionContractViolationsCount: number;
 }
 
 export class ProviderReadinessReport {
@@ -70,6 +85,19 @@ export class ProviderReadinessReport {
     let unconfiguredCount = 0;
     let healthyCount = 0;
 
+    // API Contracts specific tallies
+    let missingContractCount = 0;
+    let schemaCompleteContractsCount = 0;
+    let readyContractsCount = 0;
+    let jointMetadataCompliance = true;
+    let jurisdictionContractViolationsCount = 0;
+
+    const mapJurisdictionScope = (jur: 'FEDERAL' | 'KRG' | 'JOINT'): JurisdictionScope => {
+      if (jur === 'FEDERAL') return 'FEDERAL_IRAQ';
+      if (jur === 'KRG') return 'KURDISTAN_REGION';
+      return 'JOINT_OPERATIONS';
+    };
+
     for (const prov of rawProviders) {
       // 1. Check endpoints & check health
       let state = await ProviderHealthCheckEngine.executeHealthCheck(prov);
@@ -94,8 +122,38 @@ export class ProviderReadinessReport {
           dataType: 'raw_revenue' // Blocked by policy
         });
         if (!secRes.allowed) {
-          // Confirm security policy works correctly (Joint code blocked from raw data is a correct/passing security status)
           securityPassed = true;
+        }
+      }
+
+      // 3. API Contract Validation
+      const scope = mapJurisdictionScope(prov.jurisdiction);
+      const contract = ApiContractRegistry.getContractByDomainAndJurisdiction(prov.domain as any, scope);
+
+      let apiContractStatus: ApiContractStatus = 'NOT_CONFIGURED';
+      let apiContractErrors: string[] = [];
+      let schemaComplete = false;
+      let securityVerified = false;
+      let jointCompliant = true;
+
+      if (!contract) {
+        missingContractCount++;
+        apiContractErrors.push(`API configuration contract for domain ${prov.domain} (jurisdiction: ${prov.jurisdiction}) is missing.`);
+      } else {
+        const validation = ApiContractValidationEngine.validate(contract, scope);
+        apiContractStatus = validation.status;
+        apiContractErrors = validation.errors;
+        schemaComplete = validation.schemaComplete;
+        securityVerified = validation.securityVerified;
+        jointCompliant = validation.jointCompliant;
+
+        if (schemaComplete) schemaCompleteContractsCount++;
+        if (apiContractStatus === 'READY') readyContractsCount++;
+        if (apiContractStatus === 'JURISDICTION_VIOLATION') {
+          jurisdictionContractViolationsCount++;
+        }
+        if (prov.jurisdiction === 'JOINT' && !jointCompliant) {
+          jointMetadataCompliance = false;
         }
       }
 
@@ -107,12 +165,26 @@ export class ProviderReadinessReport {
         endpoint: prov.endpoint || '',
         state,
         securityCheckPassed: securityPassed,
-        violationReason: violationReason || undefined
+        violationReason: violationReason || undefined,
+        // API Contract specifics
+        apiContractStatus,
+        apiContractErrors,
+        schemaComplete,
+        securityVerified,
+        jointCompliant
       });
     }
 
     const overallScore = rawProviders.length > 0 
       ? Math.round((healthyCount / rawProviders.length) * 100) 
+      : 0;
+
+    const contractReadinessScore = rawProviders.length > 0
+      ? Math.round((readyContractsCount / rawProviders.length) * 100)
+      : 0;
+
+    const schemaCompletenessScore = rawProviders.length > 0
+      ? Math.round((schemaCompleteContractsCount / rawProviders.length) * 100)
       : 0;
 
     const allPass = reports.every(r => r.state === 'READY') && jurisdictionViolations === 0;
@@ -123,7 +195,13 @@ export class ProviderReadinessReport {
       allPass,
       jurisdictionViolationsCount: jurisdictionViolations,
       unconfiguredCount,
-      providers: reports
+      providers: reports,
+      // API Contract Summaries
+      contractReadinessScore,
+      missingContractCount,
+      schemaCompletenessScore,
+      jointMetadataCompliance,
+      jurisdictionContractViolationsCount
     };
   }
 }

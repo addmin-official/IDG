@@ -154,11 +154,23 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
 
   // Statistics modeling
   const statsSummary = {
-    treasuryAllocated: activeContext === 'FEDERAL_IRAQ' ? '142.5 T IQD' : activeContext === 'KURDISTAN_REGION' ? '18.2 T IQD' : '160.7 T IQD (Combined)',
+    treasuryAllocated: activeContext === 'FEDERAL_IRAQ' 
+      ? getLabel('142.5 T IQD', '142.5 ترليون د.ع', '١٤٢.٥ ترلیۆن دینار') 
+      : activeContext === 'KURDISTAN_REGION' 
+      ? getLabel('18.2 T IQD', '18.2 ترليون د.ع', '١٨.٢ ترلیۆن دینار') 
+      : getLabel('160.7 T IQD (Combined)', '160.7 ترليون د.ع (مجمع)', '١٦٠.٧ ترلیۆن دینار (کۆی گشتی)'),
     budgetUtilization: activeContext === 'FEDERAL_IRAQ' ? '82.4%' : activeContext === 'KURDISTAN_REGION' ? '74.1%' : '81.5%',
     activeDirectives: activeContext === 'FEDERAL_IRAQ' ? 34 : activeContext === 'KURDISTAN_REGION' ? 19 : 53,
-    borderRevenue: activeContext === 'FEDERAL_IRAQ' ? '2.14 B USD' : activeContext === 'KURDISTAN_REGION' ? '540 M USD' : '2.68 B USD',
-    pkiStatus: activeContext === 'FEDERAL_IRAQ' ? pkiFederal.trustStatus : activeContext === 'KURDISTAN_REGION' ? pkiKrg.trustStatus : 'Joint Federated',
+    borderRevenue: activeContext === 'FEDERAL_IRAQ' 
+      ? getLabel('2.14 B USD', '2.14 مليار دولار', '٢.١٤ ملیار دۆلار') 
+      : activeContext === 'KURDISTAN_REGION' 
+      ? getLabel('540 M USD', '540 مليون دولار', '٥٤٠ ملیۆن دۆلار') 
+      : getLabel('2.68 B USD', '2.68 مليار دولار', '٢.٦٨ ملیار دۆلار'),
+    pkiStatus: activeContext === 'FEDERAL_IRAQ' 
+      ? getLabel(pkiFederal.trustStatus, 'موثوق بالكامل', 'باوەڕ پێکراو') 
+      : activeContext === 'KURDISTAN_REGION' 
+      ? getLabel(pkiKrg.trustStatus, 'موثوق بالكامل', 'باوەڕ پێکراو') 
+      : getLabel('Joint Federated', 'فدرالية مشتركة', 'فیدڕاڵی هاوبەش'),
   };
 
   // State for adding a Joint Task under Joint Mode
@@ -187,7 +199,11 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
         description={activeSubtitle}
         status={
           <Badge variant={activeContext === 'FEDERAL_IRAQ' ? 'teal' : activeContext === 'KURDISTAN_REGION' ? 'success' : 'gold'}>
-            {activeContext === 'FEDERAL_IRAQ' ? 'IRAQ FEDERAL SOVEREIGN' : activeContext === 'KURDISTAN_REGION' ? 'KRG AUTO-COUNCIL' : 'JOINT FEDERATION ACTIVE'}
+            {activeContext === 'FEDERAL_IRAQ' 
+              ? getLabel('IRAQ FEDERAL SOVEREIGN', 'السيادة الاتحادية لجمهورية العراق', 'سەروەری فیدراڵی عێراق') 
+              : activeContext === 'KURDISTAN_REGION' 
+              ? getLabel('KRG AUTO-COUNCIL', 'حكومة إقليم كوردستان المتمتع بالحكم الذاتي', 'خۆسەری هەرێمی کوردستان') 
+              : getLabel('JOINT FEDERATION ACTIVE', 'الممر الاتحادي المشترك الفعال', 'چالاکی هاوبەشی فیدراڵ-هەرێم')}
           </Badge>
         }
         actions={
@@ -238,10 +254,12 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
         </div>
         <div className="flex gap-2">
           <span className="text-[10px] bg-slate-900/80 text-slate-500 border border-slate-800 px-2 py-1 rounded">
-            OWNER_GOV_ID: {activeContext === 'FEDERAL_IRAQ' ? 'IQ-FED-BAGHDAD-01' : activeContext === 'KURDISTAN_REGION' ? 'IQ-KRG-ERBIL-02' : 'IQ-JOINT-MULTILATERAL-99'}
+            {getLabel('OWNER_GOV_ID: ', 'رمز الهيئة المالكة: ', 'کۆدی لایەنی بەرپرس: ')}
+            {activeContext === 'FEDERAL_IRAQ' ? 'IQ-FED-BAGHDAD-01' : activeContext === 'KURDISTAN_REGION' ? 'IQ-KRG-ERBIL-02' : 'IQ-JOINT-MULTILATERAL-99'}
           </span>
           <span className="text-[10px] bg-slate-900/80 text-emerald-400 border border-emerald-950 px-2 py-1 rounded">
-            TRUST_LEVEL: SECURE_LEVEL_A
+            {getLabel('TRUST_LEVEL: ', 'مستوى الثقة السيادي: ', 'ئاستی متمانە: ')}
+            {getLabel('SECURE_LEVEL_A', 'مستوى الأمان كلاس A', 'ئاستی پارێزراوی جۆری یەکەم')}
           </span>
         </div>
       </div>
@@ -1535,12 +1553,12 @@ export default function NationalCommandCenter({ lang }: NationalCommandCenterPro
       {/* ACCESSIBILITY RADAR ACCORD SYSTEM (REPEATED ACCORD OVER THE LOWER FRAME) */}
       <div className="mt-8 pt-6 border-t border-slate-800/60 text-xs flex flex-wrap justify-between items-center text-slate-500 font-mono gap-4 text-start">
         <div>
-          <span>RECONCILIATION ABSTRACT: <b>100% READY</b></span>
+          <span>{getLabel('RECONCILIATION ABSTRACT: ', 'موجز عملية الصلح والمطابقة: ', 'خولا بەراوردکاری هاوبەش: ')}<b>{getLabel('100% READY', 'جاهز بنسبة 100%', '١٠٠٪ ئامادەیە')}</b></span>
           <span className="mx-2">•</span>
-          <span>FEDERAL ROLES ISOLATION: <b>ENFORCED</b></span>
+          <span>{getLabel('FEDERAL ROLES ISOLATION: ', 'عزل الصلاحيات الاتحادية: ', 'عزلکردنی ڕوڵە فیدراڵییەکان: ')}<b>{getLabel('ENFORCED', 'مفروض ومطبق', 'جێبەجێکراوە')}</b></span>
         </div>
         <div>
-          <span>ACCESSIBILITY VERBOSE STANDARD: <b>WCAG 2.1 AA COMPLIANT</b></span>
+          <span>{getLabel('ACCESSIBILITY VERBOSE STANDARD: ', 'معيار الوصول والشفافية الرقابي: ', 'پێوانەی شەفافیەتی گشتی: ')}<b>{getLabel('WCAG 2.1 AA COMPLIANT', 'متوافق مع المعيار الدولي WCAG 2.1 AA', 'گونجاوە لەگەڵ WCAG 2.1 AA')}</b></span>
         </div>
       </div>
 

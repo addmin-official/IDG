@@ -68,6 +68,7 @@ const localizationCoverageCheck = runScript('scripts/qa/check-localization-cover
 const rtlTypographyCheck = runScript('scripts/qa/check-rtl-typography.mjs', 'RTL Typography Check');
 const hardcodedSuccessCheck = runScript('scripts/qa/check-hardcoded-success.mjs', 'Hardcoded Success Check');
 const demoIsolationCheck = runScript('scripts/qa/check-demo-isolation.mjs', 'Demo Isolation Check');
+const apiContractCheck = runScript('scripts/qa/check-api-contracts.mjs', 'API Contract Compliance Check');
 const buildCheck = runBuildCommand();
 
 const finalReport = {
@@ -77,6 +78,7 @@ const finalReport = {
   rtlTypographyCheck,
   hardcodedSuccessCheck,
   demoIsolationCheck,
+  apiContractCheck,
   buildCheck
 };
 
