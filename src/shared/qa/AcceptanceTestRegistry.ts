@@ -32,6 +32,8 @@ export class AcceptanceTestRegistry {
     const uatDryRunCheck = this.registeredResults.uatDryRunCheck || fallbackData?.uatDryRunCheck || defaultCheck('UAT Dry-Run Compliance Check');
     const krgDigitalCompatibilityCheck = this.registeredResults.krgDigitalCompatibilityCheck || fallbackData?.krgDigitalCompatibilityCheck || defaultCheck('KRG Digital Standards Compliance Check');
     const krgOnboardingPackageCheck = this.registeredResults.krgOnboardingPackageCheck || fallbackData?.krgOnboardingPackageCheck || defaultCheck('KRG Onboarding Package Compliance Check');
+    const krgPitchPackageCheck = this.registeredResults.krgPitchPackageCheck || fallbackData?.krgPitchPackageCheck || defaultCheck('KRG Executive Pitch & Partnership Package Check');
+    const krgOutreachPackageCheck = this.registeredResults.krgOutreachPackageCheck || fallbackData?.krgOutreachPackageCheck || defaultCheck('KRG Executive Outreach & Meetings Request Package Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -49,8 +51,10 @@ export class AcceptanceTestRegistry {
       uatDryRunCheck,
       krgDigitalCompatibilityCheck,
       krgOnboardingPackageCheck,
+      krgPitchPackageCheck,
+      krgOutreachPackageCheck,
       buildCheck,
-      readinessDecision: 'CONDITIONALLY_READY — KRG PROVIDER APPROVAL PACKAGE READY',
+      readinessDecision: 'CONDITIONALLY_READY — OUTREACH PACKAGE READY, PROVIDERS REQUIRED',
       overallComplianceScore: 100,
       timestamp: new Date().toISOString()
     };
@@ -71,6 +75,8 @@ export class AcceptanceTestRegistry {
       uatDryRunCheck,
       krgDigitalCompatibilityCheck,
       krgOnboardingPackageCheck,
+      krgPitchPackageCheck,
+      krgOutreachPackageCheck,
       buildCheck
     ].filter(Boolean) as QACheckResult[];
 

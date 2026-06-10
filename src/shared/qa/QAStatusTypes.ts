@@ -7,7 +7,9 @@ export type ReadinessStatus =
   | 'CONDITIONALLY_READY — PROVIDERS REQUIRED'
   | 'CONDITIONALLY_READY — PILOT DRY-RUN READY, PROVIDERS REQUIRED'
   | 'CONDITIONALLY_READY — KRG DIGITAL PROVIDER APPROVAL REQUIRED'
-  | 'CONDITIONALLY_READY — KRG PROVIDER APPROVAL PACKAGE READY';
+  | 'CONDITIONALLY_READY — KRG PROVIDER APPROVAL PACKAGE READY'
+  | 'CONDITIONALLY_READY — EXECUTIVE PITCH PACKAGE READY, PROVIDERS REQUIRED'
+  | 'CONDITIONALLY_READY — OUTREACH PACKAGE READY, PROVIDERS REQUIRED';
 
 export interface QACheckResult {
   name: string;
@@ -32,6 +34,8 @@ export interface ProductionGateResult {
   uatDryRunCheck?: QACheckResult;
   krgDigitalCompatibilityCheck?: QACheckResult;
   krgOnboardingPackageCheck?: QACheckResult;
+  krgPitchPackageCheck?: QACheckResult;
+  krgOutreachPackageCheck?: QACheckResult;
   buildCheck: QACheckResult;
   readinessDecision: ReadinessStatus;
   overallComplianceScore: number;

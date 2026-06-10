@@ -75,6 +75,8 @@ const providerWiringCheck = runScript('scripts/qa/check-provider-wiring.mjs', 'P
 const uatDryRunCheck = runScript('scripts/qa/check-uat-dry-run.mjs', 'UAT Dry-Run Compliance Check');
 const krgDigitalCompatibilityCheck = runScript('scripts/qa/check-krg-digital-compatibility.mjs', 'KRG Digital Standards Compliance Check');
 const krgOnboardingPackageCheck = runScript('scripts/qa/check-krg-onboarding-package.mjs', 'KRG Onboarding Package Compliance Check');
+const krgPitchPackageCheck = runScript('scripts/qa/check-pitch-package.mjs', 'KRG Executive Pitch & Partnership Package Check');
+const krgOutreachPackageCheck = runScript('scripts/qa/check-outreach-package.mjs', 'KRG Executive Outreach & Meetings Request Package Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -93,6 +95,8 @@ const finalReport = {
   uatDryRunCheck,
   krgDigitalCompatibilityCheck,
   krgOnboardingPackageCheck,
+  krgPitchPackageCheck,
+  krgOutreachPackageCheck,
   buildCheck
 };
 

@@ -22,6 +22,8 @@
     "qa:uat-dry-run": "node scripts/qa/check-uat-dry-run.mjs",
     "qa:krg-digital-compatibility": "node scripts/qa/check-krg-digital-compatibility.mjs",
     "qa:krg-onboarding-package": "node scripts/qa/check-krg-onboarding-package.mjs",
+    "qa:pitch-package": "node scripts/qa/check-pitch-package.mjs",
+    "qa:outreach-package": "node scripts/qa/check-outreach-package.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
     "backend:build": "npm run --prefix server build",
     "backend:qa": "npm run --prefix server qa:safety",
@@ -31,7 +33,7 @@
     "dev:all": "npm run dev:frontend & npm run dev:backend",
     "build:frontend": "vite build",
     "build:backend": "npm run --prefix server build",
-    "qa:all": "npm run qa:production-gate && npm run qa:uat-dry-run && npm run qa:krg-digital-compatibility && npm run qa:krg-onboarding-package && npm run backend:qa",
+    "qa:all": "npm run qa:production-gate && npm run qa:uat-dry-run && npm run qa:krg-digital-compatibility && npm run qa:krg-onboarding-package && npm run qa:pitch-package && npm run qa:outreach-package && npm run backend:qa",
     "smoke:local": "node scripts/smoke/run-local-smoke.mjs",
     "release:staging-check": "node scripts/release/staging-release-check.mjs"
   },

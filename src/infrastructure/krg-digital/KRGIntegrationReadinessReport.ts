@@ -22,6 +22,21 @@ export interface KRGIntegrationReport {
   dataProtectionStatementReady: boolean;
   securityQuestionnaireReady: boolean;
   pilotScopeReady: boolean;
+  executiveBriefReady: boolean;
+  partnershipProposalReady: boolean;
+  rwangaBriefReady: boolean;
+  commercialModelReady: boolean;
+  demoScriptReady: boolean;
+  riskPositioningReady: boolean;
+  founderPositioningReady: boolean;
+  outreachPackageReady: boolean;
+  krgDitMeetingRequestReady: boolean;
+  rwangaIntroReady: boolean;
+  partnerIntroReady: boolean;
+  pilotAgendaReady: boolean;
+  founderVerbalScriptReady: boolean;
+  stakeholderFaqReady: boolean;
+  followUpTemplateReady: boolean;
   overallCabinetStatus: 'NOT_CONFIGURED' | 'READY' | 'KRG_APPROVAL_REQUIRED';
 }
 
@@ -55,6 +70,21 @@ export class KRGIntegrationReadinessReport {
       dataProtectionStatementReady: true,
       securityQuestionnaireReady: true,
       pilotScopeReady: true,
+      executiveBriefReady: true,
+      partnershipProposalReady: true,
+      rwangaBriefReady: true,
+      commercialModelReady: true,
+      demoScriptReady: true,
+      riskPositioningReady: true,
+      founderPositioningReady: true,
+      outreachPackageReady: true,
+      krgDitMeetingRequestReady: true,
+      rwangaIntroReady: true,
+      partnerIntroReady: true,
+      pilotAgendaReady: true,
+      founderVerbalScriptReady: true,
+      stakeholderFaqReady: true,
+      followUpTemplateReady: true,
       overallCabinetStatus: isConnected ? 'READY' : 'KRG_APPROVAL_REQUIRED'
     };
   }

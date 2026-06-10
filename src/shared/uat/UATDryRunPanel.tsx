@@ -481,6 +481,82 @@ export const UATDryRunPanel: React.FC<UATDryRunPanelProps> = ({
                   </div>
                 </div>
               </div>
+
+              {/* Executive Pitch & Partnership Package Block */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 col-span-1 md:col-span-2 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-teal-400 block uppercase border-b border-slate-900 pb-1">Executive Pitch & Partnership (Phase 5.14)</span>
+                <p className="text-[10px] font-mono text-slate-400">
+                  Secured pitch modules compiled in accordance with standard risk-trust guidelines:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono text-slate-400">
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-EXEC-001 (One-Page Brief)</span>
+                    <span className="text-teal-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-KRG-PRP-002 (Partnership Proposal)</span>
+                    <span className="text-teal-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-RWA-BRIEF-003 (Rwanga Intro)</span>
+                    <span className="text-teal-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-COM-MODEL-004 (Commercial Model)</span>
+                    <span className="text-teal-400 font-bold">✓ CONFIG C RECOMMENDED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-STK-DEMO-005 (15-Min Talk Script)</span>
+                    <span className="text-teal-400 font-bold">✓ READY</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-RSK-TRUST-006 (Sovereignty Trust Positioning)</span>
+                    <span className="text-teal-400 font-bold">✓ VERIFIED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center col-span-1 sm:col-span-2">
+                    <span>📄 IDG-GOV-FND-007 (Strategic Note — Mustafa Jalal Khoshnaw)</span>
+                    <span className="text-teal-400 font-bold">✓ AUDITED STRATEGIC SPONSOR</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Institutional Outreach & Meeting Request Package Block */}
+              <div className="bg-slate-950 p-3.5 rounded border border-slate-900 col-span-1 md:col-span-2 space-y-2.5">
+                <span className="text-[10px] font-mono font-bold text-sky-400 block uppercase border-b border-slate-900 pb-1">Institutional Outreach & Meeting Requests (Phase 5.15)</span>
+                <p className="text-[10px] font-mono text-slate-400">
+                  Official introduction and pilot presentation documents compiled and verified:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] font-mono text-slate-400">
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-KRG-001 (KRG DIT Request)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-RWA-002 (Rwanga Introduction)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-PTN-003 (Strategic Partner Intro)</span>
+                    <span className="text-sky-400 font-bold">✓ COMPILED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-AGD-004 (45-Min Pilot Agenda)</span>
+                    <span className="text-sky-400 font-bold">✓ STRUCTURED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-VERB-005 (Founder Pitch Script)</span>
+                    <span className="text-sky-400 font-bold">✓ MUSTAFA JALAL KHOSHNAW</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center">
+                    <span>📄 IDG-OUT-FAQ-006 (Stakeholder FAQ)</span>
+                    <span className="text-sky-400 font-bold">✓ AUDITED</span>
+                  </div>
+                  <div className="p-1 px-2 rounded bg-slate-900/60 border border-slate-800/50 flex justify-between items-center col-span-1 sm:col-span-2">
+                    <span>📄 IDG-OUT-EML-007 (Neutral Follow-Up Email)</span>
+                    <span className="text-sky-400 font-bold">✓ STAGED DRIFT-SAFE</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
