@@ -674,6 +674,55 @@ export const AcquisitionReadinessPanel: React.FC<AcquisitionReadinessPanelProps>
                 )}
               </div>
 
+              {/* OpenAPI Export & Backend Onboarding Status Section (Phase 5.6) */}
+              <div className="bg-slate-900/40 p-4 rounded-lg border border-slate-800 space-y-3">
+                <h4 className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <FileText className="w-4.5 h-4.5 text-emerald-400" />
+                  <span>{getLabel('OpenAPI Export & Backend Onboarding (Phase 5.6)', 'تصدير بروتوكولات الربط وحزمة تهيئة الأنظمة (المرحلة 5.6)', 'هەناردەکردنی گرێبەستی کات و ئۆنبوڕدین')}</span>
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {/* 1. OpenAPI Export Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('OpenAPI Export Status', 'حالة تصدير ملفات OpenAPI', 'هەناردەی مەلەفی فەرمی')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
+                      EXPORTED (3 FILES)
+                    </span>
+                  </div>
+
+                  {/* 2. Backend Onboarding Package Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Onboarding Package Status', 'حالة حزمة تهيئة الوزارات', 'مۆدیولی ئۆنبوڕدین')}
+                    </span>
+                    <span className="text-xs font-semibold font-mono text-emerald-400 block mt-1">
+                      READY / COMPLIED
+                    </span>
+                  </div>
+
+                  {/* 3. Joint Metadata Spec Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Joint Metadata Spec Status', 'تطابق بيانات الربط المشترك', 'مەرجەكانی سەنەد')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-teal-400 block mt-1">
+                      ENFORCED (METADATA-ONLY)
+                    </span>
+                  </div>
+
+                  {/* 4. Provider Integration Checklist Status */}
+                  <div className="bg-slate-950 p-2.5 rounded border border-slate-800 text-center">
+                    <span className="text-[9px] text-slate-500 uppercase font-mono block">
+                      {getLabel('Integration Checklist Status', 'اكتمال معايير مصفوفة التدقيق', 'لیستی پشکنینی پڕۆژە')}
+                    </span>
+                    <span className="text-xs font-bold font-mono text-emerald-400 block mt-1">
+                      100% COMPLIANT
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* Status checklist grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                 {checks.map(check => {

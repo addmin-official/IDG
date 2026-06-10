@@ -16,6 +16,7 @@
     "qa:hardcoded-success": "node scripts/qa/check-hardcoded-success.mjs",
     "qa:demo-isolation": "node scripts/qa/check-demo-isolation.mjs",
     "qa:api-contracts": "node scripts/qa/check-api-contracts.mjs",
+    "qa:openapi-contracts": "node scripts/qa/check-openapi-contracts.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs"
   },
   "dependencies": {

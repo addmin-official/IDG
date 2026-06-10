@@ -24,6 +24,8 @@ export class AcceptanceTestRegistry {
     const rtlTypographyCheck = this.registeredResults.rtlTypographyCheck || fallbackData?.rtlTypographyCheck || defaultCheck('RTL Typography Check');
     const hardcodedSuccessCheck = this.registeredResults.hardcodedSuccessCheck || fallbackData?.hardcodedSuccessCheck || defaultCheck('Hardcoded Success Check');
     const demoIsolationCheck = this.registeredResults.demoIsolationCheck || fallbackData?.demoIsolationCheck || defaultCheck('Demo Isolation Check');
+    const apiContractCheck = this.registeredResults.apiContractCheck || fallbackData?.apiContractCheck || defaultCheck('API Contract Compliance Check');
+    const openapiContractCheck = this.registeredResults.openapiContractCheck || fallbackData?.openapiContractCheck || defaultCheck('OpenAPI Contract Verification Check');
     const buildCheck = this.registeredResults.buildCheck || fallbackData?.buildCheck || defaultCheck('Build Check');
 
     const gateResult: ProductionGateResult = {
@@ -33,6 +35,8 @@ export class AcceptanceTestRegistry {
       rtlTypographyCheck,
       hardcodedSuccessCheck,
       demoIsolationCheck,
+      apiContractCheck,
+      openapiContractCheck,
       buildCheck,
       readinessDecision: 'PILOT_READY',
       overallComplianceScore: 100,
@@ -47,6 +51,8 @@ export class AcceptanceTestRegistry {
       rtlTypographyCheck,
       hardcodedSuccessCheck,
       demoIsolationCheck,
+      apiContractCheck,
+      openapiContractCheck,
       buildCheck
     ];
 

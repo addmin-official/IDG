@@ -69,6 +69,7 @@ const rtlTypographyCheck = runScript('scripts/qa/check-rtl-typography.mjs', 'RTL
 const hardcodedSuccessCheck = runScript('scripts/qa/check-hardcoded-success.mjs', 'Hardcoded Success Check');
 const demoIsolationCheck = runScript('scripts/qa/check-demo-isolation.mjs', 'Demo Isolation Check');
 const apiContractCheck = runScript('scripts/qa/check-api-contracts.mjs', 'API Contract Compliance Check');
+const openapiContractCheck = runScript('scripts/qa/check-openapi-contracts.mjs', 'OpenAPI Contract Verification Check');
 const buildCheck = runBuildCommand();
 
 const finalReport = {
@@ -79,6 +80,7 @@ const finalReport = {
   hardcodedSuccessCheck,
   demoIsolationCheck,
   apiContractCheck,
+  openapiContractCheck,
   buildCheck
 };
 

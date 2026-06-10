@@ -15,6 +15,8 @@ export interface ProductionGateResult {
   rtlTypographyCheck: QACheckResult;
   hardcodedSuccessCheck: QACheckResult;
   demoIsolationCheck: QACheckResult;
+  apiContractCheck?: QACheckResult;
+  openapiContractCheck?: QACheckResult;
   buildCheck: QACheckResult;
   readinessDecision: ReadinessStatus;
   overallComplianceScore: number;
