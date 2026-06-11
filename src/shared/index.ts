@@ -9,3 +9,4 @@ export * from './services';
 export * from './localization';
 export * from './view-models';
 export * from './utils';
+export * from './revenue-settlement';

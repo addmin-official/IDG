@@ -26,6 +26,7 @@
     "qa:outreach-package": "node scripts/qa/check-outreach-package.mjs",
     "qa:training-package": "node scripts/qa/check-training-package.mjs",
     "qa:ui-containment": "node scripts/qa/check-ui-containment.mjs",
+    "qa:fiscal-settlement-policy": "node scripts/qa/check-fiscal-settlement-policy.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
     "backend:build": "npm run --prefix server build",
     "backend:qa": "npm run --prefix server qa:safety",

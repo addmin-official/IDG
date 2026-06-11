@@ -298,3 +298,11 @@ paths:
         '200':
           description: Honest BRS provider state
 
+  /settlement/readiness:
+    get:
+      summary: KRG settlement readiness status
+      responses:
+        '200':
+          description: Settlement policy engine configuration and KRG data provider status check
+
+

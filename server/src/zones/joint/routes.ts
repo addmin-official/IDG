@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
+import settlementRoutes from './settlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('JOINT_OPERATIONS'));
+router.use('/', settlementRoutes);
 
 const jointPaths = [
   '/health',

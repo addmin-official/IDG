@@ -40,6 +40,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SettlementNettingDetails'
+  /joint/settlement/reconciliation:
+    get:
+      summary: Joint fiscal settlement reconciliation
+      description: Returns reconciliation status of KRG submitted proofs and Federal acknowledgment hashes.
+      responses:
+        '200':
+          description: Reconciliation and metadata exchange verification
+
   /joint/metadata-exchange:
     get:
       summary: Cross-agency operational metadata exchange

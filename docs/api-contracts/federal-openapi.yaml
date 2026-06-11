@@ -271,3 +271,11 @@ paths:
       responses:
         '200':
           description: Fusion modeling outputs
+
+  /settlement/readiness:
+    get:
+      summary: Federal settlement readiness status
+      responses:
+        '200':
+          description: Settlement policy engine configuration and Federal data provider status check
+
