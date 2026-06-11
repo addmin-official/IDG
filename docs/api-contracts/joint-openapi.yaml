@@ -48,6 +48,15 @@ paths:
         '200':
           description: Reconciliation and metadata exchange verification
 
+  /joint/border-settlement/reconciliation:
+    get:
+      summary: Joint border-specific settlement reconciliation
+      description: Returns metadata-only reconciliation status comparing cryptographic border proof hashes, gating periods, and transfer statuses.
+      responses:
+        '200':
+          description: Joint zero-disclosure hash alignment verification
+
+
   /joint/metadata-exchange:
     get:
       summary: Cross-agency operational metadata exchange

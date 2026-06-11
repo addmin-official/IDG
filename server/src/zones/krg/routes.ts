@@ -4,10 +4,12 @@ import { AuditLogger } from '../../security/auditLogger.js';
 import krdpassRoutes from './krdpassRoutes.js';
 import brsRoutes from './brsRoutes.js';
 import settlementRoutes from './settlementRoutes.js';
+import borderSettlementRoutes from './borderSettlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('KURDISTAN_REGION'));
 router.use('/', settlementRoutes);
+router.use('/', borderSettlementRoutes);
 
 router.use('/krdpass', krdpassRoutes);
 router.use('/brs', brsRoutes);

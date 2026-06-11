@@ -305,4 +305,12 @@ paths:
         '200':
           description: Settlement policy engine configuration and KRG data provider status check
 
+  /border-settlement/readiness:
+    get:
+      summary: KRG border-specific revenue settlement readiness status
+      responses:
+        '200':
+          description: Border settlement policy engine configurations, KRG border gate data provider state and verification checks
+
+
 

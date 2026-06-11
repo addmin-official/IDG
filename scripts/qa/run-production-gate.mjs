@@ -80,6 +80,7 @@ const krgOutreachPackageCheck = runScript('scripts/qa/check-outreach-package.mjs
 const krgTrainingPackageCheck = runScript('scripts/qa/check-training-package.mjs', 'KRG Training & Manual Package Check');
 const uiContainmentCheck = runScript('scripts/qa/check-ui-containment.mjs', 'UI Containment & Safety Check');
 const fiscalSettlementPolicyCheck = runScript('scripts/qa/check-fiscal-settlement-policy.mjs', 'Fiscal Settlement Policy & Rules Engine Check');
+const borderSettlementPolicyCheck = runScript('scripts/qa/check-border-settlement-policy.mjs', 'Border Settlement Policy & Rules Engine Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -103,6 +104,7 @@ const finalReport = {
   krgTrainingPackageCheck,
   uiContainmentCheck,
   fiscalSettlementPolicyCheck,
+  borderSettlementPolicyCheck,
   buildCheck
 };
 
@@ -110,13 +112,14 @@ const passCount = Object.values(finalReport).filter(c => c.status === 'PASS').le
 const totalCount = Object.values(finalReport).length;
 const overallComplianceScore = Math.round((passCount / totalCount) * 100);
 
-// Set final decision to CONDITIONALLY_READY — FISCAL SETTLEMENT POLICY READY, PROVIDERS REQUIRED
+// Set final decision to CONDITIONALLY_READY — BORDER SETTLEMENT POLICY READY, PROVIDERS REQUIRED
 const finalReportWithMetadata = {
   ...finalReport,
-  readinessDecision: 'CONDITIONALLY_READY — FISCAL SETTLEMENT POLICY READY, PROVIDERS REQUIRED',
+  readinessDecision: 'CONDITIONALLY_READY — BORDER SETTLEMENT POLICY READY, PROVIDERS REQUIRED',
   overallComplianceScore,
   timestamp: new Date().toISOString()
 };
+
 
 // Write results
 try {

@@ -10,3 +10,4 @@ export * from './localization';
 export * from './view-models';
 export * from './utils';
 export * from './revenue-settlement';
+export * from './border-settlement';

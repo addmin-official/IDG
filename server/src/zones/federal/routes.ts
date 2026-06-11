@@ -2,10 +2,12 @@ import { Router, Request, Response } from 'express';
 import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
 import settlementRoutes from './settlementRoutes.js';
+import borderSettlementRoutes from './borderSettlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('FEDERAL_IRAQ'));
 router.use('/', settlementRoutes);
+router.use('/', borderSettlementRoutes);
 
 const federalPaths = [
   '/health',
