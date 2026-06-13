@@ -22,9 +22,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Root endpoints
+// Root and API health/readiness endpoints
 app.use('/', healthRoutes);
 app.use('/', readinessRoutes);
+app.use('/api/v1', healthRoutes);
+app.use('/api/v1', readinessRoutes);
 
 // Isolated Jurisdiction Zones
 app.use('/api/v1/federal', federalRoutes);

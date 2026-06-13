@@ -301,6 +301,7 @@ paths:
   /settlement/readiness:
     get:
       summary: KRG settlement readiness status
+      deprecated: true
       responses:
         '200':
           description: Settlement policy engine configuration and KRG data provider status check

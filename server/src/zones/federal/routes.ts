@@ -1,12 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
-import settlementRoutes from './settlementRoutes.js';
+// settlementRoutes (general fiscal settlement) has been archived/disabled
 import borderSettlementRoutes from './borderSettlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('FEDERAL_IRAQ'));
-router.use('/', settlementRoutes);
 router.use('/', borderSettlementRoutes);
 
 const federalPaths = [
@@ -18,13 +17,10 @@ const federalPaths = [
   '/border/gates',
   '/border/events',
   '/customs/declarations',
-  '/revenue/ledger',
   '/trade/licenses',
-  '/integrity/cases',
-  '/identity/records',
-  '/workforce/roster',
-  '/security/sessions',
-  '/intelligence/threats'
+  '/border-security/sessions',
+  '/border-risk/alerts',
+  '/customs-integrity/cases'
 ];
 
 federalPaths.forEach(path => {

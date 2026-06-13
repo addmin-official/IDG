@@ -75,4 +75,37 @@
 * **Nav Option 5:** `Joint Border Reconciliation`
 * **Nav Option 6:** `KRG Digital Compatibility`
 
-ئەم شوناسە پارێزراوە لەبەر ئەوەی بەهێزترین سیستەمی کۆنترۆڵی خاوەن دەوران لە ژێر بنەمای نیشتمانی باری دەروازە سنوورییەکان پێڕەو دەکات.
+هەمیشە ئەم شوناسە پارێزراوە لەبەر ئەوەی بەهێزترین سیستەمی کۆنترۆڵی خاوەن دەوران لە ژێر بنەمای نیشتمانی باری دەروازە سنوورییەکان پێڕەو دەکات.
+
+---
+
+### Phase 5.21 Backend/API Scope Pruning & Readiness Normalization
+
+ئەم بەشە لە ژێر قۆناغی ٥.٢١ زیادکراوە بۆ بە فەرمیکردنی ڕاکێشان و دابڕینی دەروازەی سنووری و دڵنیابوونەوە لە پاکی پێشکەشکارەکان:
+
+* **Active Production Backend Entrypoint:** `server/src/index.ts` (Isolated, high-integrity architecture).
+* **Routes Retained:**
+  - `/api/v1/health` & `/api/v1/readiness` (Conditional State)
+  - `/api/v1/federal/border/*`
+  - `/api/v1/federal/customs/*`
+  - `/api/v1/federal/trade/*`
+  - `/api/v1/federal/border-settlement/*`
+  - `/api/v1/krg/border/*`
+  - `/api/v1/krg/customs/*`
+  - `/api/v1/krg/trade/*`
+  - `/api/v1/krg/border-settlement/*`
+  - `/api/v1/krg/krdpass/*`
+  - `/api/v1/krg/brs/*`
+  - `/api/v1/joint/border-reconciliation`
+  - `/api/v1/joint/border-settlement-reconciliation`
+  - `/api/v1/joint/hash-verification` (metadata proofs)
+  - `/api/v1/joint/metadata-exchange` (metadata proofs)
+  - `/api/v1/joint/audit-verification` (metadata proofs)
+  - `/api/v1/joint/provider-readiness` (provider readiness summary)
+* **Routes Disabled/Archived:**
+  - Removed broad fiscal settlement endpoints (`/settlement/readiness` & `/settlement/reconciliation`).
+  - Extracted general user identity, payroll, procurement, state assets, and workforce routes.
+  - Renamed and explicitly scoped risk and alert systems to `/border-security/*` and `/border-risk/*`.
+* **Readiness Correction Summary:** High-integrity fallback logic returned `CONDITIONALLY_READY — BORDER API SURFACE VERIFIED, PROVIDERS REQUIRED` rather than claiming a false READY state when required providers remain `NOT_CONFIGURED`.
+* **Joint Metadata-Only Enforcement Summary:** No raw transaction data sharing or cross-jurisdiction billing profiles are exposed at the Joint layer; interchange passes solely cryptographic proof hashes and status aggregates.
+* **Demo/Mock Server Quarantine:** Root `server.ts` is explicitly labeled and quarantined with warnings (`DEMO_ONLY_SERVER`, `NOT_PRODUCTION_ENTRYPOINT`). It serves only as a localized UI design playground and does not represent the production staging gateway.

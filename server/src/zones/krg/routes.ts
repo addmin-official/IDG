@@ -3,12 +3,11 @@ import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
 import krdpassRoutes from './krdpassRoutes.js';
 import brsRoutes from './brsRoutes.js';
-import settlementRoutes from './settlementRoutes.js';
+// settlementRoutes (general fiscal settlement) has been archived/disabled
 import borderSettlementRoutes from './borderSettlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('KURDISTAN_REGION'));
-router.use('/', settlementRoutes);
 router.use('/', borderSettlementRoutes);
 
 router.use('/krdpass', krdpassRoutes);
@@ -23,13 +22,10 @@ const krgPaths = [
   '/border/gates',
   '/border/events',
   '/customs/declarations',
-  '/revenue/ledger',
   '/trade/licenses',
-  '/integrity/cases',
-  '/identity/records',
-  '/workforce/roster',
-  '/security/sessions',
-  '/intelligence/threats'
+  '/border-security/sessions',
+  '/border-risk/alerts',
+  '/customs-integrity/cases'
 ];
 
 krgPaths.forEach(path => {

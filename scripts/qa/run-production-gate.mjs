@@ -82,6 +82,7 @@ const uiContainmentCheck = runScript('scripts/qa/check-ui-containment.mjs', 'UI 
 const fiscalSettlementPolicyCheck = runScript('scripts/qa/check-fiscal-settlement-policy.mjs', 'Fiscal Settlement Policy & Rules Engine Check');
 const borderSettlementPolicyCheck = runScript('scripts/qa/check-border-settlement-policy.mjs', 'Border Settlement Policy & Rules Engine Check');
 const borderScopeLockCheck = runScript('scripts/qa/check-border-scope-lock.mjs', 'Border Operating System Scope Lock Check');
+const borderApiSurfaceCheck = runScript('scripts/qa/check-border-api-surface.mjs', 'Border API Surface Compliance Check');
 const buildCheck = runBuildCommand();
 const buildOutputSafetyCheck = runScript('scripts/qa/check-build-output-safety.mjs', 'Build Output Safety Check');
 
@@ -107,6 +108,7 @@ const finalReport = {
   fiscalSettlementPolicyCheck,
   borderSettlementPolicyCheck,
   borderScopeLockCheck,
+  borderApiSurfaceCheck,
   buildCheck
 };
 
@@ -114,10 +116,10 @@ const passCount = Object.values(finalReport).filter(c => c.status === 'PASS').le
 const totalCount = Object.values(finalReport).length;
 const overallComplianceScore = Math.round((passCount / totalCount) * 100);
 
-// Set final decision to CONDITIONALLY_READY — BORDER SCOPE LOCKED, PRUNING PLAN READY, PROVIDERS REQUIRED
+// Set final decision to CONDITIONALLY_READY — BORDER API SURFACE VERIFIED, PROVIDERS REQUIRED
 const finalReportWithMetadata = {
   ...finalReport,
-  readinessDecision: 'CONDITIONALLY_READY — BORDER SCOPE LOCKED, PRUNING PLAN READY, PROVIDERS REQUIRED',
+  readinessDecision: 'CONDITIONALLY_READY — BORDER API SURFACE VERIFIED, PROVIDERS REQUIRED',
   overallComplianceScore,
   timestamp: new Date().toISOString()
 };

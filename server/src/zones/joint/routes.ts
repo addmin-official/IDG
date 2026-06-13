@@ -1,12 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { jurisdictionGuard } from '../../security/jurisdictionGuard.js';
 import { AuditLogger } from '../../security/auditLogger.js';
-import settlementRoutes from './settlementRoutes.js';
+// settlementRoutes (general fiscal settlement reconciliation) has been archived/disabled
 import borderSettlementRoutes from './borderSettlementRoutes.js';
 
 const router = Router();
 router.use(jurisdictionGuard('JOINT_OPERATIONS'));
-router.use('/', settlementRoutes);
 router.use('/', borderSettlementRoutes);
 
 const jointPaths = [
@@ -15,11 +14,12 @@ const jointPaths = [
   '/metadata',
   '/audit-events',
   '/sync-status',
-  '/joint/reconciliation',
+  '/joint/border-reconciliation',
+  '/joint/border-settlement-reconciliation',
   '/joint/hash-verification',
-  '/joint/settlement-status',
   '/joint/metadata-exchange',
-  '/joint/audit-verification'
+  '/joint/audit-verification',
+  '/joint/provider-readiness'
 ];
 
 jointPaths.forEach(path => {

@@ -29,6 +29,7 @@
     "qa:fiscal-settlement-policy": "node scripts/qa/check-fiscal-settlement-policy.mjs",
     "qa:border-settlement-policy": "node scripts/qa/check-border-settlement-policy.mjs",
     "qa:border-scope-lock": "node scripts/qa/check-border-scope-lock.mjs",
+    "qa:border-api-surface": "node scripts/qa/check-border-api-surface.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
 
     "backend:build": "npm run --prefix server build",
@@ -39,7 +40,7 @@
     "dev:all": "npm run dev:frontend & npm run dev:backend",
     "build:frontend": "vite build",
     "build:backend": "npm run --prefix server build",
-    "qa:all": "npm run qa:production-gate && npm run qa:ui-containment && npm run qa:uat-dry-run && npm run qa:krg-digital-compatibility && npm run qa:krg-onboarding-package && npm run qa:pitch-package && npm run qa:outreach-package && npm run qa:training-package && npm run backend:qa",
+    "qa:all": "npm run qa:production-gate && npm run qa:border-api-surface && npm run qa:ui-containment && npm run qa:uat-dry-run && npm run qa:krg-digital-compatibility && npm run qa:krg-onboarding-package && npm run qa:pitch-package && npm run qa:outreach-package && npm run qa:training-package && npm run backend:qa",
     "smoke:local": "node scripts/smoke/run-local-smoke.mjs",
     "release:staging-check": "node scripts/release/staging-release-check.mjs"
   },

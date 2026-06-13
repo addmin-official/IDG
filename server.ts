@@ -5,6 +5,15 @@ import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type } from '@google/genai';
 
+// =================================================================
+// DEMO_ONLY_SERVER & NOT_PRODUCTION_ENTRYPOINT
+// =================================================================
+// WARNING: This file is a fallback demonstration server strictly
+// restricted to local UX flow testing and Gemini AI prototyping.
+// It is NOT the high-security production/staging gateway backend.
+// The real production API entrypoint is located at server/src/index.ts.
+// =================================================================
+
 dotenv.config();
 
 const app = express();
