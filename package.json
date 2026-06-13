@@ -28,6 +28,7 @@
     "qa:ui-containment": "node scripts/qa/check-ui-containment.mjs",
     "qa:fiscal-settlement-policy": "node scripts/qa/check-fiscal-settlement-policy.mjs",
     "qa:border-settlement-policy": "node scripts/qa/check-border-settlement-policy.mjs",
+    "qa:border-scope-lock": "node scripts/qa/check-border-scope-lock.mjs",
     "qa:production-gate": "node scripts/qa/run-production-gate.mjs",
 
     "backend:build": "npm run --prefix server build",
