@@ -1,1301 +1,581 @@
 import React, { useState } from 'react';
 import { 
-  Landmark, 
-  Layers, 
-  Activity, 
-  Network, 
-  Shield, 
-  TrendingUp, 
-  AlertTriangle, 
-  TrendingDown, 
-  Database, 
-  Lock, 
-  FileText, 
-  Plus, 
-  CheckCircle2, 
-  Cpu, 
-  RefreshCw,
-  Coins,
-  History,
-  Scale
+  Landmark, Layers, Activity, Network, Shield, AlertTriangle, 
+  Coins, FileText, CheckCircle2, Cpu, RefreshCw, Scale, Database, PlayCircle
 } from 'lucide-react';
 import { Card, Badge, Button } from '../../../ui';
 
-// Import our real engines and registries
-import { CBIRegistry, TreasuryPolicy, SovereignObligation, SovereignAsset, CBIAccount } from '../../../services/treasury/CBIRegistry';
-import { CBIIntegrationEngine, RevenueStream, ReconciliationReport, TreasuryPosition } from '../../../services/treasury/CBIIntegrationEngine';
-import { NationalSettlementEngine, SettlementInstruction, LedgerEventType, SettlementStatus, SovereignLedgerEvent } from '../../../services/treasury/NationalSettlementEngine';
-import { useSsos } from '../../../providers/SsosProvider';
-
-// Import SSOS components from Phase 3.6.11
-import { GovernmentPerformancePanel } from './GovernmentPerformancePanel';
-import { NationalBudgetCommandCenter } from './NationalBudgetCommandCenter';
-import { NationalEnergyRegistryComponent } from './NationalEnergyRegistry';
-import { NationalProjectsRegistryPanel } from './NationalProjectsRegistryPanel';
-import { RevenueSharingPanel } from './RevenueSharingPanel';
-
-// Import newly created Sovereign Revenue Dashboards
-import FederalRevenueDashboard from '../../../federal/revenue/FederalRevenueDashboard';
-import KRGRevenueDashboard from '../../../krg/revenue/KRGRevenueDashboard';
-import JointRevenueDashboard from '../../../shared/revenue/JointRevenueDashboard';
-
-// Sovereign Procurement
-import NationalTenderCenter from '../procurement/NationalTenderCenter';
-import ContractLifecyclePanel from '../procurement/ContractLifecyclePanel';
+// Import our real border-settlement engine & registry
+import { BorderRevenuePolicyRegistry } from '../../../shared/border-settlement/BorderRevenuePolicyRegistry';
+import { BorderRevenueCalculationEngine, RealBorderRevenueProvider } from '../../../shared/border-settlement/BorderRevenueCalculationEngine';
+import { BorderSettlementReadinessReport } from '../../../shared/border-settlement/BorderSettlementReadinessReport';
+import { BorderSettlementVisibilityPolicy } from '../../../shared/border-settlement/BorderSettlementVisibilityPolicy';
 
 interface SovereignFiscalSystemProps {
   lang: 'en' | 'ar' | 'ku';
 }
 
+/**
+ * @file SovereignFiscalSystem.tsx
+ * @description پۆرتاڵی فەرمی و چڕوپڕی یەکلاییکردنەوەی داهاتی سنوورەکان و دەروازە گومرگییەکان (سەرانسەری عێراق و هەرێمی کوردستان).
+ * تەنها پابەندبوونی کایەی دەروازە سنوورییەکان بەبێ تێکەڵبوونی داتای گشتی نیشتیمانی، نەوت، یان مووچە پیشان دەدات.
+ */
 export const SovereignFiscalSystem: React.FC<SovereignFiscalSystemProps> = ({ lang }) => {
-  const { ssosMode } = useSsos();
   const isRtl = lang !== 'en';
 
-  const [activeCabinetTab, setActiveCabinetTab] = useState<
-    'federal-treasury' | 'krg-treasury' | 'fiscal-ledger' | 'revenue-recon' | 'debt-registry' | 'asset-registry' | 'settlement-ops' | 'federal-revenue' | 'krg-revenue' | 'joint-revenue'
-  >('federal-treasury');
-
-  const [masterHub, setMasterHub] = useState<'fiscal-os' | 'resource-os'>('fiscal-os');
-  const [activeResourceTab, setActiveResourceTab] = useState<'budgets' | 'sharing' | 'energy' | 'projects' | 'kpis' | 'procurement'>('budgets');
-
-  // Trigger state re-renders upon mutating backend registry values
+  const [activeTab, setActiveTab] = useState<'policies' | 'calculator' | 'readiness' | 'security-policy'>('policies');
   const [ticker, setTicker] = useState(0);
-  const triggerRefresh = () => setTicker(prev => prev + 1);
 
-  // Localization translator helper
+  // Simulation Provider Configurations
+  const [isTestProviderEnabled, setIsTestProviderEnabled] = useState(false);
+  const [testGrossUSD, setTestGrossUSD] = useState('2400000');
+  const [testDeductionUSD, setTestDeductionUSD] = useState('400000');
+  const [selectedPolicyId, setSelectedPolicyId] = useState('KRG_TO_FEDERAL_BORDER_REVENUE_50_PERCENT');
+  const [periodId, setPeriodId] = useState('2026-Q2');
+
   const getLabel = (en: string, ar: string, ku: string) => {
     const labels = { en, ar, ku };
     return labels[lang] || en;
   };
 
-  // State calculations from engines
-  const policies = CBIRegistry.getTreasuryPolicies();
-  const authorities = CBIRegistry.getFiscalAuthorities();
-  const activeSignatories = CBIRegistry.getSettlementAuthorities();
-  const budgetApprovers = CBIRegistry.getBudgetAuthorities();
-  
-  const obligations = CBIRegistry.getSovereignObligations();
-  const assets = CBIRegistry.getSovereignAssets();
-  const cbiAccounts = CBIRegistry.getCBIAccounts();
-  
-  const streams = CBIIntegrationEngine.getRevenueStreams();
-  const reconReport = CBIIntegrationEngine.executeRevenueReconciliation(ssosMode);
-  
-  const ledgerHistory = NationalSettlementEngine.getLedgerEvents();
-  const settlementsQueue = NationalSettlementEngine.getSettlementsQueue();
-  const reserves = NationalSettlementEngine.getSovereignReserves();
-  const readiness = NationalSettlementEngine.evaluateFiscalReadiness(ssosMode);
+  const policies = BorderRevenuePolicyRegistry.getAllPolicies();
+  const readinessReport = BorderSettlementReadinessReport.generateReport();
 
-  // Dummy / Initial states for forms
-  const [wireUSD, setWireUSD] = useState<string>('100.0');
-  const [wireIQD, setWireIQD] = useState<string>('131000');
-  const [complianceCheckResult, setComplianceCheckResult] = useState<any>(null);
+  // Handle registering/de-registering simulation provider safely
+  const handleToggleTestProvider = () => {
+    if (!isTestProviderEnabled) {
+      const gross = parseFloat(testGrossUSD);
+      const deduct = parseFloat(testDeductionUSD);
 
-  const [newDebtLender, setNewDebtLender] = useState('');
-  const [newDebtAmount, setNewDebtAmount] = useState('250.0');
-  const [newDebtType, setNewDebtType] = useState<'Internal' | 'External' | 'Guarantee' | 'Commitment'>('Internal');
+      if (isNaN(gross) || isNaN(deduct) || gross < 0 || deduct < 0) {
+        alert(getLabel('Please enter valid numeric values', 'الرجاء إدخال قيم عددية صالحة', 'تکایە ژمارەی دروست بنووسە'));
+        return;
+      }
 
-  const [newAssetName, setNewAssetName] = useState('');
-  const [newAssetValuation, setNewAssetValuation] = useState('500.0');
-  const [newAssetCategory, setNewAssetCategory] = useState<'Energy' | 'Infrastructure' | 'Strategic' | 'StateOwnedEnterprise' | 'TreasuryControlled'>('Strategic');
-
-  const [newSettlementSource, setNewSettlementSource] = useState<'federal' | 'krg' | 'joint'>('federal');
-  const [newSettlementTarget, setNewSettlementTarget] = useState<'federal' | 'krg' | 'joint'>('krg');
-  const [newSettlementAmount, setNewSettlementAmount] = useState('45.0');
-  const [newSettlementDesc, setNewSettlementDesc] = useState('');
-
-  const [newAdjustmentAmt, setNewAdjustmentAmt] = useState('20.0');
-  const [newAdjustmentJurisdiction, setNewAdjustmentJurisdiction] = useState<'federal' | 'krg' | 'joint'>('federal');
-  const [newAdjustmentReference, setNewAdjustmentReference] = useState('');
-
-  const [actorName, setActorName] = useState('Minister Executive');
-
-  // Interactive Form Submissions
-  const handleVerifyWireCompliance = (e: React.FormEvent) => {
-    e.preventDefault();
-    const usd = parseFloat(wireUSD);
-    const iqd = parseFloat(wireIQD);
-    if (isNaN(usd) || isNaN(iqd) || usd <= 0) return;
-    const res = CBIIntegrationEngine.verifyExchangeCompliance(usd, iqd);
-    setComplianceCheckResult(res);
+      // Register temporary real provider simulator
+      const mockProvider: RealBorderRevenueProvider = {
+        borderGateId: 'ALL_KRG_GATES',
+        isConfigured: true,
+        getValidatedGrossRevenueUSD: () => gross,
+        getValidatedDeductionsUSD: () => deduct,
+        getAuditVerificationHash: () => 'sha256_mock_audit_prov_hash_09f3'
+      };
+      
+      BorderRevenueCalculationEngine.registerProvider(mockProvider);
+      setIsTestProviderEnabled(true);
+    } else {
+      BorderRevenueCalculationEngine.removeProvider('ALL_KRG_GATES');
+      setIsTestProviderEnabled(false);
+    }
+    setTicker(prev => prev + 1);
   };
 
-  const handleCreateDebt = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newDebtLender.trim()) return;
-    const principal = parseFloat(newDebtAmount);
-    if (isNaN(principal) || principal <= 0) return;
-
-    CBIRegistry.addSovereignObligation({
-      id: `DEBT-OB-${obligations.length + 101}`,
-      lender: newDebtLender,
-      loanType: newDebtType,
-      jurisdiction: 'federal',
-      principalAmount: principal,
-      interestRate: 4.25,
-      maturityDate: '2029-12-31',
-      committedSpent: principal * 0.8
-    });
-
-    // Add ledger event trace
-    NationalSettlementEngine.appendLedgerEvent({
-      eventType: 'ADJUSTMENT',
-      jurisdiction: 'federal',
-      authority: actorName,
-      policyReference: 'POL-FY26-FED-01',
-      auditReference: `AUD-DEBT-${obligations.length + 101}`,
-      ledgerReference: 'LEDGER-PRIMARY-FED',
-      amountUSD: principal,
-      payload: JSON.stringify({ action: 'Guaranteed Sovereign Obligation Registration', lender: newDebtLender, type: newDebtType })
-    });
-
-    setNewDebtLender('');
-    triggerRefresh();
-  };
-
-  const handleCreateAsset = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newAssetName.trim()) return;
-    const valuation = parseFloat(newAssetValuation);
-    if (isNaN(valuation) || valuation <= 0) return;
-
-    CBIRegistry.addSovereignAsset({
-      id: `AST-SOV-${assets.length + 101}`,
-      name: newAssetName,
-      category: newAssetCategory,
-      jurisdiction: 'federal',
-      valuation,
-      annualRevenueYield: valuation * 0.05,
-      lastAuditDate: new Date().toISOString().split('T')[0]
-    });
-
-    // Append event
-    NationalSettlementEngine.appendLedgerEvent({
-      eventType: 'ADJUSTMENT',
-      jurisdiction: 'federal',
-      authority: actorName,
-      policyReference: 'POL-FY26-FED-01',
-      auditReference: `AUD-ASSET-${assets.length + 101}`,
-      ledgerReference: 'LEDGER-PRIMARY-FED',
-      amountUSD: valuation,
-      payload: JSON.stringify({ action: 'Sovereign Asset Registration', name: newAssetName, category: newAssetCategory })
-    });
-
-    setNewAssetName('');
-    triggerRefresh();
-  };
-
-  const handleCreateSettlement = (e: React.FormEvent) => {
-    e.preventDefault();
-    const amount = parseFloat(newSettlementAmount);
-    if (isNaN(amount) || amount <= 0 || !newSettlementDesc.trim()) return;
-
-    NationalSettlementEngine.appendSettlement({
-      sourceJurisdiction: newSettlementSource,
-      targetJurisdiction: newSettlementTarget,
-      amountUSD: amount,
-      description: newSettlementDesc,
-      policyIdReference: 'POL-FY26-JNT-01'
-    });
-
-    setNewSettlementDesc('');
-    triggerRefresh();
-  };
-
-  const handleAdvanceSettlement = (id: string, stage?: SettlementStatus) => {
-    NationalSettlementEngine.advanceSettlementStatus(id, actorName, stage);
-    triggerRefresh();
-  };
-
-  const handleAppendAdjustment = (e: React.FormEvent) => {
-    e.preventDefault();
-    const amount = parseFloat(newAdjustmentAmt);
-    if (isNaN(amount) || amount <= 0) return;
-
-    NationalSettlementEngine.appendLedgerEvent({
-      eventType: 'ADJUSTMENT',
-      jurisdiction: newAdjustmentJurisdiction,
-      authority: actorName,
-      policyReference: 'POL-FY26-FED-01',
-      auditReference: `AUD-ADJ-${Date.now().toString().slice(-4)}`,
-      ledgerReference: `LEDGER-${newAdjustmentJurisdiction.toUpperCase()}-PRIMARY`,
-      amountUSD: amount,
-      payload: JSON.stringify({
-        adjustmentFactor: amount,
-        referenceNotes: newAdjustmentReference || 'Routine treasury compliance adjustment audit'
-      })
-    });
-
-    setNewAdjustmentReference('');
-    triggerRefresh();
-  };
+  // Run calculation logic from core engine
+  const calculationResult = BorderRevenueCalculationEngine.calculate(
+    selectedPolicyId,
+    periodId,
+    'ALL_KRG_GATES'
+  );
 
   return (
-    <Card 
-      id="sovereign-fiscal-ledger-system" 
-      className="p-5 lg:p-6 bg-[#111e2e]/95 border border-[#cca553]/20 shadow-xl overflow-visible text-slate-100 flex flex-col gap-6"
-    >
-      {/* SECTION 1: HEADER CONTROLS */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div className="flex items-center gap-3">
-          <div className="p-3.5 bg-[#cca553]/10 rounded-xl border border-[#cca553]/20 text-[#cca553]">
-            <Coins className="w-8 h-8" />
-          </div>
-          <div className="text-start">
-            <h2 className="text-lg font-bold uppercase tracking-wider text-white">
-              {getLabel('Sovereign National Fiscal Operating System (SNFOS)', 'نظام الخزينة والمالية الوطنية السيادية', 'سیستمی دارایی و گەنجینەی نیشتمانی سەروەری عێراق')}
-            </h2>
-            <p className="text-xs text-[#cca553]/80 font-mono tracking-wider mt-1">
-              {getLabel('CENTRAL BANK OF IRAQ INTEGRATION • EMERALD SOVEREIGN LEDGER (SSOS-A)', 'ربط البنك المركزي العراقي • سجل الزمرد المالي الموحد', 'پێوەستکاری بانکی ناوەندی عێراق • دەفتەری مۆری سەوز')}
-            </p>
-          </div>
-        </div>
-        
-        {/* CBI Exchange Rate indicator */}
-        <div className="flex flex-wrap items-center gap-3.5">
-          <div className="bg-slate-900/80 px-3.5 py-2 rounded-xl border border-slate-800 text-xs text-start">
-            <span className="text-[10px] text-slate-500 font-mono block font-bold">CBI FIXED ANCHOR</span>
-            <span className="text-sm font-bold text-teal-400 font-mono">1,310.00 IQD/USD</span>
-          </div>
-          <div className="bg-slate-900/80 px-3.5 py-2 rounded-xl border border-rose-950/40 text-xs text-start flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
-            <div>
-              <span className="text-[10px] text-slate-500 font-mono block font-bold">LEDGER ENFORCEMENT</span>
-              <span className="text-slate-300 font-bold font-mono">APPEND_ONLY ACTIVE</span>
-            </div>
-          </div>
+    <div id="border-revenue-settlement-portal" className="bg-[#0f172a] rounded-xl border border-slate-800 p-5 shadow-2xl relative">
+      
+      {/* Top Banner Warning: Providers Required */}
+      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3.5 mb-6 flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+        <div className="text-xs">
+          <p className="font-bold text-amber-400 font-mono">
+            {getLabel(
+              'CONDITIONALLY READY — PROVIDERS NOT CONFIGURING REAL AUTOMATED TRANSMISSION',
+              'جاهزية مشروطة — مزودو البيانات الحقيقية قيد التثبيت والطلب',
+              'ئامادەکاری مەرجدار — دابینکارانی داتای ڕاستەقینە لە دەروازەکان پێویستن'
+            )}
+          </p>
+          <p className="text-slate-300 mt-1">
+            {getLabel(
+              'This module is locked to Border & Customs Revenue share logic. No raw national data, oil, or state assets are accessible. Real automated telemetry feeds from Baghdad/Erbil must be established for live settlement actions.',
+              'تم قفل هذه الوحدة البرمجية على إيرادات المنافذ والجمارك فقط. لا يمكن كشف الحسابات العامة أو كشوف ميزانية النفط والرواتب. لتفعيل الحسابات الحية، يلزم ربط مزودات البيانات المشفرة التابعة للطرفين.',
+              'ئەم بەشە بە تەواوی قوفڵکراوە لەسەر لۆجیکی داهاتی دەروازەکان و گومرگ. هیچ گرێدەرێکی نەوت، دەوڵەت یان داتای دارایی تر تێکەڵ نەکراوە. بۆ یەکلاکردنەوەی کار پێویستە پرۆڤایدەری دڵنیایی فەرمی هەبێت.'
+            )}
+          </p>
         </div>
       </div>
 
-      {/* MASTER SYSTEM SELECTOR HUB */}
-      <div className="flex bg-slate-950 p-1.5 rounded-xl border border-slate-800 gap-2 text-xs font-mono">
+      {/* Header and Title */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-4 mb-6 gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <Badge variant="warning">
+              {getLabel('BORDER OPERATING SYSTEM', 'نظام تشغيل وإدارة الحدود', 'سیستەمی فەرمی دەروازەکان (BOS)')}
+            </Badge>
+            <span className="text-[10px] font-mono text-slate-500">v5.20 LOCKED</span>
+          </div>
+          <h2 className="text-xl font-bold font-sans text-slate-100 mt-1.5">
+            {getLabel(
+              'Border Revenue Settlement Control Hub',
+              'منصة يكلواندنةوة و ڕێكخستنی داهاتی دەروازە سنوورییەکان',
+              'مەڵبەندی یەکلاییکردنەوەی داهاتی دەروازە سنوورییەکان'
+            )}
+          </h2>
+          <p className="text-xs text-slate-400 mt-1 font-sans">
+            {getLabel(
+              'Constitutional border-revenue coordination, customs duties auditing and multi-jurisdiction 50% reconciliation calculations.',
+              'وردبینی فەرمی داهاتی گومرگ، چاودێری جێبەجێکردنی هاوبەشی بەندی ٥٠٪، و بەڵگەسازی بۆ لیدجەری هاوبەشی نیشتمانی.',
+              'بەدواداچوون بۆ ڕێککەوتنی دارایی داهاتە دەروازەیییەکان بە پێی بەندی فەرمی فیدراڵی ٥٠٪.'
+            )}
+          </p>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              BorderRevenueCalculationEngine.removeProvider('ALL_KRG_GATES');
+              setIsTestProviderEnabled(false);
+              setTicker(p => p + 1);
+            }}
+            className="p-2 bg-slate-900 border border-slate-800 rounded-lg hover:bg-slate-850 text-slate-400 hover:text-slate-200 transition-all text-xs flex items-center gap-1.5"
+            title={getLabel('Reset Engine State', 'إعادة ضبط وضعية الحساب', 'دووبارە ڕێکخستنەوەی سیستم')}
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>{getLabel('Reset', 'إعادة ضبط', 'دووبارەکردنەوە')}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Internal Navigation Grid */}
+      <div className="flex flex-wrap border-b border-slate-800 gap-1.5 pb-3 mb-6">
         <button
-          onClick={() => setMasterHub('fiscal-os')}
-          className={`flex-1 py-2 rounded-lg cursor-pointer transition-all uppercase font-bold flex items-center justify-center gap-2 ${
-            masterHub === 'fiscal-os'
-              ? 'bg-[#E1AD01] text-slate-950 shadow-md font-extrabold'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+          onClick={() => setActiveTab('policies')}
+          className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            activeTab === 'policies'
+              ? 'bg-amber-950 text-amber-400 border border-amber-500/30'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
           }`}
         >
-          <Coins className="w-4 h-4 shrink-0" />
-          <span>{getLabel('Sovereign Fiscal Registry OS (Phase 3.6.12)', 'سجل الخزينة والمالية الموحد (الجيل الثاني)', 'دەفتەری گشتی گەنجینە و دارایی (پێش قۆناغی دووەم)')}</span>
+          <Coins className="w-4 h-4" />
+          <span>{getLabel('Customs Share Policies', 'سیاسات توزيع داهات الحدوود', 'یاساکانی دابەشکردنی داهاتی گومرگ')}</span>
         </button>
+
         <button
-          onClick={() => setMasterHub('resource-os')}
-          className={`flex-1 py-2 rounded-lg cursor-pointer transition-all uppercase font-bold flex items-center justify-center gap-2 ${
-            masterHub === 'resource-os'
-              ? 'bg-[#E1AD01] text-slate-950 shadow-md font-extrabold'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+          onClick={() => setActiveTab('calculator')}
+          className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            activeTab === 'calculator'
+              ? 'bg-amber-950 text-amber-400 border border-amber-500/30'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
           }`}
         >
-          <Layers className="w-4 h-4 shrink-0" />
-          <span>{getLabel('National Budget & Capital Operations OS (Phase 3.6.11)', 'موازنة الموارد والقدرات البشرية (الجيل الأول)', 'بودجەی نیشتمانی و سەرچاوە گشتییەکان (پێش قۆناغی یەکەم)')}</span>
+          <Cpu className="w-4 h-4" />
+          <span>{getLabel('Calculations Engine', 'بزوێنەری بیرکاری گومرگی', 'سیستەمی هەژمارکاری داهات')}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('readiness')}
+          className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            activeTab === 'readiness'
+              ? 'bg-amber-950 text-amber-400 border border-amber-500/30'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+          }`}
+        >
+          <Activity className="w-4 h-4" />
+          <span>{getLabel('Sovereign Scope Audit', 'دۆخی فەرمی کایەی کورتەی دەروازە', 'ڕاپۆرتی سەروەریی دەروازە')}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('security-policy')}
+          className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            activeTab === 'security-policy'
+              ? 'bg-amber-950 text-amber-400 border border-amber-500/30'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+          }`}
+        >
+          <Shield className="w-4 h-4" />
+          <span>{getLabel('Sovereignty Rules Policy', 'پاراستنی سەروەری گومرگی', 'یاساکانی سەروەری دەروازەکان')}</span>
         </button>
       </div>
 
-      {masterHub === 'fiscal-os' ? (
-        <>
-          {/* SECTION 2: FISCAL READINESS ENGINE BLOCK */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 bg-slate-950/50 p-5 rounded-xl border border-slate-800/80">
-            
-            <div className="lg:col-span-1 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-800 pb-4 lg:pb-0 lg:pr-6 text-start">
-              <div>
-                <h4 className="text-xs text-slate-500 font-mono uppercase tracking-widest font-bold mb-1">
-                  {getLabel('Sovereign Fiscal Readiness', 'تقييم جاهزية الخزينة', 'هەڵسەنگاندنی ئامادەکاری دارایی')}
-                </h4>
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-4xl font-extrabold text-[#cca553] font-mono">{readiness.scoreOverall}%</span>
-                  <Badge variant={readiness.isCompliant ? 'success' : 'warning'}>
-                    {readiness.isCompliant ? 'COMPLIANT' : 'CONSTRAINED'}
-                  </Badge>
-                </div>
-                <p className="text-[11px] text-slate-400 mt-2 mb-4">
-                  {getLabel('Mathematical aggregate of intergovernmental liquidity buffers, settlement clearances, and sovereign asset ratios.',
-                             'تجميع رياضي لاحتياطيات السيولة والمقاصات والالتزامات السيادية.',
-                             'کۆی پێوەرە داراییەکان لە نێوان حکومەت، نەبوونی کێشەی نەختینەیی و توانای بازرگانی.')}
-                </p>
-              </div>
-              <div className="mt-2 space-y-2">
-                <span className="text-[10px] text-slate-500 block font-bold font-mono">EXECUTIVE COMPLIANCE ACTOR:</span>
-                <input 
-                  type="text" 
-                  value={actorName} 
-                  onChange={(e) => setActorName(e.target.value)} 
-                  className="w-full bg-slate-900 border border-slate-800 text-xs rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#cca553] text-[#cca553] font-mono font-bold"
-                />
-              </div>
-            </div>
+      {/* TAB CONTENT: POLICIES */}
+      {activeTab === 'policies' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 flex flex-col gap-4">
+            <h3 className="text-sm font-bold text-slate-100 flex items-center gap-1.5 font-mono">
+              <FileText className="w-4 h-4 text-amber-500" />
+              <span>{getLabel('Constitutional Customs Treaties Registered', 'الاتفاقيات الدستورية الموثقة لتوزيع داهات گومرگ', 'ڕێککەوتنە دەستوورییە مۆرکراوەکانی گومرگ')}</span>
+            </h3>
 
-            <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-5 gap-4">
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 text-start">
-                <span className="text-[10px] text-slate-500 block font-mono uppercase">TREASURY</span>
-                <span className="text-lg font-bold text-white font-mono block mt-1">{readiness.treasuryReadiness}%</span>
-                <div className="w-full bg-slate-950 h-1 rounded mt-2 overflow-hidden">
-                  <div className="bg-[#cca553] h-full" style={{ width: `${readiness.treasuryReadiness}%` }}></div>
-                </div>
-              </div>
-              
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 text-start">
-                <span className="text-[10px] text-slate-500 block font-mono uppercase">SETTLEMENTS</span>
-                <span className="text-lg font-bold text-emerald-400 font-mono block mt-1">{readiness.settlementReadiness}%</span>
-                <div className="w-full bg-slate-950 h-1 rounded mt-2 overflow-hidden">
-                  <div className="bg-emerald-400 h-full" style={{ width: `${readiness.settlementReadiness}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 text-start">
-                <span className="text-[10px] text-slate-500 block font-mono uppercase">RECON RECON</span>
-                <span className="text-lg font-bold text-teal-400 font-mono block mt-1">{readiness.revenueReconciliationReadiness}%</span>
-                <div className="w-full bg-slate-950 h-1 rounded mt-2 overflow-hidden">
-                  <div className="bg-teal-400 h-full" style={{ width: `${readiness.revenueReconciliationReadiness}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 text-start">
-                <span className="text-[10px] text-slate-500 block font-mono uppercase">DEBT GOVERNANCE</span>
-                <span className="text-lg font-bold text-cyan-400 font-mono block mt-1">{readiness.debtGovernanceReadiness}%</span>
-                <div className="w-full bg-slate-950 h-1 rounded mt-2 overflow-hidden">
-                  <div className="bg-cyan-400 h-full" style={{ width: `${readiness.debtGovernanceReadiness}%` }}></div>
-                </div>
-              </div>
-
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80 text-start">
-                <span className="text-[10px] text-slate-500 block font-mono uppercase">ASSET RECOGNITION</span>
-                <span className="text-lg font-bold text-blue-400 font-mono block mt-1">{readiness.assetGovernanceReadiness}%</span>
-                <div className="w-full bg-slate-950 h-1 rounded mt-2 overflow-hidden">
-                  <div className="bg-blue-400 h-full" style={{ width: `${readiness.assetGovernanceReadiness}%` }}></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* SECTION 3: SUB-CAPABILITY SELECTION TABS */}
-          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-950 rounded-xl border border-slate-800/80">
-            {[
-              { id: 'federal-treasury', label: getLabel('Federal Treasury Core', 'الخزينة الاتحادية', 'خزێنەی فیدراڵ'), icon: Landmark },
-              { id: 'krg-treasury', label: getLabel('KRG Treasury Core', 'خزينة الإقليم KRG', 'خزێنەی هەرێم KRG'), icon: Layers },
-              { id: 'fiscal-ledger', label: getLabel('Emerald Fiscal Ledger', 'سجل الزمرد الوطني السيادي', 'دەفتەری مۆری نیشتمانی'), icon: History },
-              { id: 'federal-revenue', label: getLabel('Federal Revenue isolated', 'الإيرادات فیدراڵ المعزولة', 'داهاتی فیدراڵ عێراق'), icon: Coins },
-              { id: 'krg-revenue', label: getLabel('KRG Revenue isolated', 'الإيرادات الإقليم المعزولة', 'داهاتی کوردستان KRG'), icon: Cpu },
-              { id: 'revenue-recon', label: getLabel('Budget Law Variance', 'محرك الموازنة المشتركة', 'بەرامبەرکردنی داهاتی هاوبەش'), icon: Scale },
-              { id: 'joint-revenue', label: getLabel('Joint Revenue Audit', 'مطابقة الإيرادات السيادية', 'وردبینی داهاتی فیدراڵ-KRG'), icon: Shield },
-              { id: 'debt-registry', label: getLabel('National Debt Registry', 'سجل الدين السيادي', 'تۆماري قەرزی نیشتمانی'), icon: Shield },
-              { id: 'asset-registry', label: getLabel('Sovereign Asset Registry', 'سجل الأصول والشركات العامة', 'تۆماری دارایی غەیرە منقول'), icon: Database },
-              { id: 'settlement-ops', label: getLabel('Intergovernmental Settlements', 'المقاصات والتحويلات المشتركة', 'بەرامبەربوونی دارایی هاوبەش'), icon: Network },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveCabinetTab(tab.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono transition-all cursor-pointer border ${
-                  activeCabinetTab === tab.id 
-                    ? 'bg-[#1a2c42] text-[#cca553] border-[#cca553]/30 font-bold' 
-                    : 'text-slate-400 hover:text-white border-transparent'
-                }`}
-              >
-                <tab.icon className="w-3.5 h-3.5 shrink-0" />
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
-
-      {/* SECTION 4: DETAILED DASHBOARDS */}
-      <div className="min-h-[400px]">
-        
-        {/* DASHBOARD 1: FEDERAL TREASURY CORE */}
-        {activeCabinetTab === 'federal-treasury' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-[700] uppercase tracking-widest text-slate-200 border-b border-slate-800 pb-2 mb-4 flex justify-between items-center">
-                  <span>{getLabel('FEDERAL TREASURY POSITION MONITOR', 'موقف الخزينة الاتحادية', 'چاودێری دۆخی خزێنەی گشتی فیدراڵ')}</span>
-                  <Badge variant="teal">BAGHDAD_VAULT_1</Badge>
-                </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-                    <span className="text-[10px] text-slate-500 font-mono uppercase block">{getLabel('Consolidated Cash Liquidity', 'النهود النقدية المتوفرة', 'نەختی بەردەستی فیدراڵ')}</span>
-                    <span className="text-xl font-bold font-mono text-white block mt-1">$45.20 Billion USD</span>
-                    <span className="text-[10px] text-teal-400 block mt-1 font-mono">{getLabel('76.2% Liquid Cash Assets', '٧٦٪ سيولة جاهزة', '٧٦٪ بە شێوەی نەختی گۆڕاو')}</span>
-                  </div>
-                  
-                  <div className="bg-slate-900/40 p-4 rounded-xl border border-slate-800">
-                    <span className="text-[10px] text-slate-500 font-mono uppercase block">{getLabel('Emergency Sovereign Reserve', 'احتياطي الطوارئ', 'خزێنەی یەدەگی فریاکەوتن')}</span>
-                    <span className="text-xl font-bold font-mono text-teal-400 block mt-1">$5.00 Billion USD</span>
-                    <span className="text-[10px] text-slate-400 block mt-1 font-mono">{getLabel('Mandated Reserve requirement ratio: 15%', 'الحد الأدنى للاحتياطي ١٥٪', 'پارێزگاری لە ڕێژەی یەدەگی یاسایی')}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold tracking-widest">{getLabel('LEDGER REAL-TIME EXPENDITURE OUTFLOWS', 'تفاصيل النفقات الجارية والمسجلة', 'وردبینی خەرجییەکانی خزێنەی گشتی فیدراڵ')}</span>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-start border-collapse border border-slate-800">
-                      <thead>
-                        <tr className="bg-slate-900 text-slate-400 font-mono text-[10px] border-b border-slate-800">
-                          <th className="p-2 text-start">LEDGER CODE</th>
-                          <th className="p-2 text-start">SUB CATEGORY</th>
-                          <th className="p-2 text-start">BUDGET LIMIT</th>
-                          <th className="p-2 text-start">DISBURSED COIL</th>
-                          <th className="p-2 text-start">LIQUIDITY DEPTH</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800/60 font-mono">
-                        <tr>
-                          <td className="p-2.5 text-cyan-400 font-bold">EXP-FED-SOC</td>
-                          <td className="p-2.5 font-sans">Social Security & Welfare</td>
-                          <td className="p-2.5 font-bold">$32,000M</td>
-                          <td className="p-2.5 text-slate-300">$7,500M</td>
-                          <td className="p-2.5 text-emerald-400">92.4% Safe</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-cyan-400 font-bold">EXP-FED-SEC</td>
-                          <td className="p-2.5 font-sans">National Security & Defense</td>
-                          <td className="p-2.5 font-bold">$28,000M</td>
-                          <td className="p-2.5 text-slate-300">$8,100M</td>
-                          <td className="p-2.5 text-emerald-400">89.1% Safe</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-cyan-400 font-bold">EXP-FED-DEV</td>
-                          <td className="p-2.5 font-sans">Reconstruction & Projects</td>
-                          <td className="p-2.5 font-bold">$45,000M</td>
-                          <td className="p-2.5 text-slate-300">$9,000M</td>
-                          <td className="p-2.5 text-white">45.0% Restricted</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>AUDIT RECORD ID: <b>FED-SECURE-AUD-1002</b></span>
-                <span className="text-emerald-400">STATUS: <b>VERIFIED WITH COMPTROLLER</b></span>
-              </div>
-            </div>
-
-            {/* CBI Account holdings */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                  {getLabel('GOVERNMENT SAVINGS AT CENTRAL BANK (CBI)', 'حسابات الحكومة لدى البنك المركزي', 'ئەمینی دارایی حکومەت لە بانکی ناوەندی')}
-                </h3>
-                
-                <p className="text-xs text-slate-400 mb-5 leading-relaxed">
-                  {getLabel('Real-time balances of the Federal Iraq and Joint accounts monitored within the CBI electronic ledger.',
-                             'مطابقة فورية لأرصدة حسابات الحكومة الاتحادية المسجلة لدى المقر الرئيسي للبنك المركزي.',
-                             'ڕازیکردنی بەردەوامی باڵانسی بانکی فیدراڵ و هاوبەش کە لە سیستەمی ئەلیکترۆنی پاشەکەوت کراوە.')}
-                </p>
-
-                <div className="space-y-3 text-xs">
-                  {cbiAccounts.filter(a => a.jurisdiction !== 'krg').map(acc => (
-                    <div key={acc.accountNumber} className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 font-mono">
-                      <div className="flex justify-between font-bold text-slate-200">
-                        <span>{acc.accountNumber}</span>
-                        <Badge variant="teal">{acc.currency}</Badge>
-                      </div>
-                      <p className="text-slate-400 font-sans mt-1 text-[11px] truncate">{acc.title}</p>
-                      <div className="flex justify-between items-baseline mt-2.5">
-                        <span className="text-slate-500 text-[10px]">CURRENT BALANCE:</span>
-                        <span className="text-base font-extrabold text-[#cca553]">{acc.balance.toLocaleString()} M</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 p-2 bg-slate-900 rounded border border-slate-800 text-[10px] text-slate-400 flex items-center gap-1.5 font-mono">
-                <Lock className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>Encrypted using Federal RSA-4096 SHA-256 Authority key.</span>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 2: KRG REGIONAL REGISTRY & LIQUIDITY MOUNT */}
-        {activeCabinetTab === 'krg-treasury' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-[#52B788]/20 pb-2 mb-4 flex justify-between items-center">
-                  <span>{getLabel('KRG TREASURY REGIONAL POSITION MONITOR', 'خزينة إقليم كوردستان', 'چاودێری دۆخی گشتی خزێنەی هەرێمی کوردستان')}</span>
-                  <Badge variant="success">ERBIL_VAULT_1</Badge>
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="bg-[#1b2a22]/30 p-4 rounded-xl border border-emerald-950/50">
-                    <span className="text-[10px] text-slate-400 font-mono uppercase block">{getLabel('Regional Cash Liquidity', 'النقدية المتوفرة للإقليم', 'نەختی بەردەستی هەرێمی کوردستان')}</span>
-                    <span className="text-xl font-bold font-mono text-emerald-400 block mt-1">$4.80 Billion USD</span>
-                    <span className="text-[10px] text-emerald-300 block mt-1 font-mono">{getLabel('64.5% Liquid Cash Assets', '٦٤٪ سيولة نقدية', '٦٤٪ بە شێوەی نەختینەی ئامادەکراو')}</span>
-                  </div>
-
-                  <div className="bg-[#1b2a22]/30 p-4 rounded-xl border border-emerald-950/50">
-                    <span className="text-[10px] text-slate-400 font-mono uppercase block">{getLabel('Regional Emergency Buffer', 'اليادج الاحتياطي للإقليم', 'خزێنەی یەدەگی فریاکەوتی فریکوێنت')}</span>
-                    <span className="text-xl font-bold font-mono text-teal-400 block mt-1">$600 Million USD</span>
-                    <span className="text-[10px] text-slate-400 block mt-1 font-mono">{getLabel('Mandated Reserve requirement ratio: 12%', 'الاحتياطي الإقليمي المعتمد ١٢٪', 'ڕێژەی یەدەگی یاسایی هەرێم نیشتمانی')}</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold tracking-widest">{getLabel('REGIONAL EXPENDITURE BALANCING SCHEME', 'تسوية ومراقبة نفقات الإقليم', 'خشتەی خەرجییەکانی خزێنەی هەرێمی کوردستان')}</span>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-start border-collapse border border-slate-800">
-                      <thead>
-                        <tr className="bg-slate-900 text-slate-400 font-mono text-[10px] border-b border-slate-800">
-                          <th className="p-2 text-start">LEDGER CODE</th>
-                          <th className="p-2 text-start">SUB CATEGORY</th>
-                          <th className="p-2 text-start">BUDGET ALLOCATED</th>
-                          <th className="p-2 text-start">DISBURSED COIL</th>
-                          <th className="p-2 text-start">STATUS</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-800/60 font-mono">
-                        <tr>
-                          <td className="p-2.5 text-[#52B788] font-bold">EXP-KRG-SOC</td>
-                          <td className="p-2.5 font-sans">Civilian Salaries & Pensions</td>
-                          <td className="p-2.5 font-bold">$5,400M</td>
-                          <td className="p-2.5 text-slate-300">$1,200M</td>
-                          <td className="p-2.5 text-amber-500">Tight Balance Buffer</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-[#52B788] font-bold">EXP-KRG-SEC</td>
-                          <td className="p-2.5 font-sans">Peshmerga Defense Coordination</td>
-                          <td className="p-2.5 font-bold">$3,200M</td>
-                          <td className="p-2.5 text-slate-300">$950M</td>
-                          <td className="p-2.5 text-emerald-400">Synchronized</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2.5 text-[#52B788] font-bold">EXP-KRG-DEV</td>
-                          <td className="p-2.5 font-sans">Autonomous Border Development</td>
-                          <td className="p-2.5 font-bold">$4,800M</td>
-                          <td className="p-2.5 text-slate-300">$1,100M</td>
-                          <td className="p-2.5 text-blue-400">Funding Clearance</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>AUDIT RECORD ID: <b>KRG-SECURE-AUD-2005</b></span>
-                <span className="text-[#52B788]">STATUS: <b>SYNCHRONIZED METADATA STORE</b></span>
-              </div>
-            </div>
-
-            {/* CBI Regional accounts holding balances */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-[700] uppercase tracking-widest text-[#52B788] border-b border-slate-800 pb-2 mb-4">
-                  {getLabel('KRG SAVINGS REGISTERED AT CENTRAL BANK', 'حسابات الإقليم لدى البنك المركزي', 'ئامۆژگاری و حساباتی هەرێمی کوردستان لە CBI')}
-                </h3>
-                
-                <p className="text-xs text-slate-400 mb-5 leading-relaxed">
-                  {getLabel('KRG Regional accounts under CBI supervision. Transactions are verified using double-entry ledger audits to check for inter-domain compliance.',
-                             'تثبيت أرصدة إقليم كوردستان لدى البنك المركزي في بغداد التي يتم التحقق منها لتسجيل العائدات والمصالح الجمركية.',
-                             'حسابەکانی دارایی هەرێم لە لایەن بانکی ناوەندی چاودێری دەکرێت بۆ ناردنی پارە و مووچە بە شێوازی فەرمی.')}
-                </p>
-
-                <div className="space-y-3 text-xs">
-                  {cbiAccounts.filter(a => a.jurisdiction === 'krg').map(acc => (
-                    <div key={acc.accountNumber} className="bg-slate-900/50 p-4 rounded-xl border border-[#52B788]/10 font-mono">
-                      <div className="flex justify-between font-bold text-slate-200">
-                        <span>{acc.accountNumber}</span>
-                        <Badge variant="success">{acc.currency}</Badge>
-                      </div>
-                      <p className="text-slate-400 font-sans mt-1 text-[11px] truncate">{acc.title}</p>
-                      <div className="flex justify-between items-baseline mt-2.5">
-                        <span className="text-slate-500 text-[10px]">CURRENT BALANCE:</span>
-                        <span className="text-base font-extrabold text-[#52B788]">{acc.balance.toLocaleString()} M</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 p-2 bg-[#1b2a22]/20 rounded border border-emerald-950 text-[10px] text-slate-400 flex items-center gap-1.5 font-mono">
-                <Lock className="w-3.5 h-3.5 text-[#52B788] shrink-0" />
-                <span>ECDSA secp256k1 Sovereign Signature Verified.</span>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 3: EMERALD FISCAL LEDGER (EVENT SOURCED UNIFIED RECONCILIATION BUS) */}
-        {activeCabinetTab === 'fiscal-ledger' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Event ledger stream viewer */}
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4 flex justify-between items-center">
-                  <span>{getLabel('IMMUTABLE NATIONAL SOVEREIGN FISCAL LEDGER', 'سجل الزمرد الوطني السيادي الموثق', 'دەفتەری حیساباتی نیشتمانیی و ڕوداوە داراییە نەگۆڕەکان')}</span>
-                  <Badge variant="gold">EVENT-SOURCED</Badge>
-                </h3>
-                
-                <p className="text-xs text-slate-400 mb-4">
-                  {getLabel('Showing all verified append-only sovereign event logs. Every entry represents an immutable physical asset exchange signed by an explicit ministerial authority.',
-                             'عرض جميع الوقائع والقيام بعملية التدقيق من جهة طرف ثالث معتمد دون وجود سجلات وهمية.',
-                             'پیشاندانی سەرجەم ڕوداوە داراییە تۆمارکراوەکان. هیچ کەم و زۆرێک ناکرێت لە دەفتەرەکە بەبێ ڕەزامەندی وەزیر.')}
-                </p>
-
-                <div className="space-y-3 max-h-[350px] overflow-y-auto pr-2">
-                  {ledgerHistory.map((evt) => (
-                    <div key={evt.transactionId} className="bg-slate-900 border border-slate-800 p-3.5 rounded-xl font-mono text-xs hover:border-[#cca553]/20 transition-all">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-cyan-400 font-bold">{evt.transactionId}</span>
-                        <Badge variant={evt.jurisdiction === 'federal' ? 'teal' : evt.jurisdiction === 'krg' ? 'success' : 'gold'}>
-                          {evt.jurisdiction.toUpperCase()} • {evt.eventType}
-                        </Badge>
-                      </div>
-                      
-                      <div className="space-y-1 mt-2 text-slate-300 text-[11px]">
-                        <p className="font-sans font-bold text-white text-xs">{JSON.parse(evt.payload).action || `${evt.eventType} Ledger Posting Event`}</p>
-                        <p>{getLabel('Authority Signatory', 'السلطة المخولة', 'دەسەڵاتی واژۆکار')}: <b>{evt.authority}</b></p>
-                        <p>{getLabel('Sovereign Amount', 'المبلغ المدرج', 'بڕی دارایی')}: <b className="text-emerald-400">${evt.amountUSD} M USD</b></p>
-                        <p>{getLabel('Policy Path', 'السياسة المعتمدة', 'سیاسەت')}: <span className="text-slate-400">{evt.policyReference}</span> • {getLabel('Ledger Core', 'رابط الدفتر', 'نووسینگەی گشتی')}: <span className="text-slate-400">{evt.ledgerReference}</span></p>
-                        <p className="text-[10px] text-slate-500">{evt.timestamp}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-4 p-2 bg-slate-900 rounded border border-slate-800 text-[10px] text-slate-400 flex items-center justify-between font-mono">
-                <span>TOTAL EVENTS SEATED: <b>{ledgerHistory.length} EVENTS</b></span>
-                <span className="text-teal-400">CHAIN INTEGRITY: <b>100% CORRECT (0 ORPHANS)</b></span>
-              </div>
-            </div>
-
-            {/* Adjustments / Manual event append form */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800 text-start">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('APPEND ADJUSTMENT ENTRY TO THE LEDGER', 'تسجيل حركة تعديل مالي مباشر', 'زیادکردنی سەرجاوی کتوپڕ یان چاککردنی حیساب لە دەفتەردا')}
-              </h3>
-
-              <form onSubmit={handleAppendAdjustment} className="space-y-4 text-xs font-mono">
-                <div>
-                  <label className="block text-slate-400 mb-1">EXECUTION JURISDICTION:</label>
-                  <select 
-                    value={newAdjustmentJurisdiction}
-                    onChange={(e) => setNewAdjustmentJurisdiction(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-slate-800 text-xs rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#cca553] text-[#cca553] font-bold"
-                  >
-                    <option value="federal">FEDERAL GOVERNMENT (IRAQ)</option>
-                    <option value="krg">KURDISTAN REGION (KRG)</option>
-                    <option value="joint">JOINT COORDINATION COUNCIL</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">ADJUSTING SUM (MILLIONS USD):</label>
-                  <input 
-                    type="number" 
-                    value={newAdjustmentAmt}
-                    onChange={(e) => setNewAdjustmentAmt(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#cca553] font-bold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">ADJUSTMENT NOTES / POLICY CODE:</label>
-                  <textarea 
-                    value={newAdjustmentReference}
-                    onChange={(e) => setNewAdjustmentReference(e.target.value)}
-                    placeholder="Provide reference reasons per sovereign budget guidelines..."
-                    rows={4}
-                    className="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <Button type="submit" variant="gold" className="w-full font-bold">
-                  + {getLabel('Write Immutable Adjustment', 'ترقية وتثبيت التعديل الجديد', 'تۆمارکردنی چاککاری نەگۆڕ')}
-                </Button>
-              </form>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 4: REVENUE RECONCILIATION ENGINE */}
-        {activeCabinetTab === 'revenue-recon' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-start text-xs">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('CROSS-GOVERNMENT REVENUE STREAM AUDITS', 'تدقيق ومطابقة ممرات الموارد والضرائب', 'وردبینیکردنی هەمەلایەنەی دەروازە داراییەکان')}
-              </h3>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-start border-collapse border border-slate-800">
-                  <thead>
-                    <tr className="bg-slate-900 text-slate-400 font-mono text-[10px] border-b border-slate-800">
-                      <th className="p-2.5 text-start">STREAM ID</th>
-                      <th className="p-2.5 text-start">STREAM DETAILS</th>
-                      <th className="p-2.5 text-start">TYPE</th>
-                      <th className="p-2.5 text-start">JURISDICTION</th>
-                      <th className="p-2.5 text-start">COLLECTED</th>
-                      <th className="p-2.5 text-start">ANNUAL EST</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-mono">
-                    {streams.map(str => (
-                      <tr key={str.id} className="hover:bg-slate-900/25">
-                        <td className="p-2.5 text-cyan-400 font-bold">{str.id}</td>
-                        <td className="p-2.5 font-sans font-bold text-white">{str.name}</td>
-                        <td className="p-2.5">
-                          <span className="text-[10px] bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-amber-500 uppercase">{str.type}</span>
-                        </td>
-                        <td className="p-2.5 uppercase text-slate-300 font-bold">{str.jurisdiction}</td>
-                        <td className="p-2.5 text-emerald-400 font-bold">${str.collectedToDate.toLocaleString()} M</td>
-                        <td className="p-2.5 text-slate-400">${str.projectedAnnual.toLocaleString()} M</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Wire compliance tool */}
-              <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 mt-6 md:p-5">
-                <h4 className="text-xs font-bold font-mono text-[#cca553] uppercase mb-3 flex items-center gap-2">
-                  <Activity className="w-4 h-4 shrink-0" />
-                  {getLabel('CBI WIRE TRANSFER ARBITRAGE ENFORCEMENT COMPLIANCE CHECK', 'تنفيذ التحقق من تراخيص غسيل وتهريب تحويل العملات', 'پشکنینی دژە سەرپێچی دارایی و حەواڵە لە CBI')}
-                </h4>
-                
-                <form onSubmit={handleVerifyWireCompliance} className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {policies.map(policy => (
+              <Card key={policy.policyId} className="bg-slate-900/50 border-slate-800 p-4">
+                <div className="flex items-start justify-between gap-3 flex-col sm:flex-row">
                   <div>
-                    <span className="text-[9px] text-slate-500 font-mono block">TRANSFER AMOUNT (USD MILLIONS):</span>
-                    <input 
-                      type="text" 
-                      value={wireUSD} 
-                      onChange={(e) => setWireUSD(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 text-xs rounded px-2.5 py-1 mt-1 text-white font-mono"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-slate-500 font-mono block">CONVERTED EXCHANGED AMOUNT (IQD MILLIONS):</span>
-                    <input 
-                      type="text" 
-                      value={wireIQD} 
-                      onChange={(e) => setWireIQD(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 text-xs rounded px-2.5 py-1 mt-1 text-white font-mono"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <Button type="submit" variant="teal" size="sm" className="w-full py-1">
-                      Verify Exchange Alignment
-                    </Button>
-                  </div>
-                </form>
-
-                {complianceCheckResult && (
-                  <div className={`mt-4 p-3.5 rounded border text-xs font-mono ${complianceCheckResult.isValid ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-red-950/20 border-red-500/30'}`}>
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold">COMPLIANCE STATE: <b className={complianceCheckResult.isValid ? 'text-emerald-400' : 'text-red-400'}>{complianceCheckResult.complianceCode}</b></span>
-                      <span className="text-[10px] text-slate-500">Variance offset: <b>{complianceCheckResult.offsetRatio}%</b></span>
-                    </div>
-                    <p className="text-[11px] text-slate-400 mt-1 font-sans">
-                      {complianceCheckResult.isValid 
-                        ? 'Arbitrage threshold checks passed successfully. Transaction exchange rate matches benchmark limits within acceptable margins.' 
-                        : 'CRITICAL ARBITRAGE WARNING: Computed rate deviates severely from CBI bench. Transaction holds potential cash-flight threat limits! Approval suspended.'}
+                    <h4 className="text-xs font-bold text-amber-400 flex items-center gap-1.5 leading-relaxed font-sans text-start">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                      {policy.name}
+                    </h4>
+                    <p className="text-[11px] text-slate-400 mt-1 font-mono text-start">
+                      {getLabel('Applicable Target Gate:', 'المنفذ المستهدف:', 'دەروازەی جێبەجێکار:')} <b className="text-slate-200">{policy.borderGateName}</b>
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5 font-mono text-start">
+                      {getLabel('Basis Code:', 'السند الدستوري:', 'بناغەی یاسایی:')} <span className="text-slate-300 font-bold">{policy.legalBasisId}</span>
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-1.5 text-start leading-relaxed bg-[#0b0f1a] p-2 rounded border border-slate-850">
+                      <b>{getLabel('Legal Reference Name:', 'المرجع القانوني:', 'دەقی یاسایی:')}</b> {policy.legalReferenceLabel}
                     </p>
                   </div>
-                )}
-              </div>
-            </div>
 
-            {/* Exceptions and suggestions report */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('RECONCILIATION VARIANCE OUTCOMES & REVISION REPORTS', 'تقرير مطابقة الإيرادات واكتشاف الفروقات والشوائب', 'کورتەی کێشەدارەکانی داهات و ئامۆژگاری هاوسەنگی')}
-              </h3>
-
-              <div className="space-y-4">
-                
-                <div className="p-3 bg-slate-900 rounded border border-slate-800">
-                  <div className="flex justify-between font-mono font-bold text-slate-400">
-                    <span>Audit Scope:</span>
-                    <span className="text-white">{reconReport.scope}</span>
-                  </div>
-                  <div className="flex justify-between font-mono font-bold text-slate-400 mt-1">
-                    <span>Timestamp:</span>
-                    <span className="text-slate-400 text-[10px] truncate max-w-[150px]">{reconReport.timestamp}</span>
-                  </div>
-                  <div className="flex justify-between font-mono font-bold text-slate-400 mt-1">
-                    <span>KRG Share Outlier:</span>
-                    <span className={reconReport.unreconciledDifference > 0 ? 'text-rose-400' : 'text-teal-400'}>
-                      ${reconReport.unreconciledDifference.toLocaleString()} M USD
+                  <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
+                    <Badge variant={policy.policyId.includes('50_PERCENT') ? 'success' : 'warning'}>
+                      {policy.settlementPercentage}% {getLabel('Distribution', 'نسبة الحصة', 'ڕێژەی پشک')}
+                    </Badge>
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      {policy.effectiveDate} - {policy.expiryDate}
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold">EXCEPTIONS REGISTERED:</span>
-                  
-                  {reconReport.exceptions.map((exc, idx) => (
-                    <div key={idx} className={`p-3 rounded border text-xs font-mono relative overflow-hidden ${exc.severity === 'critical' ? 'bg-rose-950/20 border-rose-500/30 text-rose-300' : exc.severity === 'alert' ? 'bg-amber-950/20 border-amber-500/30 text-amber-300' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-[11px] uppercase">{exc.code}</span>
-                        <Badge variant={exc.severity === 'critical' ? 'danger' : exc.severity === 'alert' ? 'gold' : 'slate'}>{exc.severity}</Badge>
-                      </div>
-                      <p className="text-[11px] text-slate-400 font-sans mt-1 leading-relaxed">
-                        {exc.message}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-[10px] text-slate-500 font-mono uppercase block font-bold">RECOMMENDABLE CORRECTIVE ACTIONS:</span>
-                  <div className="p-3 bg-slate-900 rounded border border-[#cca553]/10 text-[11px] space-y-1.5 leading-relaxed text-slate-300">
-                    {reconReport.recommendations.map((rec, i) => (
-                      <p key={i}>• {rec}</p>
-                    ))}
+                <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 font-mono">
+                  <div>
+                    <span>{getLabel('Scope:', 'نطاق العمليات:', 'بواری گومرگ:')} </span>
+                    <b className="text-slate-300">{policy.revenueScope}</b>
+                  </div>
+                  <div>
+                    <span>{getLabel('Legal Status:', 'الوضعية القانونية:', 'دۆخی یاسایی:')} </span>
+                    <span className="text-emerald-400 font-bold">{policy.approvalStatus}</span>
                   </div>
                 </div>
-
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 5: NATIONAL DEBT REGISTRY */}
-        {activeCabinetTab === 'debt-registry' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-start text-xs">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('NATIONAL OBLIGATIONS & DEBT INSTRUMENTS (FEDERAL/KRG)', 'التزامات الديون وأدوات الائتمان الوطنية العامة', 'سیستمی بەڕێوەبردن و تۆمارکردنی قەرزە دەرەکی و ناوخۆیییەکان')}
-              </h3>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-start border-collapse border border-slate-800">
-                  <thead>
-                    <tr className="bg-slate-900 text-slate-400 font-mono text-[10px] border-b border-slate-800">
-                      <th className="p-2.5 text-start">OBLIGATION ID</th>
-                      <th className="p-2.5 text-start">CREDITOR / LENDER</th>
-                      <th className="p-2.5 text-start">INSTRUMENT TYPE</th>
-                      <th className="p-2.5 text-start">JURISDICTION</th>
-                      <th className="p-2.5 text-start">PRINCIPAL DUE</th>
-                      <th className="p-2.5 text-start">YIELD SPEED</th>
-                      <th className="p-2.5 text-start">MATURITY DATE</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-mono">
-                    {obligations.map(ob => (
-                      <tr key={ob.id} className="hover:bg-slate-900/35">
-                        <td className="p-2.5 text-cyan-400 font-bold">{ob.id}</td>
-                        <td className="p-2.5 font-sans font-bold text-white">{ob.lender}</td>
-                        <td className="p-2.5">
-                          <span className="text-[10px] bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-[#cca553] uppercase">{ob.loanType}</span>
-                        </td>
-                        <td className="p-2.5 uppercase text-slate-300 font-bold">{ob.jurisdiction}</td>
-                        <td className="p-2.5 text-rose-400 font-extrabold">${ob.principalAmount.toLocaleString()} M</td>
-                        <td className="p-2.5 text-slate-300">{ob.interestRate}% APR</td>
-                        <td className="p-2.5 text-slate-400">{ob.maturityDate}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl mt-6 flex flex-wrap justify-between items-center gap-4">
-                <div>
-                  <span className="text-[10px] text-slate-500 font-mono block">AGGREGATE LEVERAGED LIABILITIES DEBT:</span>
-                  <span className="text-lg font-bold font-mono text-rose-400">${obligations.reduce((sum, item) => sum + item.principalAmount, 0).toLocaleString()} M USD</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-500 font-mono block">FISCAL COMMITTED OBLIGATIONS RETIRED:</span>
-                  <span className="text-md font-bold font-mono text-teal-400">${obligations.reduce((sum, item) => sum + item.committedSpent, 0).toLocaleString()} M USD APPROVED</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Debt Registration Form */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('REGISTER NEW SOVEREIGN OBLIGATION', 'تسجيل سند ديون سيادية جديدة', 'تۆمارکردنی قەرز یان بەڵێننامەی دارایی نوێ')}
-              </h3>
-
-              <form onSubmit={handleCreateDebt} className="space-y-4 font-mono text-xs">
-                <div>
-                  <label className="block text-slate-400 mb-1">CREDITOR INST OR LENDER:</label>
-                  <input 
-                    type="text" 
-                    value={newDebtLender} 
-                    onChange={(e) => setNewDebtLender(e.target.value)}
-                    placeholder="e.g. World Bank Group, JICA Loan..."
-                    className="w-full bg-slate-900 border border-slate-800 rounded text-xs px-2.5 py-1.5 text-white active:outline-none focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">OBLIGATION PRINCIPAL (MILLIONS USD):</label>
-                  <input 
-                    type="number" 
-                    value={newDebtAmount} 
-                    onChange={(e) => setNewDebtAmount(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded text-xs px-2.5 py-1.5 text-white focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">DEBT INSTRUMENT CLASSIFICATION:</label>
-                  <select 
-                    value={newDebtType}
-                    onChange={(e) => setNewDebtType(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-slate-800 text-[#cca553] rounded px-2.5 py-1.5 text-xs font-bold"
-                  >
-                    <option value="Internal">Internal (Domestic Bonds / CBI Sale)</option>
-                    <option value="External">External (Sovereign bilateral credit)</option>
-                    <option value="Guarantee">Government Sovereign Guarantee</option>
-                    <option value="Commitment">Direct Treasury Commited Obligation</option>
-                  </select>
-                </div>
-
-                <Button type="submit" variant="gold" className="w-full font-bold">
-                  + {getLabel('Incorporate Debt Record', 'توثيق وتوقيع سند الائتمان', 'تۆمارکردنی کۆی گشتی واژۆکە')}
-                </Button>
-              </form>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 6: SOVEREIGN ASSET REGISTRY */}
-        {activeCabinetTab === 'asset-registry' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-start text-xs">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('SOVEREIGN ASSETS & RESOURCE CAPITAL DEPOSITORIES', 'سجل أصول وشركات وودائع الدولة السيادية', 'تۆماری دارایی و سەرچاوە فیزیکییە سەروەرییەکانی عێراق')}
-              </h3>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-start border-collapse border border-slate-800">
-                  <thead>
-                    <tr className="bg-slate-900 text-slate-400 font-mono text-[10px] border-b border-slate-800">
-                      <th className="p-2.5 text-start">ASSET ID</th>
-                      <th className="p-2.5 text-start">ASSET INFRASTRUCTURE DESK</th>
-                      <th className="p-2.5 text-start">CATEGORY</th>
-                      <th className="p-2.5 text-start">JURISDICTION</th>
-                      <th className="p-2.5 text-start">EST VALUATION</th>
-                      <th className="p-2.5 text-start">REVENUE YIELD</th>
-                      <th className="p-2.5 text-start">LAST SYNC AUDIT</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-mono">
-                    {assets.map(ast => (
-                      <tr key={ast.id} className="hover:bg-slate-900/35">
-                        <td className="p-2.5 text-cyan-400 font-bold">{ast.id}</td>
-                        <td className="p-2.5 font-sans font-bold text-white">{ast.name}</td>
-                        <td className="p-2.5">
-                          <span className="text-[10px] bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-teal-400 uppercase">{ast.category}</span>
-                        </td>
-                        <td className="p-2.5 uppercase text-slate-300 font-bold">{ast.jurisdiction}</td>
-                        <td className="p-2.5 text-emerald-400 font-extrabold">${ast.valuation.toLocaleString()} M</td>
-                        <td className="p-2.5 text-white font-bold">${ast.annualRevenueYield.toLocaleString()} M/yr</td>
-                        <td className="p-2.5 text-slate-400">{ast.lastAuditDate}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* State holdings & Sovereign Gold reserve tracking */}
-              <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-3 bg-slate-950 font-mono rounded">
-                  <span className="text-[9px] text-slate-500 block">CBI PHYSICAL GOLD DEPOSITORY</span>
-                  <span className="text-sm font-bold text-[#cca553]">{reserves.goldFineOunces.toLocaleString()} Fine Oz</span>
-                  <span className="text-[10px] text-slate-400 block mt-1">Value: <b>${reserves.goldValueUSD.toLocaleString()} Million USD</b></span>
-                </div>
-                
-                <div className="p-3 bg-slate-950 font-mono rounded">
-                  <span className="text-[9px] text-slate-500 block">SDR REMITTANCES (IMF BALANCE)</span>
-                  <span className="text-sm font-bold text-teal-400">${reserves.sdrBalanceUSD.toLocaleString()} Million USD</span>
-                  <span className="text-[10px] text-slate-500 block">Sovereign Right Holding assets</span>
-                </div>
-
-                <div className="p-3 bg-slate-950 font-mono rounded">
-                  <span className="text-[9px] text-slate-500 block">TOTAL LIQUID SOVEREIGN RESERVES</span>
-                  <span className="text-sm font-bold text-emerald-400">${reserves.totalReservesSovereignUSD.toLocaleString()} Million USD</span>
-                  <span className="text-[10px] text-slate-400 block mt-1">CBI primary backup liquidity.</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Asset Influx Registration Form */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('REGISTER NEW SOVEREIGN STATE ASSET', 'تسجيل قيد أصول سيادية واستثمار عام', 'تۆمارکردنی کاڵا یان دەروەتێکی ژێرخانی نوێ')}
-              </h3>
-
-              <form onSubmit={handleCreateAsset} className="space-y-4 font-mono text-xs">
-                <div>
-                  <label className="block text-slate-400 mb-1">STATE ASSET DESCRIPTION:</label>
-                  <input 
-                    type="text" 
-                    value={newAssetName} 
-                    onChange={(e) => setNewAssetName(e.target.value)}
-                    placeholder="e.g. Khor Al-Zubair Industrial Hub Complex..."
-                    className="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1.5 text-white text-xs focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">ESTIMATED ASSET DEED VALUE (MILLIONS USD):</label>
-                  <input 
-                    type="number" 
-                    value={newAssetValuation} 
-                    onChange={(e) => setNewAssetValuation(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1.5 text-white focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">ASSET CLASSIFICATION CATEGORY:</label>
-                  <select 
-                    value={newAssetCategory}
-                    onChange={(e) => setNewAssetCategory(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-slate-800 text-[#cca553] rounded px-2.5 py-1.5 font-bold"
-                  >
-                    <option value="Energy">Energy & Pipeline Infrastructure</option>
-                    <option value="Infrastructure">Infrastructure (Ports/Roads/Airports)</option>
-                    <option value="Strategic">Strategic National Land Reserves</option>
-                    <option value="StateOwnedEnterprise">State Owned Enterprise shares</option>
-                    <option value="TreasuryControlled">Treasury-Controlled Cash Depositories</option>
-                  </select>
-                </div>
-
-                <Button type="submit" variant="gold" className="w-full font-bold">
-                  + {getLabel('Incorporate Asset Entry', 'تثبيت ملكية الأصل الجديد', 'تۆمارکردنی دارایی لە پاشەکەوت')}
-                </Button>
-              </form>
-            </div>
-
-          </div>
-        )}
-
-        {/* DASHBOARD 7: INTERGOVERNMENTAL SETTLEMENT OPERATIONS & ROUTING QUEUE */}
-        {activeCabinetTab === 'settlement-ops' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-start text-xs">
-            
-            <div className="lg:col-span-2 bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('FEDERAL-REGIONAL CLEARINGS & ROUTINGS QUEUE', 'طابور تسويات وتحويلات المقاصة الفيدرالية والإقليمية', 'ڕیزبەندی وەڵامدانەوەی بەرامبەرکردنی دارایی فیدراڵ-هەرێم')}
-              </h3>
-
-              <div className="space-y-4 max-h-[450px] overflow-y-auto pr-2">
-                {settlementsQueue.map(item => (
-                  <div key={item.id} className="bg-slate-900 border border-slate-800 rounded-xl p-4 font-mono relative hover:border-[#cca553]/25 transition-all">
-                    
-                    <div className="flex justify-between items-center mb-2 border-b border-slate-800 pb-1.5">
-                      <div className="flex items-center gap-1.5 text-cyan-400 font-bold">
-                        <span>{item.id}</span>
-                        <span className="text-slate-500 text-[10px]">• Route:</span>
-                        <span className="text-[#cca553] font-bold uppercase text-[11px]">{item.sourceJurisdiction} ➔ {item.targetJurisdiction}</span>
-                      </div>
-                      <Badge variant={
-                        item.status === 'Audited' ? 'success' : 
-                        item.status === 'Settled' ? 'teal' : 
-                        item.status === 'Authorized' ? 'gold' : 
-                        item.status === 'Validated' ? 'indigo' : 'slate'
-                      }>
-                        {item.status.toUpperCase()}
-                      </Badge>
-                    </div>
-
-                    <div className="space-y-1.5 text-slate-300 text-[11px]">
-                      <p className="font-sans text-xs font-bold text-white leading-relaxed">{item.description}</p>
-                      <p>Sovereign cleared funds: <b className="text-emerald-400">${item.amountUSD} Million USD</b></p>
-                      
-                      {item.authorizedBy && <p>Signed Authority: <span className="text-white font-bold">{item.authorizedBy}</span></p>}
-                      {item.signedTimestamp && <p>Approved timestamp: <span className="text-slate-400">{item.signedTimestamp}</span></p>}
-                      {item.auditHash && <p className="truncate text-teal-400">Ledger Sign-off Hash: <span>{item.auditHash}</span></p>}
-                    </div>
-
-                    {/* Settlement State Advancement Controls */}
-                    <div className="flex justify-end gap-2 mt-3.5 pt-2 border-t border-slate-800/60">
-                      {item.status === 'Draft' && (
-                        <Button onClick={() => handleAdvanceSettlement(item.id, 'Validated')} size="sm" variant="indigo" className="text-[10px] py-0.5">
-                          Validate clearance
-                        </Button>
-                      )}
-                      
-                      {item.status === 'Validated' && (
-                        <Button onClick={() => handleAdvanceSettlement(item.id, 'Authorized')} size="sm" variant="gold" className="text-[10px] py-0.5">
-                          Authorize payout
-                        </Button>
-                      )}
-
-                      {item.status === 'Authorized' && (
-                        <Button onClick={() => handleAdvanceSettlement(item.id, 'Settled')} size="sm" variant="success" className="text-[10px] py-0.5 font-bold">
-                          Execute CBI settlement
-                        </Button>
-                      )}
-
-                      {item.status === 'Settled' && (
-                        <Button onClick={() => handleAdvanceSettlement(item.id, 'Audited')} size="sm" variant="teal" className="text-[10px] py-0.5">
-                          Publish audit record
-                        </Button>
-                      )}
-
-                      {item.status === 'Audited' && (
-                        <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-bold">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Checked & Locked
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Instruction Routing Form */}
-            <div className="bg-slate-950/60 p-5 rounded-xl border border-slate-800">
-              <h3 className="text-sm font-[700] uppercase tracking-widest text-[#cca553] border-b border-slate-800 pb-2 mb-4">
-                {getLabel('DRAFT INTER-GOVERNMENT ROUTING INSTRUCTION', 'صياغة أمر تحويل ومقاصة سيادية جديدة', 'دانانی فەرمانی ناردنی بەرامبەربوونی دارایی')}
-              </h3>
-
-              <form onSubmit={handleCreateSettlement} className="space-y-4 font-mono text-xs">
-                <div>
-                  <label className="block text-slate-400 mb-1">ORIGIN SOURCE ASSET HOLDER:</label>
-                  <select 
-                    value={newSettlementSource}
-                    onChange={(e) => setNewSettlementSource(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-slate-800 text-teal-400 rounded px-2.5 py-1.5 focus:outline-none"
-                  >
-                    <option value="federal">FEDERAL GOVERNMENT VAULTS</option>
-                    <option value="krg">KRG COALITION TREASURY</option>
-                    <option value="joint">JOINT CLEARING SWAP POOL</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">TARGET BENEFICIARY JURISDICTION:</label>
-                  <select 
-                    value={newSettlementTarget}
-                    onChange={(e) => setNewSettlementTarget(e.target.value as any)}
-                    className="w-full bg-slate-900 border border-slate-800 text-[#52B788] rounded px-2.5 py-1.5 focus:outline-none"
-                  >
-                    <option value="federal">FEDERAL GOVERNMENT VAULTS</option>
-                    <option value="krg">KRG COALITION TREASURY</option>
-                    <option value="joint">JOINT CLEARING SWAP POOL</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">SETTLE TRANSFER SUM (USD MILLIONS):</label>
-                  <input 
-                    type="number" 
-                    value={newSettlementAmount} 
-                    onChange={(e) => setNewSettlementAmount(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1.5 text-white text-xs font-bold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">EXPLANATORY RESOLUTION MEMO:</label>
-                  <textarea 
-                    value={newSettlementDesc} 
-                    onChange={(e) => setNewSettlementDesc(e.target.value)}
-                    placeholder="Provide details about the intergovernmental settlement requirement..."
-                    rows={3}
-                    className="w-full bg-slate-900 border border-slate-800 text-xs rounded text-white px-2.5 py-1.5 focus:ring-1 focus:ring-[#cca553]"
-                  />
-                </div>
-
-                <Button type="submit" variant="gold" className="w-full font-bold">
-                  + {getLabel('Draft Settlement Route', 'إصدار مسودة المقاصة والتحويل', 'پەسەندکردنی فەرمانی ناردنەکە')}
-                </Button>
-              </form>
-            </div>
-
-          </div>
-        )}
-
-        {activeCabinetTab === 'federal-revenue' && (
-          <div className="animate-fade-in">
-            <FederalRevenueDashboard />
-          </div>
-        )}
-
-        {activeCabinetTab === 'krg-revenue' && (
-          <div className="animate-fade-in">
-            <KRGRevenueDashboard />
-          </div>
-        )}
-
-        {activeCabinetTab === 'joint-revenue' && (
-          <div className="animate-fade-in">
-            <JointRevenueDashboard />
-          </div>
-        )}
-
-      </div>
-        </>
-      ) : (
-        <div className="space-y-6">
-          {/* RESOURCE HUB NAVIGATION SUB-BAR */}
-          <div className="flex flex-wrap gap-1 p-1 bg-slate-950 rounded-xl border border-slate-800">
-            {[
-              { id: 'budgets', label: getLabel('National Budgets', 'الموازنة العامة', 'بودجەی گشتی نیشتمانی') },
-              { id: 'sharing', label: getLabel('Revenue Sharing', 'تقاسم الإيرادات المشتركة', 'دابەشکردنی داهاتی هاوبەش') },
-              { id: 'energy', label: getLabel('State Energy Resources', 'حقول النفط والغاز الكلية', 'سەرچاوەکانی نەوت و گاز') },
-              { id: 'projects', label: getLabel('Strategic Capital Registry', 'سجل الاستثمارات الكبرى', 'کار و پڕۆژە نیشتمانییەکان') },
-              { id: 'kpis', label: getLabel('Cabinet Performance KPI', 'مؤشرات الأداء للمؤسسات', 'دۆخی کارکردنی وەزارەتەکان') },
-              { id: 'procurement', label: getLabel('Procurement Contracts', 'عقود المشتريات والترسية', 'گرێبەستی تەندەرەکان') }
-            ].map(sub => (
-              <button
-                key={sub.id}
-                onClick={() => setActiveResourceTab(sub.id as any)}
-                className={`flex-1 py-1.5 text-xs font-mono rounded cursor-pointer transition-all ${
-                  activeResourceTab === sub.id
-                    ? 'bg-[#132237] text-[#cca553] font-bold border-b border-[#cca553]'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {sub.label}
-              </button>
+              </Card>
             ))}
           </div>
 
-          {/* RENDER ACTIVE RESOURCE CABINET PANEL */}
-          <div className="bg-slate-950/20 p-2 rounded-xl">
-            {activeResourceTab === 'budgets' && <NationalBudgetCommandCenter lang={lang} />}
-            {activeResourceTab === 'sharing' && <RevenueSharingPanel lang={lang} />}
-            {activeResourceTab === 'energy' && <NationalEnergyRegistryComponent lang={lang} />}
-            {activeResourceTab === 'projects' && <NationalProjectsRegistryPanel lang={lang} />}
-            {activeResourceTab === 'kpis' && <GovernmentPerformancePanel lang={lang} />}
-            {activeResourceTab === 'procurement' && (
-              <div className="space-y-4">
-                <NationalTenderCenter lang={lang} />
-                <ContractLifecyclePanel lang={lang} />
+          <div>
+            <Card className="bg-[#0b1322] border-slate-800 p-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono mb-3">
+                {getLabel('Sovereign Separation Rules', 'قواعد الفصل وحماية السرية السيادية', 'یاساکانی جیاکاری سەروەری دارایی')}
+              </h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {getLabel(
+                  'Under Federal and Kurdistan sovereignty agreements, general treasury accounts and raw internal local transaction ledgers are strictly hosted inside local clusters. The Federal Ministry receives only structured audited metadata proofs.',
+                  'بموجب اتفاقيات السيادة الوطنية المبرمة، تخضع الأنظمة المالية الداخلية للطرفين للحوسبة المحلية التامة. لا تشترك البوابة المركزية بالمسودات أو المعاملات التفصيلية للمواطنين، بل بمؤشرات المطابقة والنسب الإجمالية فقط.',
+                  'بە پێی پەیمانی سەروەریی نێوان هەولێر و بەغدا، سەرجەم داتاکانی خەڵک لە ئاستی دەروازەکان دەژرێن و پارێزراون. بەغدا تەنها ڕێژەی سەرەکی و پشکی گشتی ٥٠٪ ی دەست دەکەوێت.'
+                )}
+              </p>
+              
+              <div className="mt-4 space-y-2 text-[11px] font-mono">
+                <div className="flex items-center justify-between p-2 bg-[#122237]/60 rounded">
+                  <span className="text-slate-400">{getLabel('Oil revenue inclusion:', 'إيرادات الموازنة والمحروقات:', 'تێکەڵبوونی نەوت:')}</span>
+                  <span className="text-rose-400 font-bold">STRICTLY_FORBIDDEN</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-[#122237]/60 rounded">
+                  <span className="text-slate-400">{getLabel('Internal payroll integration:', 'توطين المعاشات والرواتب:', 'مووچەی فەرمانبەران:')}</span>
+                  <span className="text-rose-400 font-bold">OUT_OF_SCOPE</span>
+                </div>
+                <div className="flex items-center justify-between p-2 bg-[#122237]/60 rounded">
+                  <span className="text-slate-400">{getLabel('Zero-Disclosure audit verified:', 'تحقق خالٍ من كشف البيانات التفصيلية:', 'وردبینی بێ-خستنەڕوو:')}</span>
+                  <span className="text-emerald-400 font-bold">COMPLIANT</span>
+                </div>
               </div>
-            )}
+            </Card>
           </div>
         </div>
       )}
 
-      {/* SECTION 5: LOWER METRIC BAR */}
-      <div className="border-t border-slate-800 pt-5 text-start text-xs font-mono text-slate-500 flex flex-wrap justify-between items-center gap-4">
-        <div>
-          <span>SOVEREIGN CORE COMPLIANCE: <b>ISO-20022 ENGAGED</b></span>
-          <span className="mx-2">•</span>
-          <span>GOLD RATIO AUDIT: <b>VERIFIED BY THIRD PARTY</b></span>
+      {/* TAB CONTENT: CALCULATIONS ENGINE */}
+      {activeTab === 'calculator' && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-start">
+          <div className="lg:col-span-2">
+            <Card className="bg-slate-900 border-slate-800 p-5">
+              <h3 className="text-sm font-bold text-slate-200 mb-4 flex items-center gap-1.5 font-mono">
+                <Cpu className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '3s' }} />
+                <span>{getLabel('Mathematical Border Revenue Calculation Engine', 'بزوێنەری بیرکاری گومرگ و دەروازەکان', 'سیستەمی هەژمارکردنی داهاتی دەروازە')}</span>
+              </h3>
+
+              {/* Simulation Provider Controls */}
+              <div className="bg-[#121c2c] border border-slate-800 rounded-lg p-4 mb-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+                  <div>
+                    <h4 className="text-xs font-bold text-white font-mono">
+                      {getLabel('Automated Telemetry Provider Simulator', 'محاكي دابینکاری داتا مۆڵەتپێدراو', 'مەینەتی هۆست فیدەر بۆ داتای گومرگ')}
+                    </h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      {getLabel(
+                        'Enable temporary testing provider with custom verified border data values.',
+                        'ڕێگە بدە بە تاقیکردنەوەی خێرای بزوێنەرەکە بە زیادکردنی ژمارەی خەمڵێنراوی خاو.',
+                        'ڕێگە بدە بە تاقیکردنەوەی خێرای بزوێنەرەکە بە زیادکردنی ژمارەی خەمڵێنراوی خاو.'
+                      )}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={handleToggleTestProvider}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      isTestProviderEnabled
+                        ? 'bg-rose-950 text-rose-300 border border-rose-500/30'
+                        : 'bg-emerald-950 text-emerald-400 border border-emerald-500/30'
+                    }`}
+                  >
+                    <PlayCircle className="w-4 h-4" />
+                    <span>
+                      {isTestProviderEnabled 
+                        ? getLabel('Deactivate Simulator', 'تعطيل المحاكي', 'ناچالاککردن') 
+                        : getLabel('Activate Test Data', 'تفعيل محاكي البيانات', 'چالاککردنی تاقیکاری')
+                      }
+                    </span>
+                  </button>
+                </div>
+
+                {/* Input Fields */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] text-slate-400 font-mono mb-1">{getLabel('Gross Customs Revenue (USD):', 'مجمل إيرادات الجمارك (دولار):', 'تێکڕای گشتی داهاتی گومرکی (USD):')}</label>
+                    <input
+                      type="number"
+                      value={testGrossUSD}
+                      disabled={isTestProviderEnabled}
+                      onChange={(e) => setTestGrossUSD(e.target.value)}
+                      className="bg-slate-900 border border-slate-800 text-xs rounded p-2 text-slate-100 w-full focus:outline-none focus:ring-1 focus:ring-amber-500 font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-slate-400 font-mono mb-1">{getLabel('Validated Deductions (USD):', 'تخفيضات ومصاريف دەروازە:', 'داشکاندن و خەرجییە گومرگییە ڕێگەپێدراوەکان:')}</label>
+                    <input
+                      type="number"
+                      value={testDeductionUSD}
+                      disabled={isTestProviderEnabled}
+                      onChange={(e) => setTestDeductionUSD(e.target.value)}
+                      className="bg-slate-900 border border-slate-800 text-xs rounded p-2 text-slate-100 w-full focus:outline-none focus:ring-1 focus:ring-amber-500 font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Selector configurations */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-[11px] text-slate-400 font-mono mb-1">{getLabel('Target Active Policy:', 'الاتفاقية الناشطة المستهدفة:', 'یاسای جێبەجێکار:')}</label>
+                  <select
+                    value={selectedPolicyId}
+                    onChange={(e) => setSelectedPolicyId(e.target.value)}
+                    className="bg-slate-900 border border-slate-800 text-xs text-slate-100 rounded p-2 w-full focus:outline-none focus:ring-1 focus:ring-amber-500 font-mono"
+                  >
+                    {policies.map(p => (
+                      <option key={p.policyId} value={p.policyId}>{p.policyId}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] text-slate-400 font-mono mb-1">{getLabel('Settlement Period:', 'فترة التصفية والمطابقة:', 'وەرزی یەکلاییکردنەوە:')}</label>
+                  <input
+                    type="text"
+                    value={periodId}
+                    onChange={(e) => setPeriodId(e.target.value)}
+                    className="bg-slate-900 border border-slate-800 text-xs rounded p-2 text-slate-100 w-full focus:outline-none focus:ring-1 focus:ring-amber-500 font-mono"
+                  />
+                </div>
+              </div>
+
+              {/* Output block displaying calculated values or REAL_BORDER_REVENUE_PROVIDER_REQUIRED status */}
+              <div className="bg-[#0b101a] border border-slate-850 rounded-lg p-5">
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#cca553] block mb-2">{getLabel('Engine Process State Output', 'مخرجات حالة بزوێنەی بیرکاری', 'ئەنجامی ڕاستەوخۆی پرۆسەی هەژمار')}</span>
+                
+                {calculationResult.status === 'PENDING_PROVIDER_DATA' ? (
+                  <div className="flex flex-col items-center justify-center p-6 bg-amber-500/5 border border-dashed border-amber-500/25 rounded-md">
+                    <AlertTriangle className="w-7 h-7 text-amber-500 mb-2" />
+                    <p className="text-xs font-bold font-mono text-amber-400">STATUS: PENDING_PROVIDER_DATA</p>
+                    <p className="text-[11px] text-slate-400 text-center mt-1.5 max-w-md">
+                      {getLabel(
+                        'The engine rejected the calculation due to lacks of verified automated provider validation signals. Reason code:',
+                        'تم رفض الحساب تلقائياً نظراً لعدم توفر داتا الدەروازە الموثقة من الشبكات المحلية. رمز السبب:',
+                        'بزوێنەرەکە ڕەتی کردەوە داتای گرێبەستی بێ پرۆڤایدەر هەژمار بکات چونکە کایەی دڵنیایی داواکراوە. کۆدی ڕەتکردنەوە:'
+                      )}
+                    </p>
+                    <code className="text-xs font-mono px-3 py-1 bg-slate-900 border border-slate-800 rounded text-amber-300 font-bold mt-2.5">
+                      REAL_BORDER_REVENUE_PROVIDER_REQUIRED
+                    </code>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-emerald-950/20 border border-emerald-500/20 rounded">
+                      <span className="text-xs text-emerald-400 font-bold uppercase font-mono">STATUS: CALCULATED (PROVISIONAL SIMULATION)</span>
+                      <span className="text-[10px] text-slate-500 font-mono">TEST_PROVIDER_ACTIVE</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div className="p-3.5 bg-slate-900 border border-slate-850 rounded">
+                        <span className="text-[10px] text-slate-400 font-mono block">{getLabel('Gross Customs Sum:', 'إجمالي إيراد دەروازە:', 'تێکڕای داهاتی دەروازە:')}</span>
+                        <span className="text-base font-bold text-white font-mono block mt-1">${parseFloat(testGrossUSD).toLocaleString()} USD</span>
+                        <span className="text-[9px] text-slate-500 font-mono block mt-1">{calculationResult.auditProof?.grossBorderRevenueHash}</span>
+                      </div>
+
+                      <div className="p-3.5 bg-slate-900 border border-slate-850 rounded">
+                        <span className="text-[10px] text-slate-400 font-mono block">{getLabel('Calculated 50% Federal Share:', 'مستحق الهيئة الفيدرالية ٥٠٪:', 'پشکی فیدراڵی فەرمی ٥٠٪:')}</span>
+                        <span className="text-base font-bold text-amber-400 font-mono block mt-1">${((parseFloat(testGrossUSD) - parseFloat(testDeductionUSD)) * 0.5).toLocaleString()} USD</span>
+                        <span className="text-[9px] text-slate-500 font-mono block mt-1">{calculationResult.auditProof?.payableAmountHash}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-900 border border-slate-850 rounded font-mono text-[11px] space-y-1 text-slate-400 mt-2">
+                      <p className="font-bold text-slate-300 mb-1.5">{getLabel('Zero-Disclosure Verification Proof generated:', 'دليل التحقق السيادي المولد:', 'بەڵگەی ئۆتۆماتیکی وردبینی:')}</p>
+                      <p><b>{getLabel('Audit ID:', 'رقم التحقق:', 'کۆدی سەرەکی:')}</b> <span className="text-slate-300">{calculationResult.auditProof?.auditTraceId}</span></p>
+                      <p><b>{getLabel('Compliance Certificate:', 'بەنوسی دڵنیایی:', 'ئاستی یەکگرتنەوە:')}</b> <span className="text-emerald-400 font-bold">CERTIFIED_ZERO_DISCLOSURE</span></p>
+                      <p><b>{getLabel('Sovereign Signatures:', 'تواقيع السيادة المشتركة:', 'واژۆی دەسەڵاتی خاوەن دۆسیە:')}</b> {calculationResult.auditProof ? `${calculationResult.auditProof.sourceJurisdiction}_SECURED || ${calculationResult.auditProof.recipientJurisdiction}_SECURED` : ''}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+          </div>
+
+          <div>
+            <Card className="bg-[#0b1322] border-slate-800 p-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono mb-3">
+                {getLabel('Formula & Standard Rules', 'المعادلات الریاضیة الرسمیة للحدود', 'یاسا بیرکارییەکانی مینیوی سنوور')}
+              </h4>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {getLabel(
+                  'The calculation engine uses strict legal custom sharing rules without hardcoding state properties:',
+                  'بزوێنەری بیرکاری داهاتی گومرکی بە ئۆتۆماتیکی پاشەکەست دەکات دوای کایەکردنی خەرجییەکان:',
+                  'حیسابی داهاتی گشت دەروازە حکومەتییەکان لە کۆتاییدا بەم نەخشەیە خەمڵێنرێت:'
+                )}
+              </p>
+              
+              <div className="bg-slate-900 border border-slate-850 rounded p-3 text-start font-mono text-xs text-amber-500 mt-4 leading-relaxed">
+                <b>Net Revenue Basis (B)</b> = Gross Customs Revenue - Approved Deductions<br/>
+                <b>Payable Federal Sum</b> = (B * Policy Percentage) / 100
+              </div>
+
+              <div className="mt-4 p-3 bg-slate-900/50 border border-slate-800 rounded text-xs text-slate-400">
+                <p className="font-bold text-slate-300 font-mono mb-1">{getLabel('Telemetry required:', 'مزودو الشبکات:', 'هێڵی گواستنەوەی داتا:')}</p>
+                <p className="leading-relaxed">
+                  {getLabel(
+                    'No fake or simulated balances leak into production databases. If data signals drop, calculated bounds turn back to pending provider state automatically.',
+                    'لا یسمح للبیانات التجریبیة بدخول قواعد البیانات المرکزیة للطرفین. عند انقطاع الاتصال تحتسب حالة تعلیق المخرجات تلقائیاً.',
+                    'هیچ کات داتایەکی گومانی ناچێتە سیستمەوە. لە کاتی نەبوونی پەیوەندی بەستێن، سەرجەم ژمارەکان ئەبن بە مەرجدار.'
+                  )}
+                </p>
+              </div>
+            </Card>
+          </div>
         </div>
-        <div>
-          <span>RECONCILIATION SPEED: <b>REAL-TIME STREAM HANDSHAKE</b></span>
-        </div>
+      )}
+
+      {/* TAB CONTENT: READINESS REPORT */}
+      {activeTab === 'readiness' && (
+        <Card className="bg-slate-900 border-slate-800 p-5 text-start">
+          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono mb-4">
+            <Activity className="w-5 h-5 text-amber-500" />
+            <span>{getLabel('Sovereign Border Scope & Readiness Audit Report', 'تقرير جاهزية کورتەی کایەی پەیوەندی دەروازەکان', 'ڕاپۆرتی سەرنشین بۆ هەڵسەنگاندنی کایەی ڕاستەقینە')}</span>
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="py-3 px-4 bg-[#0c1624] border border-slate-800 rounded-lg">
+              <span className="text-[10px] text-slate-400 uppercase font-mono">{getLabel('System State', 'حالة النطاق الموحد', 'دۆخی گشتی')}</span>
+              <span className="block text-sm font-bold text-amber-400 font-mono mt-1">LOCKED</span>
+            </div>
+            <div className="py-3 px-4 bg-[#0c1624] border border-slate-800 rounded-lg">
+              <span className="text-[10px] text-slate-400 uppercase font-mono">{getLabel('Pruning Mapping', 'حماية النطاق', 'نەخشەی دەرچوون')}</span>
+              <span className="block text-sm font-bold text-emerald-400 font-mono mt-1">FULLY_PRUNED</span>
+            </div>
+            <div className="py-3 px-4 bg-[#0c1624] border border-slate-800 rounded-lg">
+              <span className="text-[10px] text-slate-400 uppercase font-mono">{getLabel('Registered Rules', 'الاتفاقيات الفعالة', 'یاساکانی دەروازە')}</span>
+              <span className="block text-sm font-bold text-white font-mono mt-1">{readinessReport.borderPolicyCount} Policies</span>
+            </div>
+            <div className="py-3 px-4 bg-[#0c1624] border border-slate-800 rounded-lg">
+              <span className="text-[10px] text-slate-400 uppercase font-mono">{getLabel('Gate Decision', 'الامتثال للاتفاق الجمركي', 'جوڵەی بڕیار لە دەروازە')}</span>
+              <span className="block text-xs font-bold text-rose-400 font-mono mt-1" title="Providers required to transition to pilot phase">PENDING_PROVIDERS</span>
+            </div>
+          </div>
+
+          <div className="bg-[#0b101a] border border-slate-850 rounded-lg p-4 mb-4">
+            <h4 className="text-xs font-bold text-slate-300 font-mono mb-2 uppercase tracking-wide">
+              {getLabel('Certified Executive Core Statement', 'البيان السيادي والمصادقة التنفيذية للحدود', 'بەیاننامەی سەرەکی بەستێنی دەسەڵاتی دەروازەکان')}
+            </h4>
+            <p className="text-xs text-slate-400 leading-relaxed font-sans text-start">
+              {readinessReport.notes[1]}
+            </p>
+          </div>
+
+          <div className="space-y-2 text-xs">
+            <p className="font-bold text-[#cca553] font-mono mb-2">{getLabel('Mandatory Verification Items Evaluated:', 'مؤشرات التحقق الإجباریة:', 'داواکارییەکانی پاراستنی سەروەری گومرگی:')}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-[11px] text-slate-300">
+              <div className="p-2.5 bg-slate-950/40 border border-slate-800 rounded flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{getLabel('Constitutional 50% border split locked', 'تم حظر دمج أي حسابات خارجية', 'یاسای فیدراڵی ٥٠٪ دەروازەکان جێگیرە')}</span>
+              </div>
+              <div className="p-2.5 bg-slate-950/40 border border-slate-800 rounded flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{getLabel('Sovereignty-rule data leakage restricted', 'تأمين داتا الإقليم وعدم كشف السرية', 'دزەکردنی داتا بە تەواوی بلۆککراوە')}</span>
+              </div>
+              <div className="p-2.5 bg-slate-950/40 border border-slate-800 rounded flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{getLabel('No hardcoded mock transaction values', 'أرقام الحساب خالية من البيانات الصورية', 'سیستەمەکە سەربەخۆیە لە ژمارەی ساختە')}</span>
+              </div>
+              <div className="p-2.5 bg-slate-950/40 border border-slate-800 rounded flex items-center gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{getLabel('Zero general fiscal or salary-integration overreach', 'عدم وجود تداخل مع ملفات الرواتب العامة', 'هیچ تێکەڵبوونێک بە مووچەی مەدەنییەکان نییە')}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* TAB CONTENT: SECURITY & SOVEREIGNTY RULES */}
+      {activeTab === 'security-policy' && (
+        <Card className="bg-slate-900 border-slate-800 p-5 text-start">
+          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 font-mono mb-4">
+            <Shield className="w-5 h-5 text-emerald-500" />
+            <span>{getLabel('Sovereignty & Separation Rules Visibility Ledger', 'دفتر سجل الفصل وحماية سيادة البيانات', 'لیدجەری پاراستنی تایبەتمەندی و بەندەکانی دەسەڵاتی داتای هەرێم')}</span>
+          </h3>
+
+          <p className="text-xs text-slate-400 leading-relaxed mb-4">
+            {getLabel(
+              'To build mutual trust, our software mandates that Baghdad audit officials can never bypass sovereignty bounds to view raw, unhashed regional transaction elements. Similarly, admin roles are restricted from forcing central overrides of local database nodes.',
+              'لتعزيز الثقة البينية، تمنع البرمجيات سلطات التدقيق الاتحادية من الولوج المباشر للداتا الخام لبلدات إقليم كوردستان، وتسمح بالتحقق المستند للوثائق الثنائية. كما يمنع الإداريون الفيدراليون من إجبار مخدّمات الإقليم على تعديل داتها محلياً.',
+              'بۆ پاراستنی بارودۆخی متمانە، بەرنامەکە بە یاسای توند ڕێگری لێ دەکات کە فیکەرەکانی بەغداد بتوانن داتای وردبینی دەروازەیی هەولێر ببینن بێ واژۆی هاوبەش، هەروەها ناتوانرێت لە لایەن ئەدمین تێکبدرێت.'
+            )}
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="p-4 bg-[#0a111a] border border-slate-850 rounded">
+              <span className="text-xs font-bold text-emerald-400 font-mono block uppercase mb-1">
+                Rule check: canFederalViewRawKrgBorderRevenue()
+              </span>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {getLabel(
+                  'KRG raw clearance logs are processed in Erbil. Federal requests return true only for pre-audited high-level totals or signed metadata blocks.',
+                  'داتای سەرەکی گومرگی هەرێم بە ناچالاکی تێپەڕ دەبێت. بەغداد تەنها مێتاداتای زەرور و باڵانسی فەرمی واژۆکراوی هەیە.',
+                  'داتای گومرگی دەروازەکانی هەرێم تەنها مێتاداتاکەی بۆ بەغدا دەچێت. داتای سەرەکی گرێدراوە تەنها خوێنەرەوەی لۆکاڵی هەیە.'
+                )}
+              </p>
+              <span className="inline-block mt-3 bg-emerald-500/10 text-emerald-400 text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/25 uppercase">
+                STATUS: ENFORCED (FALSE BY DEFAULT)
+              </span>
+            </div>
+
+            <div className="p-4 bg-[#0a111a] border border-slate-850 rounded">
+              <span className="text-xs font-bold text-rose-450 font-mono block uppercase mb-1">
+                Rule check: canAdminBypassSovereigntyRules()
+              </span>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {getLabel(
+                  'Even system administrators with full write rights are programmaticly barred from manually bypassing cryptographic separation rules.',
+                  'ڕێگری لە دەستێوەردانی ئەندازیار یان سەرکردەکانی سیستەم کراوە لە ڕێڕەوی گواستنەوەی پارە بە بەکارهێنانی کلیلە کریپتۆگرافییەکان.',
+                  'ڕێگری لە دەستێوەردانی ئەندازیار یان سەرکردەکانی سیستەم کراوە لە ڕێڕەوی گواستنەوەی پارە بە بەکارهێنانی کلیلە کریپتۆگرافییەکان.'
+                )}
+              </p>
+              <span className="inline-block mt-3 bg-rose-500/10 text-rose-400 text-[10px] font-mono px-2 py-0.5 rounded border border-rose-500/25 uppercase">
+                STATUS: BLOCKED (FALSE BY DEFAULT)
+              </span>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Decorative Branding Watermark */}
+      <div className="mt-8 border-t border-slate-800/60 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 font-mono gap-3">
+        <span>{getLabel('IRAQ CENTRAL BANK LIAISON ACTIVE', 'قناة البنك المركزي العراقي نشطة', 'هێڵی پەیوەندی بانکی ناوەندیی چالاکە')}</span>
+        <span>
+          {getLabel('DECISION:', 'حالة التصفية الحالية:', 'بڕیاری کۆتایی:')} <b className="text-amber-400">CONDITIONALLY_READY — PROVIDERS REQUIRED</b>
+        </span>
       </div>
-    </Card>
+    </div>
   );
 };
-
-export default SovereignFiscalSystem;

@@ -1,29 +1,19 @@
 import { useState } from 'react';
 import { 
-  Shield, Activity, Database, Cpu, TrendingUp, Layers, Landmark, Network, Lock, Brain, Users, RefreshCw, Coins, Building2
+  Shield, Activity, Database, Cpu, Layers, Landmark, Network, RefreshCw, Coins, HelpCircle
 } from 'lucide-react';
 import { DICTIONARY } from '../mockData';
-import EcosystemWorkflows from '../modules/workflow/EcosystemWorkflows';
-import SovereignAIBrain from '../modules/ai/SovereignAIBrain';
-import NationalCommandCenter from '../modules/command-center/NationalCommandCenter';
-import SecurityCommandCenter from '../modules/security/SecurityCommandCenter';
-import NationalDataCommandCenter from '../modules/data-fabric/NationalDataCommandCenter';
-import NationalIdentityCommandCenter from '../modules/digital-identity/NationalIdentityCommandCenter';
 import { useI18n } from '../providers/I18nProvider';
 
-// Modular Tab Panels
+// Modular Tab Panels (Border Operating System Scoped Only)
 import SovereignAtlasPanel from './components/SovereignAtlasPanel';
 import CargoAuditorPanel from './components/CargoAuditorPanel';
-import PolicyAdvisorPanel from './components/PolicyAdvisorPanel';
-import EconomicCorridorsPanel from './components/EconomicCorridorsPanel';
 import { SovereignFiscalSystem } from './components/ssos/SovereignFiscalSystem';
-import NationalAssetAuthorityDashboard from './components/assets/NationalAssetAuthorityDashboard';
 import BorderCommandCenter from './components/border/BorderCommandCenter';
+import { AcquisitionReadinessPanel } from '../shared/acquisition/AcquisitionReadinessPanel';
 
 // Isolated Hooks
 import { useManifestAudit } from '../hooks/useManifestAudit';
-import { usePolicyAdvisor } from '../hooks/usePolicyAdvisor';
-import { useEconomicCorridor } from '../hooks/useEconomicCorridor';
 import { useNationalTelemetry } from '../hooks/useNationalTelemetry';
 
 // Government Provider
@@ -50,15 +40,6 @@ function AppContent() {
     customManifestViewModel, auditResultViewModel,
     handlePresetSelect, handleInitiateAudit
   } = useManifestAudit();
-
-  const {
-    chatInput, setChatInput, chatHistory, isChatLoading, handleSendChat
-  } = usePolicyAdvisor(d.policyWelcome);
-
-  const {
-    selectedCorridor, setSelectedCorridor, policyLevel, setPolicyLevel,
-    cbiSurveillance, setCbiSurveillance, isPredicting, predictionResult, handleTriggerForecast
-  } = useEconomicCorridor();
 
   const { uptime } = useNationalTelemetry();
 
@@ -210,7 +191,7 @@ function AppContent() {
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                EN
+                English
               </button>
             </div>
           </div>
@@ -220,19 +201,11 @@ function AppContent() {
       <nav id="idg-navigation" className="bg-[#122237] border-b border-slate-800 py-1.5 px-4 shadow">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2">
           {[
-            { id: 'command-center', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal PM Command' : lang === 'ar' ? 'قيادة رئيس الوزراء الاتحادي' : 'فەرماندەیی سەرۆک وەزیرانی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG PM Command' : lang === 'ar' ? 'قيادة رئيس وزراء الإقليم' : 'فەرماندەیی سەرۆک وەزیرانی هەرێم') : (lang === 'en' ? 'Joint Command Room' : lang === 'ar' ? 'غرفة القيادة المشتركة' : 'ژووری فەرماندەیی هاوبەش'), icon: Landmark },
-            { id: 'border-ops', label: lang === 'en' ? 'Sovereign Border Hub' : lang === 'ar' ? 'السيطرة على الحدود' : 'دەروازە سنوورییەکان', icon: Shield },
-            { id: 'blueprints', label: t(lang, 'navigation.blueprints'), icon: Layers },
-            { id: 'state-assets', label: lang === 'en' ? 'State Asset Authority' : lang === 'ar' ? 'سلطة ممتلكات الدولة' : 'رێکخراوی سامانی دەوڵەت', icon: Building2 },
-            { id: 'sovereign-fiscal', label: lang === 'en' ? 'Sovereign Fiscal Registry' : lang === 'ar' ? 'الخزينة والمالية السيادية' : 'گەنجینە و دارایی نیشتمانی', icon: Coins },
-            { id: 'ai-auditor', label: t(lang, 'navigation.analyzer'), icon: Cpu },
-            { id: 'policy-advisor', label: t(lang, 'navigation.advisor'), icon: Landmark },
-            { id: 'economic-corridors', label: t(lang, 'navigation.intelligence'), icon: TrendingUp },
-            { id: 'ecosystem', label: t(lang, 'navigation.ecosystem'), icon: Network },
-            { id: 'ai-brain', label: t(lang, 'navigation.aiBrain'), icon: Brain },
-            { id: 'security', label: t(lang, 'navigation.security'), icon: Lock },
-            { id: 'data-fabric', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal Data Fabric' : lang === 'ar' ? 'نسيج البيانات الفيدرالي' : 'بونیادی داتای فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG Data Fabric' : lang === 'ar' ? 'نسيج بيانات الإقليم' : 'بونیادی داتای هەرێم') : (lang === 'en' ? 'Federated Hub' : lang === 'ar' ? 'مركز البيانات الاتحادي المشترك' : 'سەنتەری داتای هاوبەش'), icon: Database },
-            { id: 'sovereign-trust', label: activeContext === 'FEDERAL_IRAQ' ? (lang === 'en' ? 'Federal Identity' : lang === 'ar' ? 'الهوية الفيدرالية' : 'ناسنامەی فیدراڵ') : activeContext === 'KURDISTAN_REGION' ? (lang === 'en' ? 'KRG Identity Authority' : lang === 'ar' ? 'سلطة هويات الإقليم' : 'دەسەڵاتی ناسنامەی هەرێم') : (lang === 'en' ? 'Federated Crypt' : lang === 'ar' ? 'التشفير الفيدرالي المشترك' : 'کلیلە هاوبەشەکان'), icon: Shield }
+            { id: 'command-center', label: lang === 'en' ? 'Sovereign Border Hub' : lang === 'ar' ? 'السيطرة والحدود السيادية' : 'مەڵبەند و فەرماندەیی دەروازەکان', icon: Shield },
+            { id: 'ai-auditor', label: lang === 'en' ? 'Trade Clearance & Audit' : lang === 'ar' ? 'مطابقة وفحص الشحنات' : 'پاکتاوکردنی گومرگی و ترانزێت', icon: Cpu },
+            { id: 'sovereign-fiscal', label: lang === 'en' ? 'Border Revenue Settlement' : lang === 'ar' ? 'تسوية وإيرادات المنافذ' : 'یەکلاییکردنەوەی داهاتی سنوور', icon: Coins },
+            { id: 'readiness-center', label: lang === 'en' ? 'BOS Readiness & UAT' : lang === 'ar' ? 'جاهزية البوابة والتكامل' : 'سەنتەری ئامادەکاری دەوڵەت', icon: HelpCircle },
+            { id: 'blueprints', label: lang === 'en' ? 'BOS Blueprints' : lang === 'ar' ? 'خرائط وبنية الأنظمة' : 'نەخشەی دەروازەکان', icon: Layers },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -285,8 +258,7 @@ function AppContent() {
       </section>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 flex flex-col gap-6">
-        {activeTab === 'command-center' && <NationalCommandCenter lang={lang} />}
-        {activeTab === 'border-ops' && <BorderCommandCenter lang={lang} />}
+        {activeTab === 'command-center' && <BorderCommandCenter lang={lang} />}
         {activeTab === 'blueprints' && <SovereignAtlasPanel lang={lang} />}
         {activeTab === 'ai-auditor' && (
           <CargoAuditorPanel
@@ -296,27 +268,8 @@ function AppContent() {
             handlePresetSelect={handlePresetSelect} handleInitiateAudit={handleInitiateAudit}
           />
         )}
-        {activeTab === 'policy-advisor' && (
-          <PolicyAdvisorPanel
-            lang={lang} d={d} chatInput={chatInput} setChatInput={setChatInput}
-            chatHistory={chatHistory} isChatLoading={isChatLoading} handleSendChat={handleSendChat}
-          />
-        )}
-        {activeTab === 'economic-corridors' && (
-          <EconomicCorridorsPanel
-            lang={lang} d={d} selectedCorridor={selectedCorridor} setSelectedCorridor={setSelectedCorridor}
-            policyLevel={policyLevel} setPolicyLevel={setPolicyLevel} cbiSurveillance={cbiSurveillance}
-            setCbiSurveillance={setCbiSurveillance} isPredicting={isPredicting} predictionResult={predictionResult}
-            handleTriggerForecast={handleTriggerForecast}
-          />
-        )}
-        {activeTab === 'ecosystem' && <EcosystemWorkflows lang={lang} />}
-        {activeTab === 'ai-brain' && <SovereignAIBrain lang={lang} />}
-        {activeTab === 'security' && <SecurityCommandCenter lang={lang} />}
-        {activeTab === 'data-fabric' && <NationalDataCommandCenter lang={lang} />}
-        {activeTab === 'sovereign-trust' && <NationalIdentityCommandCenter lang={lang} />}
         {activeTab === 'sovereign-fiscal' && <SovereignFiscalSystem lang={lang} />}
-        {activeTab === 'state-assets' && <NationalAssetAuthorityDashboard lang={lang} />}
+        {activeTab === 'readiness-center' && <AcquisitionReadinessPanel lang={lang} />}
       </main>
 
       <footer className="bg-[#0a111a] border-t border-slate-800/80 py-4 mt-10 text-slate-400 text-xs text-start w-full">
